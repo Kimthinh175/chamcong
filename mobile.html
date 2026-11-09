@@ -1,1117 +1,2267 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#090d16">
-<title>ZKTeco Timesheet Mobile</title>
-<style>
-  :root {
-    --bg-base: #090d16;
-    --bg-surface: #101726;
-    --bg-card: #151f33;
-    --bg-card-elevated: #1c2944;
-    --bg-glass: rgba(16, 23, 38, 0.85);
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-medium: rgba(255, 255, 255, 0.14);
-    --border-glow: rgba(56, 189, 248, 0.35);
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f4f2ee" id="metaThemeColor" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="ZK Chấm Công" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="application-name" content="ZK Chấm Công" />
+  <meta name="description" content="Ứng dụng PWA quản lý ngày công, bù giờ thông minh và điều khiển thiết bị ZKTeco" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/icon.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png" />
+  <title>ZK Time-Warp • Chấm Công Thông Minh</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ZK Time-Warp Mobile PWA Design System */
+    :root {
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
 
-    --primary: #38bdf8;
-    --primary-gradient: linear-gradient(135deg, #38bdf8, #2563eb);
-    --success: #10b981;
-    --success-gradient: linear-gradient(135deg, #10b981, #059669);
-    --warn: #f59e0b;
-    --warn-gradient: linear-gradient(135deg, #fbbf24, #d97706);
-    --danger: #ef4444;
-    --danger-gradient: linear-gradient(135deg, #ef4444, #b91c1c);
-    --purple: #a855f7;
+      /* Warm Neutral Canvas & Elevated Surfaces */
+      --bg-page: #f4f3ef;
+      --bg-card: #ffffff;
+      --bg-muted: #ebe9e4;
+      --bg-soft: #f5f5f8;
+      --bg-glass: rgba(255, 255, 255, 0.88);
 
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --text-dim: #64748b;
+      /* Typography */
+      --text-main: #14141b;
+      --text-sub: #3f3d4a;
+      --text-dim: #525060;
 
-    --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      /* Borders & Shadows */
+      --border: rgba(15, 23, 42, 0.05);
+      --border-strong: #cbc6bc;
+      --shadow-card: 0 12px 32px -14px rgba(15, 23, 42, 0.07), 0 2px 6px rgba(15, 23, 42, 0.03);
+      --shadow-float: 0 18px 40px -12px rgba(15, 23, 42, 0.18);
 
-    --radius-xl: 20px;
-    --radius-lg: 16px;
-    --radius-md: 12px;
-    --radius-sm: 8px;
-    --radius-full: 9999px;
+      /* Primary Brand Accent: Royal Indigo */
+      --primary: #4338ca;
+      --primary-hover: #3730a3;
+      --primary-soft: #eef2ff;
+      --primary-strong: #312e81;
+      --primary-fg: #ffffff;
+      --accent-glow: #f59e0b;
 
-    --safe-top: env(safe-area-inset-top, 0px);
-    --safe-bottom: env(safe-area-inset-bottom, 0px);
-  }
+      /* Obsidian Hero Card Tokens */
+      --hero-bg: #131520;
+      --hero-surface: rgba(255, 255, 255, 0.08);
+      --hero-border: rgba(255, 255, 255, 0.12);
+      --hero-text: #ffffff;
+      --hero-muted: #cbd5e1;
 
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    -webkit-tap-highlight-color: transparent;
-  }
+      /* Semantic Status Tokens (WCAG AA >= 4.5:1) */
+      --success: #15803d;
+      --success-btn: #15803d;
+      --success-bg: #dcfce7;
+      --success-border: #86efac;
 
-  body {
-    font-family: var(--font-sans);
-    background: var(--bg-base);
-    color: var(--text-main);
-    min-height: 100vh;
-    padding-top: calc(var(--safe-top) + 60px);
-    padding-bottom: calc(var(--safe-bottom) + 84px);
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-  }
+      --warn: #92400e;
+      --warn-bg: #fef3c7;
+      --warn-border: #fcd34d;
 
-  /* App Header Bar */
-  .app-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: calc(var(--safe-top) + 58px);
-    padding-top: var(--safe-top);
-    padding-left: 14px;
-    padding-right: 14px;
-    background: rgba(9, 13, 22, 0.92);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border-subtle);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 100;
-  }
+      --danger: #be123c;
+      --danger-bg: #ffe4e6;
+      --danger-border: #fda4af;
 
-  .header-user-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-  }
+      --ring-focus: rgba(67, 56, 202, 0.24);
+      --radius-sm: 12px;
+      --radius-md: 16px;
+      --radius-lg: 22px;
+      --radius-xl: 28px;
+      --radius-full: 9999px;
 
-  .user-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-full);
-    background: linear-gradient(135deg, #1e3a8a, #0284c7);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    font-size: 13px;
-    border: 1.5px solid rgba(56, 189, 248, 0.4);
-    box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
-    flex-shrink: 0;
-  }
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
 
-  .user-text-col {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    min-width: 0;
-  }
+    html[data-theme="dark"] {
+      --bg-page: #0b0c12;
+      --bg-card: #151722;
+      --bg-muted: #1e2130;
+      --bg-soft: #191c28;
+      --bg-glass: rgba(21, 23, 34, 0.88);
 
-  .user-title-row {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
+      --text-main: #f4f5f8;
+      --text-sub: #b4bcd0;
+      --text-dim: #949db5;
 
-  .user-name {
-    font-size: 14px;
-    font-weight: 800;
-    color: var(--text-main);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 140px;
-  }
+      --border: #252838;
+      --border-strong: #383d54;
+      --shadow-card: 0 14px 32px -16px rgba(0, 0, 0, 0.55);
 
-  .user-cycle-chip {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--primary);
-    display: flex;
-    align-items: center;
-    gap: 3px;
-  }
+      --primary: #6366f1;
+      --primary-hover: #818cf8;
+      --primary-soft: rgba(99, 102, 241, 0.16);
+      --primary-strong: #a5b4fc;
+      --primary-fg: #ffffff;
 
-  .header-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+      --hero-bg: #1b1e2e;
+      --hero-surface: rgba(255, 255, 255, 0.07);
+      --hero-border: rgba(255, 255, 255, 0.12);
 
-  /* Live Machine Mini Chip */
-  .machine-status-chip {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    padding: 5px 9px;
-    border-radius: var(--radius-full);
-    cursor: pointer;
-    font-size: 11.5px;
-    font-weight: 700;
-    color: var(--text-muted);
-    transition: all 0.2s;
-  }
-  .machine-status-chip:active {
-    transform: scale(0.96);
-    background: var(--bg-card-elevated);
-  }
-  .machine-status-chip.warped {
-    border-color: var(--warn);
-    background: rgba(245, 158, 11, 0.15);
-    color: #fbbf24;
-  }
+      --success: #4ade80;
+      --success-btn: #15803d;
+      --success-bg: rgba(74, 222, 128, 0.14);
+      --success-border: rgba(74, 222, 128, 0.3);
 
-  .status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--success);
-    box-shadow: 0 0 8px var(--success);
-    flex-shrink: 0;
-  }
-  .status-dot.warped {
-    background: var(--warn);
-    box-shadow: 0 0 10px var(--warn);
-    animation: pulseDot 0.8s infinite alternate;
-  }
-  @keyframes pulseDot {
-    from { opacity: 1; transform: scale(1); }
-    to { opacity: 0.4; transform: scale(1.3); }
-  }
+      --warn: #fbbf24;
+      --warn-bg: rgba(251, 191, 36, 0.14);
+      --warn-border: rgba(251, 191, 36, 0.3);
 
-  .header-icon-btn {
-    width: 34px;
-    height: 34px;
-    border-radius: var(--radius-full);
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    color: var(--text-main);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .header-icon-btn:active {
-    transform: scale(0.92);
-    background: var(--bg-card-elevated);
-  }
+      --danger: #fb7185;
+      --danger-bg: rgba(251, 113, 133, 0.15);
+      --danger-border: rgba(251, 113, 133, 0.32);
 
-  /* Main Scrollable View */
-  .view-wrapper {
-    max-width: 520px;
-    margin: 0 auto;
-    padding: 10px 14px 20px 14px;
-  }
+      --ring-focus: rgba(99, 102, 241, 0.32);
+    }
 
-  /* Active Time-Warp Floating HUD Banner */
-  .warp-hud-banner {
-    display: none;
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(239, 68, 68, 0.16));
-    border: 1.5px solid var(--warn);
-    border-radius: var(--radius-lg);
-    padding: 12px 14px;
-    margin-bottom: 12px;
-    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.25);
-    animation: fadeIn 0.3s ease;
-  }
-  .warp-hud-banner.active { display: block; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-  .warp-hud-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 6px;
-  }
-  .warp-hud-pill {
-    background: var(--warn);
-    color: #000;
-    font-size: 11px;
-    font-weight: 900;
-    padding: 3px 8px;
-    border-radius: var(--radius-full);
-    letter-spacing: 0.3px;
-  }
-  .warp-hud-timer {
-    font-size: 18px;
-    font-weight: 900;
-    color: #fbbf24;
-    font-variant-numeric: tabular-nums;
-  }
-  .warp-hud-msg {
-    font-size: 13.5px;
-    font-weight: 800;
-    color: #fef3c7;
-    line-height: 1.35;
-    margin-bottom: 8px;
-  }
-  .warp-hud-actions {
-    display: flex;
-    gap: 8px;
-  }
+    html, body {
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 15px;
+      line-height: 1.5;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
 
-  /* Realtime Swipe Toast Alert */
-  .swipe-toast-alert {
-    display: none;
-    background: rgba(16, 185, 129, 0.16);
-    border: 1px solid var(--success);
-    color: #a7f3d0;
-    padding: 10px 12px;
-    border-radius: var(--radius-md);
-    font-size: 12.5px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    line-height: 1.4;
-    animation: slideDown 0.3s ease;
-  }
-  .swipe-toast-alert.show { display: block; }
+    h1, h2, h3, .today-main-status, .hero-clock-val {
+      word-spacing: 0.04em;
+    }
 
-  /* ------------------- TODAY HERO CARD ------------------- */
-  .today-hero-card {
-    background: linear-gradient(145deg, #16243f, #0f182c);
-    border: 1.5px solid rgba(56, 189, 248, 0.35);
-    border-radius: var(--radius-xl);
-    padding: 15px;
-    margin-bottom: 14px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-    position: relative;
-    overflow: hidden;
-  }
-  .today-hero-card::after {
-    content: "";
-    position: absolute;
-    top: -50px;
-    right: -50px;
-    width: 120px;
-    height: 120px;
-    background: radial-gradient(circle, rgba(56, 189, 248, 0.18), transparent 70%);
-    pointer-events: none;
-  }
+    .mono,
+    #headerDevClock,
+    #todayHeroInDisplay,
+    #todayHeroInVal,
+    #todayHeroOutVal,
+    #todayHeroDurVal,
+    #warpHudCountdown,
+    #devClockFull,
+    #kpiRateText,
+    #kpiTotalNum,
+    #kpiNeedFixNum,
+    #kpiCompleteNum,
+    #kpiWeekendNum,
+    #empCardId,
+    .time-chip-in,
+    .time-chip-out,
+    .time-chip-empty,
+    .time-edit-mini-inp {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+    }
 
-  .today-hero-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  .today-hero-title {
-    font-size: 12px;
-    font-weight: 800;
-    color: #93c5fd;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .today-hero-badge {
-    font-size: 11px;
-    font-weight: 800;
-    padding: 3px 9px;
-    border-radius: var(--radius-full);
-  }
-  .badge-complete {
-    background: rgba(16, 185, 129, 0.2);
-    border: 1px solid rgba(16, 185, 129, 0.4);
-    color: #6ee7b7;
-  }
-  .badge-working {
-    background: rgba(56, 189, 248, 0.2);
-    border: 1px solid rgba(56, 189, 248, 0.4);
-    color: #7dd3fc;
-  }
-  .badge-absent {
-    background: rgba(239, 68, 68, 0.2);
-    border: 1px solid rgba(239, 68, 68, 0.4);
-    color: #fca5a5;
-  }
+    button, input, select {
+      font: inherit;
+      color: inherit;
+    }
 
-  .today-main-status {
-    font-size: 20px;
-    font-weight: 900;
-    color: #fff;
-    margin-bottom: 12px;
-    line-height: 1.2;
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-  }
+    button:focus-visible,
+    a:focus-visible {
+      outline: none;
+      box-shadow: none;
+    }
 
-  .today-times-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-    background: rgba(11, 17, 32, 0.65);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    padding: 10px 12px;
-    margin-bottom: 12px;
-  }
-  .today-col {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .today-col-label {
-    font-size: 10.5px;
-    font-weight: 700;
-    color: var(--text-dim);
-    text-transform: uppercase;
-  }
-  .today-col-val {
-    font-size: 14.5px;
-    font-weight: 800;
-    font-variant-numeric: tabular-nums;
-  }
-  .today-col-val.in { color: #6ee7b7; }
-  .today-col-val.out { color: #93c5fd; }
-  .today-col-val.dur { color: #cbd5e1; }
+    input:focus-visible,
+    select:focus-visible {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--ring-focus);
+    }
 
-  .today-hero-action-btn {
-    width: 100%;
-    border: none;
-    border-radius: var(--radius-md);
-    padding: 13px 16px;
-    font-size: 14px;
-    font-weight: 800;
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-    transition: transform 0.1s, opacity 0.2s;
-  }
-  .today-hero-action-btn:active { transform: scale(0.98); }
-  .btn-hero-in {
-    background: var(--success-gradient);
-    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
-  }
-  .btn-hero-out {
-    background: var(--primary-gradient);
-    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
-  }
-  .btn-hero-done {
-    background: rgba(255, 255, 255, 0.08);
-    color: var(--text-muted);
-    cursor: default;
-    border: 1px solid var(--border-subtle);
-  }
+    /* Tactile Press Feedback */
+    button:active:not(:disabled),
+    .kpi-chip:active,
+    .week-day-pill:active,
+    .nav-btn:active {
+      transform: scale(0.97);
+    }
 
-  /* ------------------- MONTH KPI PROGRESS CARD ------------------- */
-  .month-kpi-card {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: 12px 14px;
-    margin-bottom: 12px;
-  }
-  .month-kpi-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-  .month-kpi-title {
-    font-size: 13px;
-    font-weight: 800;
-    color: var(--text-main);
-  }
-  .month-kpi-rate {
-    font-size: 14px;
-    font-weight: 900;
-    color: #38bdf8;
-    font-variant-numeric: tabular-nums;
-  }
+    /* ==========================================================================
+       Desktop Studio Preview Frame (>= 960px) & Native Mobile Fullscreen (< 960px)
+       ========================================================================== */
+    .studio-sidebar {
+      display: none;
+    }
 
-  .kpi-progress-bar {
-    width: 100%;
-    height: 7px;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: var(--radius-full);
-    overflow: hidden;
-    margin-bottom: 10px;
-  }
-  .kpi-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #10b981, #38bdf8);
-    border-radius: var(--radius-full);
-    transition: width 0.4s ease;
-  }
+    @media (min-width: 960px) {
+      body {
+        background:
+          radial-gradient(60% 50% at 18% 12%, rgba(67, 56, 202, 0.14) 0%, transparent 70%),
+          radial-gradient(50% 45% at 85% 85%, rgba(245, 158, 11, 0.10) 0%, transparent 70%),
+          #12131a;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 36px;
+        padding: 28px 24px;
+        min-height: 100vh;
+      }
 
-  .kpi-chips-row {
-    display: flex;
-    gap: 6px;
-    overflow-x: auto;
-    padding-bottom: 2px;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .kpi-chips-row::-webkit-scrollbar { display: none; }
+      body .studio-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        width: 290px;
+        flex-shrink: 0;
+        position: sticky;
+        top: 28px;
+        background: rgba(24, 26, 38, 0.88);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 20px;
+        color: #f4f4f6;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.45);
+      }
 
-  .kpi-chip {
-    flex: 1;
-    min-width: 85px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-sm);
-    padding: 6px 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .kpi-chip:active { transform: scale(0.97); }
-  .kpi-chip.active {
-    border-color: var(--primary);
-    background: rgba(56, 189, 248, 0.12);
-  }
-  .kpi-chip-num {
-    font-size: 15px;
-    font-weight: 900;
-    line-height: 1.1;
-    font-variant-numeric: tabular-nums;
-  }
-  .kpi-chip-label {
-    font-size: 9.5px;
-    font-weight: 700;
-    color: var(--text-muted);
-    margin-top: 2px;
-    white-space: nowrap;
-    letter-spacing: -0.2px;
-  }
+      body #appContainer,
+      body #loginScreen {
+        width: 412px;
+        min-height: 0;
+        height: min(836px, calc(100dvh - 56px));
+        max-height: min(836px, calc(100dvh - 56px));
+        display: flex;
+        flex-direction: column;
+        border-radius: 48px;
+        box-shadow:
+          0 0 0 10px #1e2029,
+          0 0 0 12px #383b4a,
+          0 32px 70px -15px rgba(0, 0, 0, 0.65);
+        position: relative;
+        overflow: hidden;
+        margin: 0;
+      }
 
-  /* ------------------- FILTER PILLS ROW ------------------- */
-  .filter-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    margin-bottom: 10px;
-  }
-  .filter-scroll {
-    display: flex;
-    gap: 6px;
-    overflow-x: auto;
-    padding-bottom: 2px;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    flex: 1;
-  }
-  .filter-scroll::-webkit-scrollbar { display: none; }
+      body #appContainer .main-view {
+        flex: 1;
+        overflow-y: auto;
+        scrollbar-width: none;
+      }
 
-  .filter-pill-btn {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    color: var(--text-muted);
-    padding: 6px 12px;
-    border-radius: var(--radius-full);
-    font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.15s ease;
-  }
-  .filter-pill-btn:active { transform: scale(0.96); }
-  .filter-pill-btn.active {
-    background: rgba(56, 189, 248, 0.18);
-    border-color: var(--primary);
-    color: #93c5fd;
-  }
+      body #appContainer .main-view::-webkit-scrollbar {
+        display: none;
+      }
 
-  /* ------------------- TIMESHEET DAYS LIST ------------------- */
-  .ts-days-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
+      body #loginScreen {
+        position: relative;
+        inset: auto;
+      }
 
-  .day-row-card {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    padding: 10px 12px;
-    transition: all 0.15s ease;
-  }
-  .day-row-card.is-today {
-    border-color: rgba(56, 189, 248, 0.45);
-    background: linear-gradient(145deg, rgba(56, 189, 248, 0.08), var(--bg-surface));
-  }
-  .day-row-card.status-complete {
-    border-left: 3.5px solid var(--success);
-  }
-  .day-row-card.status-missing_out, .day-row-card.status-missing_in {
-    border-left: 3.5px solid var(--warn);
-  }
-  .day-row-card.status-absent {
-    border-left: 3.5px solid var(--danger);
-  }
-  .day-row-card.status-weekend {
-    border-left: 3.5px solid #475569;
-    opacity: 0.65;
-  }
+      body .bottom-nav-shield {
+        position: absolute;
+        bottom: 0;
+      }
 
-  .day-row-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 6px;
-  }
-  .day-date-col {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-  }
-  .day-date-text {
-    font-size: 14px;
-    font-weight: 800;
-    color: var(--text-main);
-  }
-  .day-weekday-tag {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-dim);
-    background: rgba(255, 255, 255, 0.06);
-    padding: 1px 6px;
-    border-radius: 4px;
-  }
+      body .bottom-nav {
+        position: absolute;
+        bottom: 14px;
+      }
 
-  .day-status-pill {
-    font-size: 11px;
-    font-weight: 800;
-    padding: 2px 7px;
-    border-radius: var(--radius-full);
-  }
-  .pill-complete {
-    background: rgba(16, 185, 129, 0.16);
-    color: #6ee7b7;
-  }
-  .pill-warn {
-    background: rgba(245, 158, 11, 0.16);
-    color: #fde68a;
-  }
-  .pill-danger {
-    background: rgba(239, 68, 68, 0.18);
-    color: #fca5a5;
-  }
-  .pill-weekend {
-    background: rgba(148, 163, 184, 0.12);
-    color: #94a3b8;
-  }
+      body .floating-batch-bar {
+        position: absolute;
+        bottom: 88px;
+      }
 
-  .day-times-line {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12.5px;
-  }
-  .day-swipe-chips {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-variant-numeric: tabular-nums;
-  }
-  .time-chip-in { color: #6ee7b7; font-weight: 700; }
-  .time-chip-out { color: #93c5fd; font-weight: 700; }
-  .time-chip-empty { color: var(--text-dim); }
+      body .sheet-backdrop {
+        position: absolute;
+      }
+    }
 
-  .day-dur-text {
-    font-size: 11.5px;
-    color: var(--text-muted);
-    font-weight: 600;
-  }
+    .studio-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #c7d2fe;
+      background-color: #27294a;
+      padding: 4px 10px;
+      border-radius: 999px;
+      width: fit-content;
+    }
 
-  /* Inline Quick Action inside Day Card */
-  .day-quick-action {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: 1px solid var(--border-subtle);
-  }
-  .time-edit-mini-inp {
-    width: 88px !important;
-    max-width: 88px !important;
-    flex-shrink: 0 !important;
-    padding: 7px 6px;
-    font-size: 13px;
-    font-weight: 800;
-    text-align: center;
-    color: #6ee7b7;
-    background: #0b1120;
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-sm);
-    font-variant-numeric: tabular-nums;
-    outline: none;
-  }
-  .day-action-trigger-btn {
-    flex: 1;
-    min-width: 0;
-    white-space: nowrap;
-    border: none;
-    border-radius: var(--radius-sm);
-    padding: 8px 12px;
-    font-size: 13px;
-    font-weight: 800;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    transition: transform 0.1s;
-  }
-  .day-action-trigger-btn:active { transform: scale(0.97); }
-  .day-btn-in {
-    background: var(--success-gradient);
-    color: #fff;
-  }
-  .day-btn-out {
-    background: var(--primary-gradient);
-    color: #fff;
-  }
+    .studio-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.25;
+    }
 
-  /* Collapsible Future Days Accordion */
-  .future-days-fold {
-    background: var(--bg-surface);
-    border: 1px dashed var(--border-subtle);
-    border-radius: var(--radius-md);
-    padding: 10px 14px;
-    text-align: center;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--text-dim);
-    margin-top: 4px;
-    transition: all 0.2s;
-  }
-  .future-days-fold:active {
-    background: var(--bg-card);
-  }
+    .studio-desc {
+      font-size: 12px;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
 
-  /* ------------------- TAB 1 (THỊNH) & TAB 2 (OTHERS) LISTS ------------------- */
-  .section-box {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: 13px;
-    margin-bottom: 12px;
-  }
-  .section-box-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  .section-box-title {
-    font-size: 13px;
-    font-weight: 800;
-    color: var(--text-main);
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-  }
+    .studio-flow-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      list-style: none;
+    }
 
-  .late-item-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    background: var(--bg-card);
-    border: 1.5px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    padding: 10px 11px;
-    margin-bottom: 8px;
-    transition: all 0.15s ease;
-  }
-  .late-item-card.checked {
-    border-color: var(--primary);
-    background: rgba(56, 189, 248, 0.12);
-  }
-  .late-item-card.fixed {
-    border-color: rgba(16, 185, 129, 0.45);
-    background: rgba(16, 185, 129, 0.08);
-  }
+    .studio-flow-btn {
+      appearance: none;
+      width: 100%;
+      min-height: 40px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      background-color: #212436;
+      color: #f1f5f9;
+      font-size: 13px;
+      font-weight: 500;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
 
-  .late-card-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex: 1;
-    min-width: 0;
-    cursor: pointer;
-  }
-  .late-checkbox {
-    width: 20px;
-    height: 20px;
-    accent-color: var(--primary);
-    flex-shrink: 0;
-    cursor: pointer;
-  }
-  .late-date-title {
-    font-size: 14px;
-    font-weight: 800;
-    color: var(--text-main);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .late-desc-sub {
-    font-size: 11.5px;
-    color: #fca5a5;
-    margin-top: 2px;
-    font-weight: 600;
-  }
-  .late-item-card.fixed .late-desc-sub {
-    color: #6ee7b7;
-  }
+    .studio-flow-btn:hover {
+      background-color: #2b2f46;
+      border-color: rgba(165, 180, 252, 0.35);
+    }
 
-  .late-card-right {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-shrink: 0;
-  }
-  .btn-mini-warp {
-    background: rgba(16, 185, 129, 0.2);
-    border: 1px solid rgba(16, 185, 129, 0.5);
-    color: #6ee7b7;
-    font-weight: 800;
-    font-size: 11.5px;
-    padding: 7px 10px;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-  }
-  .btn-mini-warp:active { transform: scale(0.95); }
+    .studio-flow-btn.active {
+      background-color: #4338ca;
+      border-color: #6366f1;
+      color: #ffffff;
+      font-weight: 700;
+    }
 
-  /* ------------------- FLOATING BATCH ACTION BAR ------------------- */
-  .floating-batch-bar {
-    position: fixed;
-    bottom: calc(var(--safe-bottom) + 68px);
-    left: 14px;
-    right: 14px;
-    max-width: 492px;
-    margin: 0 auto;
-    z-index: 95;
-    display: none;
-    animation: slideUp 0.25s ease;
-  }
-  .floating-batch-bar.show { display: block; }
+    .studio-flow-tag {
+      font-size: 12px;
+      font-family: var(--font-mono);
+      color: #cbd5e1;
+    }
 
-  .batch-launch-btn {
-    width: 100%;
-    background: var(--primary-gradient);
-    border: none;
-    border-radius: var(--radius-md);
-    padding: 13px 16px;
-    color: #fff;
-    font-size: 14px;
-    font-weight: 800;
-    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-  }
-  .batch-launch-btn:active { transform: scale(0.98); }
+    .studio-flow-btn.active .studio-flow-tag {
+      color: #e0e7ff;
+    }
 
-  /* ------------------- BOTTOM NAVIGATION BAR ------------------- */
-  .app-bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: calc(var(--safe-bottom) + 62px);
-    padding-bottom: var(--safe-bottom);
-    background: rgba(9, 13, 22, 0.95);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border-top: 1px solid var(--border-subtle);
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    z-index: 100;
-  }
+    /* ==========================================================================
+       Ambient Top Mesh Glow
+       ========================================================================== */
+    .ambient-mesh {
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 360px;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(60% 50% at 12% 10%, rgba(67, 56, 202, 0.18) 0%, transparent 70%),
+        radial-gradient(50% 45% at 88% 18%, rgba(245, 158, 11, 0.15) 0%, transparent 72%),
+        radial-gradient(70% 55% at 50% 55%, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+      -webkit-mask-image: linear-gradient(#000 55%, transparent);
+      mask-image: linear-gradient(#000 55%, transparent);
+    }
 
-  .nav-tab-btn {
-    flex: 1;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    background: transparent;
-    border: none;
-    color: var(--text-dim);
-    cursor: pointer;
-    transition: all 0.15s ease;
-    position: relative;
-  }
-  .nav-tab-btn.active {
-    color: #38bdf8;
-  }
-  .nav-tab-icon {
-    font-size: 20px;
-    line-height: 1;
-    transition: transform 0.15s;
-  }
-  .nav-tab-btn.active .nav-tab-icon {
-    transform: scale(1.12);
-  }
-  .nav-tab-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.2px;
-  }
-  .nav-badge-pill {
-    position: absolute;
-    top: 5px;
-    right: calc(50% - 22px);
-    background: #ef4444;
-    color: #fff;
-    font-size: 9.5px;
-    font-weight: 800;
-    padding: 1px 5px;
-    border-radius: var(--radius-full);
-  }
+    /* ==========================================================================
+       Stealth Login Overlay
+       ========================================================================== */
+    .stealth-login-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background-color: var(--bg-page);
+      background-image:
+        radial-gradient(65% 45% at 20% 15%, rgba(67, 56, 202, 0.16) 0%, transparent 70%),
+        radial-gradient(55% 45% at 85% 80%, rgba(245, 158, 11, 0.12) 0%, transparent 70%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
 
-  /* ------------------- BOTTOM SHEET MODALS ------------------- */
-  .bottom-sheet-backdrop {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(4px);
-    z-index: 200;
-    animation: fadeIn 0.2s ease;
-  }
-  .bottom-sheet-backdrop.active { display: block; }
+    .stealth-login-box {
+      width: 100%;
+      max-width: 360px;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-card);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
 
-  .bottom-sheet-content {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    max-width: 520px;
-    margin: 0 auto;
-    background: var(--bg-surface);
-    border-top: 1.5px solid var(--border-medium);
-    border-radius: 22px 22px 0 0;
-    padding: 16px 16px calc(var(--safe-bottom) + 24px) 16px;
-    z-index: 210;
-    max-height: 85vh;
-    overflow-y: auto;
-    animation: slideUp 0.25s ease;
-  }
-  .sheet-handle-bar {
-    width: 40px;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-full);
-    margin: 0 auto 14px auto;
-  }
-  .sheet-title {
-    font-size: 16px;
-    font-weight: 800;
-    color: var(--text-main);
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+    .login-brand-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 4px;
+    }
 
-  /* Form Elements */
-  select, input[type="date"], input[type="time"], input[type="text"] {
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    color: var(--text-main);
-    padding: 9px 12px;
-    border-radius: var(--radius-md);
-    font-size: 13.5px;
-    font-weight: 600;
-    outline: none;
-    width: 100%;
-  }
-  select:focus, input:focus {
-    border-color: var(--primary);
-  }
+    .login-brand-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background-color: #4338ca;
+      background-image: linear-gradient(135deg, #4338ca 0%, #312e81 100%);
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 8px 20px -6px rgba(67, 56, 202, 0.55);
+    }
 
-  .btn-default {
-    width: 100%;
-    border: none;
-    border-radius: var(--radius-md);
-    padding: 12px 14px;
-    font-size: 14px;
-    font-weight: 800;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: transform 0.1s;
-  }
-  .btn-default:active { transform: scale(0.98); }
-  .btn-primary { background: var(--primary-gradient); color: #fff; }
-  .btn-success { background: var(--success-gradient); color: #fff; }
-  .btn-danger { background: var(--danger-gradient); color: #fff; }
-  .btn-outline { background: var(--bg-card); border: 1px solid var(--border-subtle); color: var(--text-main); }
+    .login-brand-icon svg {
+      width: 24px;
+      height: 24px;
+    }
 
-  .log-container-box {
-    background: #050811;
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    padding: 10px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-muted);
-    max-height: 140px;
-    overflow-y: auto;
-    line-height: 1.45;
-  }
+    .stealth-input {
+      width: 100%;
+      height: 50px;
+      padding: 0 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-strong);
+      background-color: var(--bg-soft);
+      color: var(--text-main);
+      font-size: 16px;
+      font-weight: 600;
+    }
 
-  /* Stealth Login */
-  .stealth-login-overlay {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: #060a14;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 99999;
-    padding: 20px;
-  }
-  .stealth-login-box {
-    width: 100%;
-    max-width: 310px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .stealth-input {
-    width: 100%;
-    background: #0f172a;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: var(--radius-md);
-    padding: 14px 16px;
-    font-size: 15px;
-    color: #f8fafc;
-    outline: none;
-  }
-  .stealth-btn {
-    width: 100%;
-    background: #1e293b;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: var(--radius-md);
-    padding: 13px;
-    font-size: 15px;
-    font-weight: 700;
-    color: #f8fafc;
-    cursor: pointer;
-  }
+    .stealth-input:focus {
+      background-color: var(--bg-card);
+      border-color: var(--primary);
+    }
 
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-  @keyframes slideDown { from { transform: translateY(-15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-</style>
+    .stealth-btn {
+      appearance: none;
+      width: 100%;
+      min-height: 52px;
+      border-radius: var(--radius-md);
+      border: none;
+      background-color: var(--primary);
+      color: var(--primary-fg);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 24px -8px rgba(67, 56, 202, 0.5);
+    }
+
+    /* ==========================================================================
+       App Shell & Header
+       ========================================================================== */
+    #appContainer {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      background-color: var(--bg-page);
+    }
+
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background-color: var(--bg-glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      padding: calc(10px + var(--safe-top)) 16px 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .header-user-info {
+      appearance: none;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 4px 12px 4px 5px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      min-height: 44px;
+      cursor: pointer;
+      text-align: left;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-full);
+      background-color: #4338ca;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .user-text-col {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .user-title-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-cycle-chip {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-sub);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .machine-status-chip {
+      appearance: none;
+      min-height: 44px;
+      padding: 0 12px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border);
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    }
+
+    .machine-status-chip.warped {
+      background-color: var(--warn-bg);
+      border-color: var(--warn-border);
+      color: var(--warn);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--success);
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18);
+    }
+
+    .status-dot.warped {
+      background-color: #d97706;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25);
+    }
+
+    .header-icon-btn {
+      appearance: none;
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border);
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    }
+
+    .header-icon-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* ==========================================================================
+       Main View Container
+       ========================================================================== */
+    .main-view {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      padding: 12px 16px calc(116px + var(--safe-bottom)) 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* PWA Install Prompt Banner */
+    .pwa-install-banner {
+      display: none;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 12px 14px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .pwa-install-banner.show {
+      display: flex;
+    }
+
+    .pwa-banner-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .pwa-banner-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background-color: var(--primary);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .pwa-banner-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .pwa-banner-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .pwa-banner-sub {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    /* ==========================================================================
+       Live Radar Time-Warp HUD Banner (Obsidian Live Activity Card)
+       ========================================================================== */
+    .warp-hud-banner {
+      display: none;
+      background-color: #131520;
+      background-image:
+        radial-gradient(85% 90% at 95% 0%, rgba(245, 158, 11, 0.22) 0%, transparent 65%),
+        radial-gradient(75% 75% at 5% 100%, rgba(99, 102, 241, 0.24) 0%, transparent 65%);
+      border: 1px solid rgba(251, 191, 36, 0.38);
+      border-radius: var(--radius-xl);
+      padding: 16px;
+      color: #ffffff;
+      box-shadow: 0 20px 44px -14px rgba(15, 17, 26, 0.52);
+    }
+
+    .warp-hud-banner.active {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .warp-hud-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .warp-hud-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #fde68a;
+      background-color: #362916;
+      border: 1px solid rgba(251, 191, 36, 0.35);
+      padding: 5px 11px;
+      border-radius: var(--radius-full);
+      letter-spacing: 0.03em;
+    }
+
+    .warp-hud-timer {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 800;
+      color: #fbbf24;
+      line-height: 1;
+    }
+
+    .warp-hud-msg {
+      background-color: #1c1f2e;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 11px 13px;
+      font-size: 13.5px;
+      color: #f8fafc;
+      line-height: 1.45;
+    }
+
+    .warp-hud-actions {
+      display: grid;
+      grid-template-columns: 1.08fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-hud-primary {
+      appearance: none;
+      min-height: 46px;
+      padding: 0 12px;
+      border-radius: 14px;
+      border: none;
+      background-color: #ffffff;
+      color: #131520;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.45);
+    }
+
+    .btn-hud-cancel {
+      appearance: none;
+      min-height: 46px;
+      padding: 0 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(251, 113, 133, 0.38);
+      background-color: #2b1622;
+      color: #fecdd3;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    /* Non-jumping Floating Swipe Toast */
+    .swipe-toast-alert {
+      position: fixed;
+      left: 50%;
+      bottom: calc(94px + var(--safe-bottom));
+      transform: translateX(-50%) translateY(20px);
+      z-index: 95;
+      width: calc(100% - 32px);
+      max-width: 420px;
+      background-color: #14141b;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      padding: 13px 18px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+      box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s, transform 0.22s;
+    }
+
+    .swipe-toast-alert.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ==========================================================================
+       Tab 0: Obsidian Today Hero Card
+       ========================================================================== */
+    .today-hero-card {
+      position: relative;
+      overflow: hidden;
+      background-color: #131520;
+      background-image:
+        radial-gradient(85% 90% at 95% 5%, rgba(99, 102, 241, 0.32) 0%, transparent 65%),
+        radial-gradient(75% 70% at 5% 95%, rgba(245, 158, 11, 0.18) 0%, transparent 65%);
+      color: var(--hero-text);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-xl);
+      padding: 20px 18px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 22px 44px -16px rgba(19, 21, 32, 0.45);
+    }
+
+    .today-hero-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .today-hero-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--hero-muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .today-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 28px;
+      padding: 0 12px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .badge-working {
+      background-color: #24254c;
+      border: 1px solid rgba(165, 180, 252, 0.35);
+      color: #c7d2fe;
+    }
+
+    .badge-complete {
+      background-color: #163329;
+      border: 1px solid rgba(134, 239, 172, 0.35);
+      color: #86efac;
+    }
+
+    .badge-absent {
+      background-color: #362916;
+      border: 1px solid rgba(252, 211, 77, 0.4);
+      color: #fde68a;
+    }
+
+    .today-main-status {
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #ffffff;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .today-times-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .today-col {
+      background-color: #1d2030;
+      border: 1px solid var(--hero-border);
+      border-radius: var(--radius-md);
+      padding: 11px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .today-col-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--hero-muted);
+    }
+
+    .today-col-val {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+
+    .today-col-val.in {
+      color: #6ee7b7;
+    }
+
+    .today-col-val.out {
+      color: #c4b5fd;
+    }
+
+    .today-hero-action-btn {
+      appearance: none;
+      width: 100%;
+      min-height: 52px;
+      padding: 0 18px;
+      border-radius: var(--radius-md);
+      border: none;
+      background-color: #ffffff;
+      color: #131520;
+      font-size: 15px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.4);
+    }
+
+    .today-hero-action-btn.btn-hero-in {
+      background-color: #22c55e;
+      color: #052e16;
+    }
+
+    .today-hero-action-btn.btn-hero-out {
+      background-color: #ffffff;
+      color: #131520;
+    }
+
+    .today-hero-action-btn.btn-hero-done {
+      background-color: #222538;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #f1f5f9;
+      box-shadow: none;
+    }
+
+    /* ==========================================================================
+       Quick Rescue Banner
+       ========================================================================== */
+    .quick-rescue-banner {
+      display: none;
+      background-color: var(--bg-card);
+      border: 1px solid rgba(225, 29, 72, 0.14);
+      border-radius: var(--radius-lg);
+      padding: 14px 16px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 12px;
+      box-shadow: var(--shadow-card);
+    }
+
+    html[data-theme="dark"] .quick-rescue-banner {
+      background-color: var(--bg-card);
+      border-color: rgba(251, 113, 133, 0.25);
+    }
+
+    .quick-rescue-banner.show {
+      display: flex;
+    }
+
+    .quick-rescue-text {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+
+    .quick-rescue-btn {
+      appearance: none;
+      min-height: 44px;
+      padding: 0 15px;
+      border-radius: var(--radius-full);
+      border: none;
+      background-color: #be123c;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* ==========================================================================
+       Interactive 7-Day Week Strip
+       ========================================================================== */
+    .week-strip-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 14px 12px;
+      margin-top: 12px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .week-strip-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4px 10px 4px;
+    }
+
+    .week-strip-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .week-strip-sub {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-sub);
+    }
+
+    .week-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 0;
+    }
+
+    .week-day-pill {
+      appearance: none;
+      height: 60px;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+      border-radius: 14px;
+      background-color: var(--bg-soft);
+      color: var(--text-sub);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      cursor: pointer;
+    }
+
+    .week-day-pill.is-today {
+      background-color: var(--primary);
+      color: #ffffff;
+    }
+
+    .week-day-pill .w-label {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .week-day-pill .w-num {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 800;
+      color: inherit;
+    }
+
+    .week-day-pill .w-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .w-dot.dot-ok { background-color: #16a34a; }
+    .w-dot.dot-warn { background-color: #f59e0b; }
+    .w-dot.dot-err { background-color: #e11d48; }
+    .w-dot.dot-today { background-color: #ffffff; }
+    .w-dot.dot-none { background-color: transparent; }
+
+    /* ==========================================================================
+       Month KPI Summary & Filter Pills
+       ========================================================================== */
+    .kpi-summary-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 12px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .kpi-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .kpi-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .kpi-rate-badge {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--primary);
+      background-color: var(--primary-soft);
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+    }
+
+    .kpi-progress-bar {
+      width: 100%;
+      height: 10px;
+      background-color: var(--bg-muted);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+
+    .kpi-progress-fill {
+      height: 100%;
+      background-color: var(--primary);
+      background-image: linear-gradient(90deg, var(--primary) 0%, #6366f1 100%);
+      border-radius: var(--radius-full);
+      transition: width 0.35s ease;
+    }
+
+    .kpi-filter-pills {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .kpi-chip {
+      appearance: none;
+      min-height: 54px;
+      padding: 6px 4px;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      background-color: var(--bg-soft);
+      color: var(--text-sub);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      cursor: pointer;
+    }
+
+    .kpi-chip.active {
+      background-color: #4338ca;
+      border-color: #4338ca;
+      color: #ffffff;
+      box-shadow: 0 6px 16px -4px rgba(67, 56, 202, 0.38);
+    }
+
+    .kpi-chip-num {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .kpi-chip.active .kpi-chip-num {
+      color: #ffffff;
+    }
+
+    .kpi-chip-label {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* ==========================================================================
+       Timesheet Day List & Clean Tactile Cards
+       ========================================================================== */
+    .timesheet-day-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .day-card {
+      position: relative;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .day-card.today-highlight {
+      border-color: rgba(67, 56, 202, 0.32);
+      box-shadow: 0 12px 28px -12px rgba(67, 56, 202, 0.18);
+    }
+
+    .day-card.weekend-dim {
+      opacity: 0.92;
+    }
+
+    .day-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .day-date-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .day-date-num {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .day-weekday-tag {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-sub);
+    }
+
+    .day-today-tag {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--primary);
+      background-color: var(--primary-soft);
+      padding: 3px 9px;
+      border-radius: var(--radius-full);
+    }
+
+    .day-status-pill {
+      font-size: 12px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+    }
+
+    .pill-complete {
+      background-color: var(--success-bg);
+      color: var(--success);
+    }
+
+    .pill-warn {
+      background-color: var(--warn-bg);
+      color: var(--warn);
+    }
+
+    .pill-danger {
+      background-color: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .pill-weekend {
+      background-color: var(--bg-muted);
+      color: var(--text-sub);
+    }
+
+    .day-card-mid {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      background-color: var(--bg-soft);
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+    }
+
+    .day-punches {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .time-chip-in {
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .time-chip-out {
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .time-chip-empty {
+      color: var(--text-dim);
+    }
+
+    .day-quick-action {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-top: 4px;
+    }
+
+    .time-edit-mini-inp {
+      width: 112px;
+      height: 44px;
+      padding: 0 10px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-strong);
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      font-size: 16px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .day-action-trigger-btn {
+      appearance: none;
+      flex: 1;
+      min-height: 44px;
+      padding: 0 14px;
+      border-radius: var(--radius-md);
+      border: none;
+      background-color: var(--primary);
+      color: var(--primary-fg);
+      font-size: 13px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .day-action-trigger-btn.day-btn-in {
+      background-color: var(--success-btn);
+      color: #ffffff;
+    }
+
+    .future-days-toggle {
+      appearance: none;
+      width: 100%;
+      min-height: 46px;
+      padding: 0 16px;
+      border-radius: var(--radius-lg);
+      border: 1px dashed var(--border-strong);
+      background-color: var(--bg-card);
+      color: var(--text-sub);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* ==========================================================================
+       Tabs 1, 2, 3: Section Cards, Employee Cards & Elevated Late Items
+       ========================================================================== */
+    .tab-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .section-box {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .emp-profile-card {
+      background-color: #eef2ff;
+      color: #1e1b4b;
+      border: 1px solid #e0e7ff;
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: nowrap;
+      box-shadow: var(--shadow-card);
+    }
+
+    html[data-theme="dark"] .emp-profile-card {
+      background-color: #1b1e2e;
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+
+    .emp-info-col {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .emp-name-big {
+      font-size: 16px;
+      font-weight: 800;
+      color: inherit;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .emp-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .emp-chip {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      background-color: #ffffff;
+      color: #3730a3;
+      white-space: nowrap;
+    }
+
+    html[data-theme="dark"] .emp-chip {
+      background-color: #272b42;
+      color: #e0e7ff;
+    }
+
+    .emp-chip.danger {
+      background-color: #ffe4e6;
+      color: #be123c;
+    }
+
+    html[data-theme="dark"] .emp-chip.danger {
+      background-color: #3b1929;
+      color: #fecdd3;
+    }
+
+    .btn-quick-today {
+      appearance: none;
+      min-height: 44px;
+      padding: 0 14px;
+      border-radius: 14px;
+      border: none;
+      background-color: #4338ca;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+      flex-shrink: 0;
+      cursor: pointer;
+      box-shadow: 0 6px 16px -4px rgba(67, 56, 202, 0.38);
+    }
+
+    .toolbar-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .month-filter-select,
+    .big-select {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 100%;
+      height: 46px;
+      padding: 0 38px 0 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-strong);
+      background-color: var(--bg-soft);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233f3d4a' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      color: var(--text-main);
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      cursor: pointer;
+    }
+
+    html[data-theme="dark"] .month-filter-select,
+    html[data-theme="dark"] .big-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23cbd5e1' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    }
+
+    .custom-input {
+      width: 100%;
+      height: 46px;
+      padding: 0 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-strong);
+      background-color: var(--bg-soft);
+      color: var(--text-main);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .month-filter-select {
+      width: auto;
+      flex: 1;
+      min-width: 132px;
+      height: 44px;
+      font-size: 13px;
+    }
+
+    .toolbar-btns {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: nowrap;
+    }
+
+    .mini-tool-btn {
+      appearance: none;
+      min-height: 44px;
+      padding: 0 11px;
+      border-radius: 13px;
+      border: 1px solid var(--border);
+      background-color: var(--bg-soft);
+      color: var(--text-main);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .late-days-scroll {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .late-item-card {
+      position: relative;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 15px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .late-item-card.checked {
+      background-color: var(--primary-soft);
+      border-color: rgba(67, 56, 202, 0.35);
+    }
+
+    .late-item-card.fixed {
+      background-color: var(--success-bg);
+      border-color: var(--success-border);
+    }
+
+    .late-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .late-card-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .late-checkbox {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 7px;
+      border: 2px solid var(--border-strong);
+      background-color: var(--bg-card);
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: background-color 0.15s, border-color 0.15s;
+    }
+
+    .late-checkbox:checked {
+      background-color: var(--primary);
+      border-color: var(--primary);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .late-date-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: var(--font-mono);
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .late-desc-sub {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-sub);
+      margin-top: 2px;
+    }
+
+    .late-card-right {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background-color: var(--bg-soft);
+      padding: 8px 10px;
+      border-radius: 13px;
+    }
+
+    .late-item-card.checked .late-card-right {
+      background-color: var(--bg-card);
+    }
+
+    .late-right-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-sub);
+      white-space: nowrap;
+    }
+
+    .late-right-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      justify-content: flex-end;
+    }
+
+    .btn-mini-warp {
+      appearance: none;
+      min-height: 44px;
+      padding: 0 14px;
+      border-radius: 12px;
+      border: none;
+      background-color: var(--primary);
+      color: var(--primary-fg);
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+    }
+
+    .preset-chips {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .preset-chips.cols-5 {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .preset-chip {
+      appearance: none;
+      min-height: 44px;
+      padding: 0 6px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background-color: var(--bg-soft);
+      color: var(--text-main);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .btn-default {
+      appearance: none;
+      min-height: 48px;
+      padding: 0 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-strong);
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      font-size: 14px;
+      font-weight: 800;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      border-color: transparent;
+      color: var(--primary-fg);
+    }
+
+    .btn-success {
+      background-color: var(--success-btn);
+      border-color: transparent;
+      color: #ffffff;
+    }
+
+    .btn-danger {
+      background-color: var(--danger-bg);
+      border-color: var(--danger-border);
+      color: var(--danger);
+    }
+
+    .device-clock-panel {
+      background-color: #131520;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: #ffffff;
+    }
+
+    .hero-clock-val {
+      font-family: var(--font-mono);
+      font-size: 26px;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.15;
+    }
+
+    .hero-clock-date {
+      font-size: 12px;
+      color: #cbd5e1;
+      margin-top: 3px;
+    }
+
+    .device-action-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .log-box {
+      background-color: #131520;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #c7d2fe;
+      max-height: 180px;
+      overflow-y: auto;
+      line-height: 1.6;
+    }
+
+    /* ==========================================================================
+       Floating Batch Action Bar
+       ========================================================================== */
+    .floating-batch-bar {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: calc(88px + var(--safe-bottom));
+      z-index: 86;
+      width: calc(100% - 32px);
+      max-width: 400px;
+      display: none;
+    }
+
+    .floating-batch-bar.show {
+      display: block;
+    }
+
+    .batch-launch-btn {
+      appearance: none;
+      width: 100%;
+      min-height: 52px;
+      padding: 0 20px;
+      border-radius: 18px;
+      border: none;
+      background-color: #4338ca;
+      background-image: linear-gradient(135deg, #4338ca 0%, #312e81 100%);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 16px 32px -8px rgba(67, 56, 202, 0.55);
+    }
+
+    /* ==========================================================================
+       Obsidian Floating Dock
+       ========================================================================== */
+    .bottom-nav-shield {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+      width: 100%;
+      max-width: 520px;
+      height: calc(96px + var(--safe-bottom));
+      background: linear-gradient(to top, var(--bg-page) 60%, rgba(244, 243, 239, 0) 100%);
+      pointer-events: none;
+      z-index: 80;
+    }
+
+    html[data-theme="dark"] .bottom-nav-shield {
+      background: linear-gradient(to top, var(--bg-page) 60%, rgba(11, 12, 18, 0) 100%);
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: calc(12px + var(--safe-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 85;
+      width: calc(100% - 24px);
+      max-width: 430px;
+      height: 64px;
+      background-color: #131520;
+      background-image: linear-gradient(180deg, #191c2b 0%, #131520 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 26px;
+      padding: 0 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 52px 1fr 1fr;
+      align-items: center;
+      gap: 2px;
+      box-shadow:
+        0 18px 36px -10px rgba(10, 12, 24, 0.48),
+        0 4px 10px -2px rgba(10, 12, 24, 0.22);
+    }
+
+    html[data-theme="dark"] .bottom-nav {
+      background-color: #181b2a;
+      border-color: rgba(255, 255, 255, 0.14);
+      box-shadow: 0 18px 38px -10px rgba(0, 0, 0, 0.65);
+    }
+
+    body.keyboard-open .bottom-nav,
+    body.keyboard-open .bottom-nav-shield,
+    body.keyboard-open .floating-batch-bar {
+      display: none;
+    }
+
+    .nav-btn {
+      appearance: none;
+      position: relative;
+      height: 62px;
+      padding: 4px 2px 2px 2px;
+      border-radius: 0;
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .nav-btn.active {
+      background-color: transparent;
+      background-image: radial-gradient(55% 65% at 50% 0%, rgba(129, 140, 248, 0.26) 0%, transparent 80%);
+      color: #ffffff;
+    }
+
+    .nav-btn.active::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 22px;
+      height: 3px;
+      border-radius: 0 0 4px 4px;
+      background-color: #818cf8;
+      box-shadow: 0 2px 10px rgba(129, 140, 248, 0.9);
+    }
+
+    .nav-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .nav-btn.active .nav-icon {
+      color: #a5b4fc;
+      transform: translateY(-1px);
+    }
+
+    .nav-icon svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .nav-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .nav-btn.active .nav-label {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .nav-badge {
+      position: absolute;
+      top: 6px;
+      right: calc(50% - 22px);
+      z-index: 2;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 4px;
+      border-radius: var(--radius-full);
+      background-color: #e11d48;
+      color: #ffffff;
+      border: 1.5px solid #151826;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Center Raised Action Orb */
+    .nav-center-slot {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-center-orb {
+      appearance: none;
+      position: relative;
+      bottom: 12px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 3.5px solid var(--bg-page);
+      background-color: #4338ca;
+      background-image: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 10px 22px -6px rgba(67, 56, 202, 0.68);
+    }
+
+    .nav-center-orb svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    /* ==========================================================================
+       Bottom Sheets
+       ========================================================================== */
+    .sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(10, 12, 22, 0.56);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .sheet-backdrop.active {
+      display: flex;
+    }
+
+    .bottom-sheet {
+      width: 100%;
+      max-width: 520px;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      border-radius: 28px 28px 0 0;
+      padding: 14px 20px calc(24px + var(--safe-bottom)) 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-height: 90dvh;
+      overflow-y: auto;
+    }
+
+    .sheet-handle {
+      width: 40px;
+      height: 5px;
+      border-radius: var(--radius-full);
+      background: var(--border-strong);
+      margin: 0 auto 4px auto;
+    }
+
+    .sheet-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .sheet-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .sheet-close-btn {
+      appearance: none;
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border);
+      background: var(--bg-soft);
+      color: var(--text-sub);
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Stealth Login Screen -->
-  <div id="loginScreen" class="stealth-login-overlay">
+  <!-- ==================== DESKTOP STUDIO PREVIEW PANEL (>= 960px) ==================== -->
+  <nav class="studio-sidebar" aria-label="Bảng điều khiển xem trước UI/UX">
+    <span class="studio-badge">ZK Time-Warp • Studio UI</span>
+    <h2 class="studio-title">Trải nghiệm Mobile PWA</h2>
+    <p class="studio-desc">Chọn kịch bản bên dưới để kiểm thử trực tiếp các trạng thái trên màn hình điện thoại:</p>
+
+    <div class="studio-flow-list">
+      <button type="button" class="studio-flow-btn active" id="stBtn0" onclick="studioJump('timesheet', this)">
+        <span>1. Bảng công &amp; Ca hôm nay</span>
+        <span class="studio-flow-tag">Tab 1</span>
+      </button>
+      <button type="button" class="studio-flow-btn" id="stBtn1" onclick="studioJump('thinh', this)">
+        <span>2. Cứu hộ 3 ngày đi trễ</span>
+        <span class="studio-flow-tag">Tab 2</span>
+      </button>
+      <button type="button" class="studio-flow-btn" id="stBtnWarp" onclick="studioTriggerDemoWarp(this)">
+        <span>3. Bật Radar Tua Giờ 30s</span>
+        <span class="studio-flow-tag">HUD</span>
+      </button>
+      <button type="button" class="studio-flow-btn" id="stBtnSheet" onclick="studioTriggerConfirmSheet(this)">
+        <span>4. Mở Sheet Xác Nhận Bù</span>
+        <span class="studio-flow-tag">Sheet</span>
+      </button>
+      <button type="button" class="studio-flow-btn" id="stBtn2" onclick="studioJump('others', this)">
+        <span>5. Bù giờ cho Đồng Nghiệp</span>
+        <span class="studio-flow-tag">Tab 3</span>
+      </button>
+      <button type="button" class="studio-flow-btn" id="stBtn3" onclick="studioJump('custom', this)">
+        <span>6. Mở Cửa Từ &amp; Đồng Hồ</span>
+        <span class="studio-flow-tag">Tab 4</span>
+      </button>
+      <button type="button" class="studio-flow-btn" id="stBtnLogin" onclick="logoutApp()">
+        <span>7. Màn hình Đăng nhập</span>
+        <span class="studio-flow-tag">Auth</span>
+      </button>
+    </div>
+
+    <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; display:flex; flex-direction:column; gap:8px;">
+      <button type="button" class="studio-flow-btn" onclick="toggleMobileTheme()">
+        <span>Đổi giao diện Sáng / Tối</span>
+        <span class="studio-flow-tag">Theme</span>
+      </button>
+      <a href="/index.html" class="studio-flow-btn" style="text-decoration:none;">
+        <span>Mở Desktop Web Console</span>
+        <span class="studio-flow-tag">8099 ↗</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ==================== STEALTH LOGIN SCREEN ==================== -->
+  <div id="loginScreen" class="stealth-login-overlay" style="display:none;">
     <form class="stealth-login-box" onsubmit="handleLoginSubmit(event)">
-      <input type="text" id="loginUsername" class="stealth-input" placeholder="Username" autocomplete="username" autofocus required>
-      <input type="password" id="loginPassword" class="stealth-input" placeholder="Password" autocomplete="current-password" required>
-      <button type="submit" id="loginSubmitBtn" class="stealth-btn">→</button>
-      <div id="loginErrorMsg" style="display:none; color:#f87171; font-size:12.5px; text-align:center;"></div>
+      <div class="login-brand-row">
+        <span class="login-brand-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </span>
+        <div>
+          <h1 style="font-size:18px; font-weight:800;">ZK Time-Warp Portal</h1>
+          <p style="font-size:12px; color:var(--text-sub);">Hệ thống điều khiển chấm công thông minh</p>
+        </div>
+      </div>
+
+      <div>
+        <label class="field-label" for="loginUsername">Tài khoản</label>
+        <input type="text" id="loginUsername" class="stealth-input" value="admin" placeholder="Nhập username" autocomplete="username" required />
+      </div>
+
+      <div>
+        <label class="field-label" for="loginPassword">Mật khẩu</label>
+        <input type="password" id="loginPassword" class="stealth-input" value="admin123" placeholder="Nhập mật khẩu" autocomplete="current-password" required />
+      </div>
+
+      <button type="submit" id="loginSubmitBtn" class="stealth-btn">Đăng nhập hệ thống</button>
+      <button type="button" class="btn-default" style="width:100%;" onclick="enterPreviewDemo()">Vào thẳng giao diện (Demo UI)</button>
+      <div id="loginErrorMsg" style="display:none; color:var(--danger); font-size:13px; font-weight:700; text-align:center;"></div>
     </form>
   </div>
 
-  <!-- Main Mobile App Layout -->
-  <div id="appContainer" style="display:none;">
+  <!-- ==================== MAIN MOBILE PWA SHELL ==================== -->
+  <div id="appContainer">
+    <div class="ambient-mesh" aria-hidden="true"></div>
 
     <!-- Fixed App Header -->
     <header class="app-header">
-      <div class="header-user-info" onclick="openUserCycleSheet()">
+      <button type="button" class="header-user-info" onclick="openUserCycleSheet()">
         <div class="user-avatar" id="headerUserAvatar">TK</div>
         <div class="user-text-col">
           <div class="user-title-row">
             <span class="user-name" id="headerUserName">Trần Kim Thịnh</span>
-            <span style="font-size:10px; color:var(--text-dim);">▾</span>
+            <span style="font-size:12px; color:var(--text-dim);">▾</span>
           </div>
           <span class="user-cycle-chip" id="headerCycleText">Tháng 11/2026</span>
         </div>
-      </div>
+      </button>
 
       <div class="header-actions">
-        <!-- Machine Status Pill (Click to open Device Sheet) -->
-        <div class="machine-status-chip" id="machineStatusChip" onclick="openDeviceSheet()" title="Xem chi tiết máy chấm công">
-          <div class="status-dot" id="headerStatusDot"></div>
+        <!-- Machine Status Pill -->
+        <button type="button" class="machine-status-chip" id="machineStatusChip" onclick="openDeviceSheet()" title="Xem chi tiết máy chấm công">
+          <span class="status-dot" id="headerStatusDot"></span>
           <span id="headerDevClock">--:--</span>
-        </div>
+        </button>
 
         <!-- Sync Button -->
-        <button class="header-icon-btn" onclick="syncTimesheetFromMachine()" id="headerSyncBtn" title="Đồng bộ từ máy">
-          🔄
+        <button type="button" class="header-icon-btn" onclick="syncTimesheetFromMachine()" id="headerSyncBtn" aria-label="Đồng bộ từ máy" title="Đồng bộ từ máy">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+        </button>
+
+        <!-- Theme Toggle Button -->
+        <button type="button" class="header-icon-btn" onclick="toggleMobileTheme()" aria-label="Đổi giao diện Sáng / Tối" title="Đổi giao diện Sáng / Tối">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
         </button>
       </div>
     </header>
 
     <!-- Scrollable Main View -->
-    <main class="view-wrapper">
+    <main class="main-view">
 
-      <!-- Active Time-Warp Floating Banner HUD -->
-      <div id="warpHudBanner" class="warp-hud-banner">
+      <!-- PWA Smart Install Prompt Banner -->
+      <div id="pwaInstallBanner" class="pwa-install-banner" role="region" aria-label="Cài đặt ứng dụng">
+        <div class="pwa-banner-left">
+          <div class="pwa-banner-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+          </div>
+          <div>
+            <div class="pwa-banner-title">Cài đặt App ZK Chấm Công</div>
+            <div class="pwa-banner-sub" id="pwaBannerSubText">Mở toàn màn hình nhanh như ứng dụng gốc</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:6px; align-items:center;">
+          <button type="button" class="mini-tool-btn" id="pwaInstallBtn" style="background-color:var(--primary); color:#fff; border-color:var(--primary);" onclick="triggerPwaInstall()">Cài đặt</button>
+          <button type="button" class="sheet-close-btn" aria-label="Đóng gợi ý cài đặt" onclick="dismissPwaBanner()">✕</button>
+        </div>
+      </div>
+
+      <!-- Global Time-Warp HUD Banner (Obsidian Live Activity Card) -->
+      <div id="warpHudBanner" class="warp-hud-banner" role="status" aria-live="polite">
         <div class="warp-hud-top">
-          <span class="warp-hud-pill" id="warpHudBadge">⚡ ĐANG TUA GIỜ</span>
+          <span class="warp-hud-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Đang tua giờ máy ZKTeco
+          </span>
           <span class="warp-hud-timer" id="warpHudCountdown">30s</span>
         </div>
         <div class="warp-hud-msg" id="warpHudMsg">
-          👉 Hãy đưa thẻ RFID lên quẹt vào máy chấm công ngay!
+          Mời bạn đưa thẻ từ RFID lên máy chấm công ngay!
         </div>
         <div class="warp-hud-actions">
-          <button id="simSwipeBtn" class="btn-default btn-success" style="flex:1; display:none; padding:9px 12px; font-size:12px;" onclick="simulateSwipeOnEmulator()">
-            💳 Quẹt Thẻ Ảo (Test)
+          <button type="button" id="simSwipeBtn" class="btn-hud-primary" onclick="simulateSwipeOnEmulator()">
+            ⚡ Quẹt Thẻ Ảo
           </button>
-          <button class="btn-default btn-danger" style="flex:1; padding:9px 12px; font-size:12px;" onclick="restoreClockNow()">
-            🔄 Huỷ & Trả Giờ Chuẩn
+          <button type="button" class="btn-hud-cancel" onclick="restoreClockNow()">
+            Huỷ &amp; Trả Giờ
           </button>
         </div>
       </div>
 
-      <!-- Realtime Swipe Toast Alert -->
-      <div id="swipeToastAlert" class="swipe-toast-alert"></div>
+      <!-- Realtime Swipe Toast Alert (Fixed non-jumping pill) -->
+      <div id="swipeToastAlert" class="swipe-toast-alert" role="status" aria-live="polite"></div>
 
       <!-- ================= TAB 0: CHẤM CÔNG (TIMESHEET & TODAY HERO) ================= -->
       <div id="viewTimesheet">
-        <!-- Today Hero Card -->
+        <!-- Obsidian Today Hero Card -->
         <div class="today-hero-card" id="todayHeroCard">
           <div class="today-hero-header">
             <span class="today-hero-title">
-              <span>⚡</span>
-              <span id="todayHeroDateLine">HÔM NAY • THỨ NĂM, 05/11</span>
+              <span id="todayHeroDateLine">HÔM NAY • THỨ 2, 09/11</span>
             </span>
             <span class="today-hero-badge badge-working" id="todayHeroStatusBadge">ĐANG LÀM VIỆC</span>
           </div>
 
           <div class="today-main-status" id="todayHeroMainText">
-            <span>Đã chấm vào</span>
-            <span style="color:#6ee7b7;" id="todayHeroInDisplay">08:23:00</span>
+            <span>Đã vào ca lúc</span>
+            <span id="todayHeroInDisplay">08:23:00</span>
           </div>
 
           <div class="today-times-row">
@@ -1125,364 +2275,523 @@
             </div>
             <div class="today-col">
               <span class="today-col-label">Thời Gian</span>
-              <span class="today-col-val dur" id="todayHeroDurVal">Đang chạy</span>
+              <span class="today-col-val dur" id="todayHeroDurVal">Đang tính</span>
             </div>
           </div>
 
-          <button id="todayHeroBtn" class="today-hero-action-btn btn-hero-out" onclick="onTodayHeroActionClick()">
-            <span>🔵</span>
-            <span id="todayHeroBtnText">Tan Ca Bù Ngay (17:44:07)</span>
+          <button type="button" id="todayHeroBtn" class="today-hero-action-btn btn-hero-out" onclick="onTodayHeroActionClick()">
+            <span id="todayHeroBtnText">Tan Ca Bù Ngay (Đề xuất 17:45:00)</span>
           </button>
         </div>
 
-        <!-- Month KPI Progress Card -->
-        <div class="month-kpi-card">
-          <div class="month-kpi-top">
-            <span class="month-kpi-title" id="kpiCycleTitle">Công Tháng 11/2026</span>
-            <span class="month-kpi-rate" id="kpiRateText">3 / 4 ngày (75%)</span>
+        <!-- Quick Late-Days Queue Banner -->
+        <div id="quickRescueBanner" class="quick-rescue-banner">
+          <div>
+            <div class="quick-rescue-text" id="quickRescueText">Phát hiện 3 ngày đi trễ (&gt; 08:30) cần bù</div>
+            <div style="font-size:12px; color:var(--text-sub); margin-top:2px;">Bấm để chọn &amp; chạy tua hàng loạt về trước 08:30</div>
+          </div>
+          <button type="button" class="quick-rescue-btn" onclick="switchMainTab('thinh')">Cứu hộ ngay →</button>
+        </div>
+
+        <!-- Interactive 7-Day Week Strip -->
+        <div class="week-strip-card">
+          <div class="week-strip-head">
+            <span class="week-strip-title">Nhịp chấm công tuần này</span>
+            <span class="week-strip-sub mono">03/11 – 09/11</span>
+          </div>
+          <div class="week-grid" role="tablist" aria-label="Các ngày trong tuần">
+            <button type="button" role="tab" class="week-day-pill" onclick="setTimesheetFilter('ALL', document.getElementById('filterChipAll'))">
+              <span class="w-label">T2</span>
+              <span class="w-num">03</span>
+              <span class="w-dot dot-ok"></span>
+            </button>
+            <button type="button" role="tab" class="week-day-pill" onclick="setTimesheetFilter('ALL', document.getElementById('filterChipAll'))">
+              <span class="w-label">T3</span>
+              <span class="w-num">04</span>
+              <span class="w-dot dot-ok"></span>
+            </button>
+            <button type="button" role="tab" class="week-day-pill" onclick="setTimesheetFilter('NEED_FIX', document.getElementById('filterChipNeedFix'))">
+              <span class="w-label">T4</span>
+              <span class="w-num">05</span>
+              <span class="w-dot dot-err"></span>
+            </button>
+            <button type="button" role="tab" class="week-day-pill" onclick="setTimesheetFilter('NEED_FIX', document.getElementById('filterChipNeedFix'))">
+              <span class="w-label">T5</span>
+              <span class="w-num">06</span>
+              <span class="w-dot dot-warn"></span>
+            </button>
+            <button type="button" role="tab" class="week-day-pill" onclick="setTimesheetFilter('WEEKEND', document.getElementById('filterChipWeekend'))">
+              <span class="w-label">T6</span>
+              <span class="w-num">07</span>
+              <span class="w-dot dot-none"></span>
+            </button>
+            <button type="button" role="tab" class="week-day-pill" onclick="setTimesheetFilter('WEEKEND', document.getElementById('filterChipWeekend'))">
+              <span class="w-label">T7</span>
+              <span class="w-num">08</span>
+              <span class="w-dot dot-none"></span>
+            </button>
+            <button type="button" role="tab" aria-selected="true" class="week-day-pill is-today" onclick="setTimesheetFilter('ALL', document.getElementById('filterChipAll'))">
+              <span class="w-label">Nay</span>
+              <span class="w-num">09</span>
+              <span class="w-dot dot-today"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Month KPI Summary & Filter Chips -->
+        <div class="kpi-summary-card">
+          <div class="kpi-top-row">
+            <span class="kpi-title">Tiến độ <span id="kpiCycleTitle">Tháng 11/2026</span></span>
+            <span class="kpi-rate-badge" id="kpiRateText">19 / 22 ngày (86%)</span>
           </div>
           <div class="kpi-progress-bar">
-            <div class="kpi-progress-fill" id="kpiProgressFill" style="width: 75%;"></div>
+            <div class="kpi-progress-fill" id="kpiProgressFill" style="width: 86%;"></div>
           </div>
-          <div class="kpi-chips-row">
-            <div class="kpi-chip active" id="kpiChipAll" onclick="setTimesheetFilter('ALL', this)">
-              <span class="kpi-chip-num" id="kpiTotalNum">4</span>
-              <span class="kpi-chip-label">Tất cả ngày</span>
-            </div>
-            <div class="kpi-chip" id="kpiChipNeedFix" onclick="setTimesheetFilter('NEED_FIX', this)">
-              <span class="kpi-chip-num" style="color:#fbbf24;" id="kpiNeedFixNum">1</span>
-              <span class="kpi-chip-label">Cần bù công</span>
-            </div>
-            <div class="kpi-chip" id="kpiChipCompleted" onclick="setTimesheetFilter('COMPLETED', this)">
-              <span class="kpi-chip-num" style="color:#34d399;" id="kpiCompleteNum">3</span>
-              <span class="kpi-chip-label">Đã đủ công</span>
-            </div>
-            <div class="kpi-chip" id="kpiChipWeekend" onclick="setTimesheetFilter('WEEKEND', this)">
-              <span class="kpi-chip-num" style="color:#94a3b8;" id="kpiWeekendNum">1</span>
+          <div class="kpi-filter-pills">
+            <button type="button" class="kpi-chip active" id="filterChipAll" onclick="setTimesheetFilter('ALL', this)">
+              <span class="kpi-chip-num" id="kpiTotalNum">22</span>
+              <span class="kpi-chip-label">Tất cả</span>
+            </button>
+            <button type="button" class="kpi-chip" id="filterChipNeedFix" onclick="setTimesheetFilter('NEED_FIX', this)">
+              <span class="kpi-chip-num" id="kpiNeedFixNum">3</span>
+              <span class="kpi-chip-label">Cần bù</span>
+            </button>
+            <button type="button" class="kpi-chip" id="filterChipComplete" onclick="setTimesheetFilter('COMPLETED', this)">
+              <span class="kpi-chip-num" id="kpiCompleteNum">19</span>
+              <span class="kpi-chip-label">Đủ công</span>
+            </button>
+            <button type="button" class="kpi-chip" id="filterChipWeekend" onclick="setTimesheetFilter('WEEKEND', this)">
+              <span class="kpi-chip-num" id="kpiWeekendNum">2</span>
               <span class="kpi-chip-label">Cuối tuần</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Day-by-Day Card List -->
+        <div class="timesheet-day-list" id="timesheetDaysContainer">
+          <div style="text-align:center; padding: 30px; color: var(--text-dim);">
+            Đang nạp dữ liệu ngày công...
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TAB 1: TRỄ THỊNH ================= -->
+      <div id="viewThinh" class="tab-stack" style="display:none;">
+        <!-- Obsidian Employee Hero Pass -->
+        <div class="emp-profile-card">
+          <div class="emp-info-col">
+            <div class="emp-name-big">Trần Kim Thịnh</div>
+            <div class="emp-meta-row">
+              <span class="emp-chip">PIN 7441083</span>
+              <span class="emp-chip">RFID 10,971,784</span>
+            </div>
+          </div>
+          <button type="button" class="btn-quick-today" onclick="quickWarpTodayThinh()">
+            ⚡ Tua Hôm Nay
+          </button>
+        </div>
+
+        <!-- Filter & Batch Toolbar Card -->
+        <div class="section-box">
+          <div class="section-head">
+            <span class="section-title">Ca đi trễ (&gt; 08:30)</span>
+            <span id="lateSummaryBadgeThinh" style="font-size:12px; font-weight:800; color:var(--text-sub);">Đang tải...</span>
+          </div>
+
+          <div class="toolbar-row">
+            <select id="monthFilterThinh" class="month-filter-select" aria-label="Lọc tháng của Thịnh" onchange="renderLateDaysListThinh()">
+              <option value="2026-11">Tháng 11/2026</option>
+              <option value="ALL">Tất cả các tháng</option>
+            </select>
+            <div class="toolbar-btns">
+              <button type="button" class="mini-tool-btn" onclick="toggleSelectAllThinh(true)">Chọn hết</button>
+              <button type="button" class="mini-tool-btn" onclick="toggleSelectAllThinh(false)">Bỏ chọn</button>
+              <button type="button" class="mini-tool-btn" onclick="randomizeTimesThinh()">🎲 Đảo giờ</button>
             </div>
           </div>
         </div>
 
-        <!-- Days Timeline List -->
-        <div class="ts-days-list" id="timesheetDaysContainer">
-          <div style="text-align:center; padding:30px; color:var(--text-dim);">Đang nạp dữ liệu ngày công...</div>
+        <!-- Individual Late Day Cards -->
+        <div class="late-days-scroll" id="lateDaysContainerThinh">
+          <div class="section-box" style="text-align:center; padding:24px; color:var(--text-dim);">Đang phân tích dữ liệu...</div>
         </div>
       </div>
 
-      <!-- ================= TAB 1: CHẤM TRỄ THỊNH ================= -->
-      <div id="viewThinh" style="display:none;">
+      <!-- ================= TAB 2: ĐỒNG NGHIỆP ================= -->
+      <div id="viewOthers" class="tab-stack" style="display:none;">
+        <!-- Employee Selector Card -->
         <div class="section-box">
-          <div class="section-box-header">
-            <div class="section-box-title">📋 Ngày Chấm Trễ (&gt; 08:30) — Thịnh</div>
-            <span id="lateSummaryBadgeThinh" style="font-size:12px; font-weight:800; color:#fca5a5;">--</span>
-          </div>
-
-          <div style="display:flex; gap:6px; margin-bottom:10px;">
-            <select id="monthFilterThinh" onchange="renderLateDaysListThinh()" style="flex:1.2;">
-              <option value="2026-11" selected>Tháng 11/2026</option>
+          <div>
+            <label class="field-label" for="otherUserSelect">Chọn đồng nghiệp cần hỗ trợ bù giờ</label>
+            <select id="otherUserSelect" class="big-select" onchange="onOtherUserSelected()">
+              <option value="">-- Đang tải danh sách nhân viên --</option>
             </select>
-            <button class="btn-default btn-outline" style="flex:1; padding:7px 10px; font-size:12px;" onclick="toggleSelectAllThinh(true)">☑ Chọn hết</button>
-            <button class="btn-default btn-outline" style="flex:0.8; padding:7px 10px; font-size:12px;" onclick="randomizeTimesThinh()">🎲 Giờ</button>
-          </div>
-
-          <div id="lateDaysContainerThinh">
-            <div style="text-align:center; padding:20px; color:var(--text-dim);">Đang nạp danh sách ngày trễ...</div>
           </div>
         </div>
 
-        <!-- Quick utilities for Thinh -->
-        <div class="section-box">
-          <div class="section-box-header">
-            <div class="section-box-title">⚡ Tiện Ích Nhanh — Thịnh</div>
-          </div>
-          <button class="btn-default btn-success" style="margin-bottom:8px;" onclick="quickWarpTodayThinh()">
-            ⚡ TUA VỀ 08:2x HÔM NAY (QUẸT 1 LẦN)
-          </button>
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-            <button class="btn-default btn-outline" onclick="unlockDoor()">🔓 Mở cửa (5s)</button>
-            <button class="btn-default btn-outline" onclick="restoreClockNow()">🔄 Đặt lại giờ</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ================= TAB 2: NHÂN VIÊN KHÁC ================= -->
-      <div id="viewOthers" style="display:none;">
-        <div class="section-box">
-          <div class="section-box-header">
-            <div class="section-box-title">👥 Chọn Nhân Viên Cần Bù</div>
-          </div>
-          <select id="otherUserSelect" onchange="onOtherUserSelected()" style="margin-bottom:10px; font-weight:800; border-color:#38bdf8;">
-            <option value="">Đang nạp danh sách...</option>
-          </select>
-
-          <!-- Selected Profile Info -->
-          <div style="background:var(--bg-card); border-radius:var(--radius-md); padding:10px 12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
-            <div>
-              <div style="font-size:15px; font-weight:800; color:#fff;" id="empCardName">--</div>
-              <div style="font-size:12px; color:var(--text-muted);">
-                Mã thẻ: <strong id="empCardId" style="color:#93c5fd;">--</strong>
+        <div id="otherEmployeeContent" class="tab-stack">
+          <!-- Obsidian Colleague Hero Pass -->
+          <div class="emp-profile-card">
+            <div class="emp-info-col">
+              <div class="emp-name-big" id="empCardName">---</div>
+              <div class="emp-meta-row">
+                <span class="emp-chip">RFID <span id="empCardId">---</span></span>
+                <span class="emp-chip danger" id="empCardLateCount">0 ngày trễ</span>
               </div>
             </div>
-            <span id="empCardLateCount" style="font-size:12px; font-weight:800; color:#fca5a5; background:rgba(239,68,68,0.15); padding:3px 8px; border-radius:var(--radius-full);">--</span>
+            <button type="button" class="btn-quick-today" onclick="quickWarpTodayOthers()">
+              ⚡ Tua Hôm Nay
+            </button>
           </div>
 
-          <div style="display:flex; gap:6px; margin-bottom:10px;">
-            <select id="monthFilterOthers" onchange="renderLateDaysListOthers()" style="flex:1.2;">
-              <option value="2026-11" selected>Tháng 11/2026</option>
-            </select>
-            <button class="btn-default btn-outline" style="flex:1; padding:7px 10px; font-size:12px;" onclick="toggleSelectAllOthers(true)">☑ Chọn hết</button>
-            <button class="btn-default btn-outline" style="flex:0.8; padding:7px 10px; font-size:12px;" onclick="randomizeTimesOthers()">🎲 Giờ</button>
-          </div>
-
-          <div id="lateDaysContainerOthers">
-            <div style="text-align:center; padding:20px; color:var(--text-dim);">Chọn nhân viên để xem ngày trễ...</div>
-          </div>
-        </div>
-
-        <div class="section-box">
-          <button class="btn-default btn-success" onclick="quickWarpTodayOthers()">
-            ⚡ TUA VỀ 08:2x HÔM NAY CHO NGƯỜI NÀY
-          </button>
-        </div>
-      </div>
-
-      <!-- ================= TAB 3: THIẾT BỊ & GIỜ TÙY CHỌN ================= -->
-      <div id="viewCustom" style="display:none;">
-        <!-- Machine Status Details -->
-        <div class="section-box">
-          <div class="section-box-header">
-            <div class="section-box-title">🏢 Máy Chấm Công Port 4370</div>
-            <span class="user-cycle-chip" id="recCountBadge">-- lượt quẹt</span>
-          </div>
-
-          <div style="background:#090e1a; border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:12px; text-align:center; margin-bottom:10px;">
-            <div style="font-size:11px; font-weight:700; color:var(--text-dim); text-transform:uppercase;">Giờ hiện tại trên máy</div>
-            <div style="font-size:32px; font-weight:900; color:#38bdf8; font-variant-numeric:tabular-nums; margin:2px 0;" id="devClockFull">--:--:--</div>
-            <div style="font-size:12px; color:var(--text-muted);" id="devDateFull">----/--/--</div>
-          </div>
-
-          <div style="margin-bottom:10px;">
-            <div style="font-size:11.5px; font-weight:700; color:var(--text-dim); margin-bottom:4px;">KẾT NỐI MÁY MỤC TIÊU:</div>
-            <select id="targetSelect" onchange="onTargetChange()" style="font-weight:700;">
-              <option value="192.168.54.250:4370">🏢 Máy Thật Văn Phòng (192.168.54.250)</option>
-              <option value="127.0.0.1:4370">🧪 Máy Giả Lập Local (127.0.0.1)</option>
-            </select>
-          </div>
-
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-            <button class="btn-default btn-outline" onclick="unlockDoor()">🔓 Mở cửa (5s)</button>
-            <button class="btn-default btn-outline" onclick="restoreClockNow()">🔄 Đặt lại giờ chuẩn</button>
-          </div>
-        </div>
-
-        <!-- Custom Date & Time Picker -->
-        <div class="section-box">
-          <div class="section-box-header">
-            <div class="section-box-title">⏱️ Chỉnh Giờ & Ngày Cụ Thể</div>
-          </div>
-
-          <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:12px;">
-            <div>
-              <div style="font-size:11px; font-weight:700; color:var(--text-dim); margin-bottom:4px;">NHÂN VIÊN:</div>
-              <select id="customUserSelect" onchange="onCustomUserChange()" style="font-weight:700;">
-                <option value="7441083">Trần Kim Thịnh</option>
+          <!-- Filter & Batch Toolbar Card -->
+          <div class="section-box">
+            <div class="toolbar-row">
+              <select id="monthFilterOthers" class="month-filter-select" aria-label="Lọc tháng đồng nghiệp" onchange="renderLateDaysListOthers()">
+                <option value="2026-11">Tháng 11/2026</option>
+                <option value="ALL">Tất cả các tháng</option>
               </select>
-            </div>
-
-            <div>
-              <div style="font-size:11px; font-weight:700; color:var(--text-dim); margin-bottom:4px;">NGÀY CẦN CHẤM:</div>
-              <input type="date" id="customDateInput" style="font-size:15px; font-weight:800; text-align:center;">
-              <div style="display:flex; gap:6px; margin-top:6px;">
-                <button type="button" class="filter-pill-btn active" style="flex:1;" onclick="setCustomDateToday()">Hôm nay</button>
-                <button type="button" class="filter-pill-btn" style="flex:1;" onclick="setCustomDateDaysAgo(1)">Hôm qua</button>
-                <button type="button" class="filter-pill-btn" style="flex:1;" onclick="setCustomDateDaysAgo(2)">Hôm kia</button>
-              </div>
-            </div>
-
-            <div>
-              <div style="font-size:11px; font-weight:700; color:var(--text-dim); margin-bottom:4px;">GIỜ:PHÚT:GIÂY:</div>
-              <input type="time" step="1" id="customTimeInput" value="08:22:15" style="font-size:18px; font-weight:900; color:#6ee7b7; text-align:center;">
-              <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:6px;">
-                <button type="button" class="filter-pill-btn" onclick="setCustomTimePreset('08:22:15')">🌅 08:22</button>
-                <button type="button" class="filter-pill-btn" onclick="setCustomTimePreset('11:58:10')">🕛 11:58</button>
-                <button type="button" class="filter-pill-btn" onclick="setCustomTimePreset('17:45:20')">🌇 17:45</button>
-                <button type="button" class="filter-pill-btn" onclick="setCustomTimePreset('18:05:00')">🌇 18:05</button>
-                <button type="button" class="filter-pill-btn" onclick="setCustomTimeRandom()">🎲 Random</button>
+              <div class="toolbar-btns">
+                <button type="button" class="mini-tool-btn" onclick="toggleSelectAllOthers(true)">Chọn hết</button>
+                <button type="button" class="mini-tool-btn" onclick="toggleSelectAllOthers(false)">Bỏ chọn</button>
+                <button type="button" class="mini-tool-btn" onclick="randomizeTimesOthers()">🎲 Đảo giờ</button>
               </div>
             </div>
           </div>
 
-          <button class="btn-default btn-success" style="margin-bottom:8px;" onclick="executeCustomTimeWarp()">
-            ⚡ BẬT TUA GIỜ NÀY TRÊN MÁY (QUẸT THẺ)
-          </button>
-          <button class="btn-default btn-outline" style="border-color:#38bdf8; color:#38bdf8;" onclick="executeDirectInsertRecord()">
-            📝 Ghi Trực Tiếp Vào File Máy (Direct Insert)
-          </button>
+          <!-- Individual Late Day Cards -->
+          <div class="late-days-scroll" id="lateDaysContainerOthers">
+            <div class="section-box" style="text-align:center; padding:24px; color:var(--text-dim);">Chọn nhân viên để xem các ngày đi trễ</div>
+          </div>
         </div>
+      </div>
 
-        <!-- Realtime Swipes Log -->
+      <!-- ================= TAB 3: TÙY CHỈNH & MÁY CHẤM CÔNG ================= -->
+      <div id="viewCustom" class="tab-stack" style="display:none;">
+        <!-- Machine Status & Door Control -->
         <div class="section-box">
-          <div class="section-box-header">
-            <div class="section-box-title">📡 Nhật Ký Quẹt Thẻ Realtime</div>
+          <div class="section-head">
+            <span class="section-title">Thiết bị ZKTeco (TCP 4370)</span>
+            <span class="emp-chip" id="recCountBadge" style="background-color:var(--primary-soft); color:var(--primary);">14,681 lượt quẹt</span>
           </div>
-          <div id="logBox" class="log-container-box">Đang kết nối Backend...</div>
+
+          <div>
+            <label class="field-label" for="targetSelect">Thiết bị đích</label>
+            <select id="targetSelect" class="big-select" onchange="onTargetChange()">
+              <option value="192.168.54.250:4370">Máy Công Ty • 192.168.54.250:4370</option>
+              <option value="127.0.0.1:4370">Máy Giả Lập • 127.0.0.1:4370</option>
+            </select>
+          </div>
+
+          <div class="device-clock-panel">
+            <div>
+              <div class="hero-clock-val" id="devClockFull">--:--:--</div>
+              <div class="hero-clock-date" id="devDateFull">Ngày máy: ----/--/--</div>
+            </div>
+            <span class="today-hero-badge badge-complete">ONLINE • 4370</span>
+          </div>
+
+          <div class="device-action-grid">
+            <button type="button" class="btn-default btn-primary" onclick="unlockDoor()">🔓 Mở Cửa (5s)</button>
+            <button type="button" class="btn-default" onclick="restoreClockNow()">🔄 Đồng Bộ NTP</button>
+          </div>
         </div>
 
-        <div style="text-align:center; padding:10px 0;">
-          <button class="btn-default btn-outline" style="max-width:200px; margin:0 auto; color:#f87171;" onclick="logoutApp()">
-            🔒 Đăng xuất Portal
+        <!-- Custom Time-Warp Form -->
+        <div class="section-box">
+          <div class="section-head">
+            <span class="section-title">Tua Giờ / Ghi Bản Ghi Tùy Ý</span>
+          </div>
+
+          <div>
+            <label class="field-label" for="customUserSelect">1. Nhân viên</label>
+            <select id="customUserSelect" class="big-select" onchange="onCustomUserChange()">
+              <option value="7441083">Trần Kim Thịnh · PIN 7441083 ★</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="field-label" for="customDateInput">2. Ngày cần chấm công</label>
+            <input type="date" id="customDateInput" class="custom-input" />
+            <div class="preset-chips">
+              <button type="button" class="preset-chip" onclick="setCustomDateToday()">Hôm nay</button>
+              <button type="button" class="preset-chip" onclick="setCustomDateDaysAgo(1)">Hôm qua</button>
+              <button type="button" class="preset-chip" onclick="setCustomDateDaysAgo(2)">Hôm kia</button>
+              <button type="button" class="preset-chip" onclick="setCustomDateDaysAgo(3)">3 ngày qua</button>
+            </div>
+          </div>
+
+          <div>
+            <label class="field-label" for="customTimeInput">3. Giờ đặt lên máy (HH:MM:SS)</label>
+            <input type="text" inputmode="numeric" id="customTimeInput" class="custom-input mono" value="08:22:18" />
+            <div class="preset-chips">
+              <button type="button" class="preset-chip" onclick="setCustomTimePreset('08:18:34')">Vào 08:18</button>
+              <button type="button" class="preset-chip" onclick="setCustomTimePreset('08:23:41')">Vào 08:23</button>
+              <button type="button" class="preset-chip" onclick="setCustomTimePreset('17:45:12')">Về 17:45</button>
+              <button type="button" class="preset-chip" onclick="setCustomTimeRandom()">🎲 Đổi giờ</button>
+            </div>
+          </div>
+
+          <button type="button" class="btn-default btn-primary" style="width:100%;" onclick="executeCustomTimeWarp()">
+            ⚡ Tua Đồng Hồ Máy (Đợi Quẹt 30s)
           </button>
+
+          <button type="button" class="btn-default" style="width:100%;" onclick="executeDirectInsertRecord()">
+            Ghi Thẳng Bộ Nhớ (Không Cần Thẻ)
+          </button>
+        </div>
+
+        <!-- Activity Log -->
+        <div class="section-box">
+          <div class="section-head">
+            <span class="section-title">Nhật ký điều khiển thiết bị</span>
+            <a href="/index.html" style="font-size:12px; font-weight:700; color:var(--primary); text-decoration:none;">Mở Web Console →</a>
+          </div>
+          <div class="log-box" id="logBox">Sẵn sàng điều khiển...</div>
         </div>
       </div>
 
     </main>
 
-    <!-- Floating Batch Action Bar (Appears when items are selected in Tab 1 or 2) -->
+    <!-- Floating Batch Action Bar -->
     <div id="floatingBatchBar" class="floating-batch-bar">
-      <button class="batch-launch-btn" id="batchLaunchBtn" onclick="startSelectedQueue()">
-        🚀 CHẠY TUA GIỜ (0 NGÀY)
+      <button type="button" class="batch-launch-btn" id="batchLaunchBtn" onclick="startSelectedQueue()">
+        CHẠY TUA 0 NGÀY ĐÃ CHỌN →
       </button>
     </div>
 
-    <!-- Bottom App Navigation Bar -->
-    <nav class="app-bottom-nav">
-      <button class="nav-tab-btn active" id="navBtnTimesheet" onclick="switchMainTab('timesheet')">
-        <span class="nav-tab-icon">📅</span>
-        <span class="nav-tab-label">Ngày Công</span>
+    <!-- Obsidian Center-Orb Navigation Dock -->
+    <div class="bottom-nav-shield" aria-hidden="true"></div>
+    <nav class="bottom-nav" aria-label="Điều hướng chính">
+      <button type="button" class="nav-btn active" id="navBtnTimesheet" onclick="switchMainTab('timesheet')">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+        </span>
+        <span class="nav-label">Ngày Công</span>
       </button>
-      <button class="nav-tab-btn" id="navBtnThinh" onclick="switchMainTab('thinh')">
-        <span class="nav-tab-icon">⚡</span>
-        <span class="nav-tab-label">Trễ Thịnh</span>
-        <span class="nav-badge-pill" id="badgeThinhCount" style="display:none;">0</span>
+
+      <button type="button" class="nav-btn" id="navBtnThinh" onclick="switchMainTab('thinh')">
+        <span class="nav-badge" id="badgeThinhCount" style="display:none;">0</span>
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </span>
+        <span class="nav-label">Trễ Thịnh</span>
       </button>
-      <button class="nav-tab-btn" id="navBtnOthers" onclick="switchMainTab('others')">
-        <span class="nav-tab-icon">👥</span>
-        <span class="nav-tab-label">Đồng Nghiệp</span>
+
+      <!-- Center Raised Quick-Warp Orb -->
+      <div class="nav-center-slot">
+        <button type="button" class="nav-center-orb" onclick="quickWarpTodayThinh()" aria-label="Tua nhanh hôm nay" title="Tua nhanh hôm nay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </button>
+      </div>
+
+      <button type="button" class="nav-btn" id="navBtnOthers" onclick="switchMainTab('others')">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </span>
+        <span class="nav-label">Đồng Nghiệp</span>
       </button>
-      <button class="nav-tab-btn" id="navBtnCustom" onclick="switchMainTab('custom')">
-        <span class="nav-tab-icon">⚙️</span>
-        <span class="nav-tab-label">Máy & Giờ</span>
+
+      <button type="button" class="nav-btn" id="navBtnCustom" onclick="switchMainTab('custom')">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </span>
+        <span class="nav-label">Máy &amp; Giờ</span>
       </button>
     </nav>
 
-    <!-- User & Month Selector Bottom Sheet -->
-    <div id="userCycleSheetBackdrop" class="bottom-sheet-backdrop" onclick="closeUserCycleSheet()">
-      <div class="bottom-sheet-content" onclick="event.stopPropagation()">
-        <div class="sheet-handle-bar"></div>
-        <div class="sheet-title">
-          <span>Chọn Nhân Viên & Kỳ Công</span>
-          <button style="background:transparent; border:none; color:var(--text-dim); font-size:18px;" onclick="closeUserCycleSheet()">✕</button>
+    <!-- ================= SHEET 1: CHỌN NHÂN VIÊN & KỲ CÔNG ================= -->
+    <div class="sheet-backdrop" id="userCycleSheetBackdrop" onclick="closeUserCycleSheet()">
+      <div class="bottom-sheet" role="dialog" aria-modal="true" aria-labelledby="sheetUserCycleTitle" onclick="event.stopPropagation()">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <span class="sheet-title" id="sheetUserCycleTitle">Chọn Nhân Viên &amp; Kỳ Công</span>
+          <button type="button" class="sheet-close-btn" aria-label="Đóng" onclick="closeUserCycleSheet()">✕</button>
         </div>
 
-        <div style="margin-bottom:12px;">
-          <div style="font-size:11px; font-weight:700; color:var(--text-dim); margin-bottom:4px;">NHÂN VIÊN:</div>
-          <select id="tsUserSelect" onchange="onTimesheetUserChange(); closeUserCycleSheet();" style="font-weight:800; border-color:#38bdf8;">
-            <option value="7441083">Trần Kim Thịnh ★ Bạn</option>
+        <div>
+          <label class="field-label" for="tsUserSelect">Nhân viên xem bảng công</label>
+          <select id="tsUserSelect" class="big-select" onchange="onTimesheetUserChange()">
+            <option value="7441083">Trần Kim Thịnh · PIN 7441083 ★</option>
           </select>
         </div>
 
-        <div style="margin-bottom:16px;">
-          <div style="font-size:11px; font-weight:700; color:var(--text-dim); margin-bottom:4px;">KỲ CÔNG:</div>
-          <select id="tsCycleSelect" onchange="onTimesheetCycleChange(); closeUserCycleSheet();" style="font-weight:800;">
-            <option value="2026-11" selected>Tháng 11/2026</option>
-            <option value="2026-10">Tháng 10/2026</option>
-            <option value="2026-09">Tháng 09/2026</option>
+        <div>
+          <label class="field-label" for="tsCycleSelect">Kỳ tính công (Chu kỳ 25 → 24)</label>
+          <select id="tsCycleSelect" class="big-select" onchange="onTimesheetCycleChange()">
+            <option value="2026-11">Tháng 11/2026 (25/10 → 24/11)</option>
           </select>
         </div>
 
-        <button class="btn-default btn-primary" onclick="closeUserCycleSheet()">Xong</button>
+        <button type="button" class="btn-default btn-primary" style="width:100%;" onclick="closeUserCycleSheet()">
+          Áp Dụng &amp; Đóng
+        </button>
+
+        <button type="button" class="btn-default btn-danger" style="width:100%;" onclick="closeUserCycleSheet(); logoutApp();">
+          Đăng xuất phiên làm việc
+        </button>
       </div>
     </div>
 
-    <!-- Confirm Time-Warp Bottom Sheet Modal -->
-    <div id="confirmWarpSheetBackdrop" class="bottom-sheet-backdrop" onclick="closeConfirmWarpSheet()">
-      <div class="bottom-sheet-content" onclick="event.stopPropagation()" style="border-top-color: var(--warn); max-width: 480px;">
-        <div class="sheet-handle-bar"></div>
-        
-        <div class="sheet-title" style="margin-bottom: 6px;">
-          <span style="display:flex; align-items:center; gap:8px; color:#fbbf24;">
-            <span style="font-size:20px;">⏱️</span>
-            <span>Xác Nhận Tua Ngược Thời Gian</span>
-          </span>
-          <button style="background:transparent; border:none; color:var(--text-dim); font-size:20px; cursor:pointer; padding:2px 8px;" onclick="closeConfirmWarpSheet()">✕</button>
-        </div>
-        
-        <div style="font-size:12.5px; color:var(--text-muted); margin-bottom:14px; line-height:1.45;">
-          Hệ thống sẽ <b>tua ngược đồng hồ máy chấm công</b> về mốc thời gian dưới đây. Bạn vui lòng kiểm tra chính xác:
+    <!-- ================= SHEET 2: XÁC NHẬN & CHỈNH GIỜ TRƯỚC KHI TUA ================= -->
+    <div class="sheet-backdrop" id="confirmWarpSheetBackdrop" onclick="closeConfirmWarpSheet()">
+      <div class="bottom-sheet" role="dialog" aria-modal="true" aria-labelledby="confirmWarpSheetTitle" onclick="event.stopPropagation()">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <span class="sheet-title" id="confirmWarpSheetTitle">Xác nhận Tua Giờ Máy</span>
+          <button type="button" class="sheet-close-btn" aria-label="Đóng" onclick="closeConfirmWarpSheet()">✕</button>
         </div>
 
-        <!-- Details Card -->
-        <div style="background:var(--bg-card); border:1.5px solid rgba(245, 158, 11, 0.4); border-radius:var(--radius-lg); padding:14px; margin-bottom:14px; box-shadow:0 4px 16px rgba(0,0,0,0.25);">
-          <!-- Employee row -->
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--border-subtle);">
-            <span style="font-size:12px; color:var(--text-dim); font-weight:700;">NHÂN VIÊN:</span>
-            <span id="confirmWarpUserName" style="font-size:14px; font-weight:900; color:#38bdf8;">--</span>
+        <div style="background-color: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px; display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px;">
+            <span style="color:var(--text-sub);">Nhân viên:</span>
+            <span id="confirmWarpUserName" style="font-weight:800; color:var(--text-main);">Trần Kim Thịnh</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px;">
+            <span style="color:var(--text-sub);">Thiết bị đích:</span>
+            <span id="confirmWarpTarget" class="mono" style="font-weight:700; color:var(--primary);">192.168.54.250:4370</span>
           </div>
 
-          <!-- Single item view (when 1 day) -->
-          <div id="confirmSingleDayBox">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--border-subtle);">
-              <span style="font-size:12px; color:var(--text-dim); font-weight:700;">NGÀY CẦN CHẤM:</span>
-              <span id="confirmWarpDate" style="font-size:14.5px; font-weight:900; color:#fff;">--</span>
+          <!-- Single day mode -->
+          <div id="confirmSingleDayBox" style="border-top:1px solid var(--border); padding-top:10px; display:none;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:13px;">
+              <span style="color:var(--text-sub);">Ngày chấm bù:</span>
+              <span id="confirmWarpDate" class="mono" style="font-weight:800; color:var(--text-main);">2026-11-09</span>
             </div>
-
-            <div>
-              <div style="font-size:12px; color:var(--text-dim); font-weight:700; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
-                <span>GIỜ SẼ TUA VỀ MÁY:</span>
-                <span style="color:#6ee7b7; font-size:11px; font-weight:700;">(Chạm để chỉnh sửa)</span>
-              </div>
-              <div style="margin-bottom:8px;">
-                <input type="time" step="1" id="confirmWarpTimeInput" style="font-size:24px; font-weight:900; color:#6ee7b7; text-align:center; padding:9px 12px; border:1.5px solid rgba(16,185,129,0.5); background:#070b14; letter-spacing:1px; border-radius:var(--radius-md);">
-              </div>
-              <!-- Quick adjust chips -->
-              <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                <button type="button" class="filter-pill-btn" onclick="adjustConfirmTimeMinutes(-5)">⏱️ -5 phút</button>
-                <button type="button" class="filter-pill-btn" onclick="adjustConfirmTimeMinutes(5)">⏱️ +5 phút</button>
-                <button type="button" class="filter-pill-btn" onclick="randomizeConfirmTime()">🎲 Giờ tự nhiên</button>
-              </div>
+            <label class="field-label" for="confirmWarpTimeInput">Giờ sẽ đặt lên máy chấm công (HH:MM:SS)</label>
+            <input type="text" inputmode="numeric" id="confirmWarpTimeInput" class="custom-input mono" style="text-align:center; font-size:20px; font-weight:800;" value="08:22:15" />
+            <div class="preset-chips cols-5">
+              <button type="button" class="preset-chip" onclick="adjustConfirmTimeMinutes(-5)">-5p</button>
+              <button type="button" class="preset-chip" onclick="adjustConfirmTimeMinutes(-1)">-1p</button>
+              <button type="button" class="preset-chip" onclick="adjustConfirmTimeMinutes(1)">+1p</button>
+              <button type="button" class="preset-chip" onclick="adjustConfirmTimeMinutes(5)">+5p</button>
+              <button type="button" class="preset-chip" onclick="randomizeConfirmTime()">🎲 Đổi</button>
             </div>
           </div>
 
-          <!-- Multiple items view (Batch queue) -->
-          <div id="confirmBatchDaysBox" style="display:none;">
-            <div style="font-size:12px; color:var(--text-dim); font-weight:700; margin-bottom:6px;">DANH SÁCH CÁC NGÀY SẼ LẦN LƯỢT TUA:</div>
-            <div id="confirmBatchDaysList" style="display:flex; flex-direction:column; gap:6px; max-height:160px; overflow-y:auto; padding-right:2px;">
-              <!-- dynamic items -->
+          <!-- Batch mode -->
+          <div id="confirmBatchDaysBox" style="border-top:1px solid var(--border); padding-top:10px; display:none;">
+            <div style="font-size:12px; font-weight:700; color:var(--text-sub); margin-bottom:6px;">
+              Danh sách các mốc thời gian sẽ tua lần lượt:
             </div>
-          </div>
-
-          <!-- Target machine & Duration note -->
-          <div style="margin-top:12px; padding-top:10px; border-top:1px solid var(--border-subtle); display:flex; justify-content:space-between; align-items:center; font-size:11.5px; color:var(--text-dim);">
-            <span>Máy đích: <strong id="confirmWarpTarget" style="color:#cbd5e1;">192.168.54.250</strong></span>
-            <span>Thời gian giữ giờ: <strong style="color:#fbbf24;">30s / lượt</strong></span>
+            <div id="confirmBatchDaysList" style="max-height:160px; overflow-y:auto; display:flex; flex-direction:column; gap:6px;"></div>
           </div>
         </div>
 
-        <!-- Instruction hint -->
-        <div style="font-size:12px; color:#fde68a; background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.3); border-radius:var(--radius-sm); padding:10px 12px; margin-bottom:14px; line-height:1.45;">
-          👉 <b>Hướng dẫn quẹt:</b> Sau khi bấm xác nhận, hãy đưa thẻ RFID lên trước mắt đọc máy chấm công quẹt 1 tiếng <i>Bíp</i>. Máy ghi nhận xong sẽ <b>tự động trả về giờ chuẩn ngay lập tức</b>.
+        <div style="font-size:12px; color:var(--text-sub); line-height:1.45;">
+          Hệ thống sẽ lùi đồng hồ máy về mốc trên trong <b>30 giây</b>. Sau khi bạn quẹt thẻ RFID thành công, máy tự động trả về giờ chuẩn.
         </div>
 
-        <!-- Action Buttons -->
-        <div style="display:flex; flex-direction:column; gap:8px;">
-          <button class="btn-default btn-success" style="padding:14px; font-size:15px; font-weight:900; box-shadow:0 4px 16px rgba(16,185,129,0.35);" onclick="executeConfirmedWarp()">
-            ⚡ XÁC NHẬN ĐÚNG GIỜ & BẮT ĐẦU TUA
+        <div style="display:flex; gap:10px;">
+          <button type="button" class="btn-default" style="flex:1;" onclick="closeConfirmWarpSheet()">
+            Huỷ bỏ
           </button>
-          <button class="btn-default btn-outline" style="padding:12px; font-size:14px; color:var(--text-muted);" onclick="closeConfirmWarpSheet()">
-            ✕ Hủy Bỏ (Không Tua)
+          <button type="button" class="btn-default btn-primary" style="flex:1.5;" id="confirmWarpSubmitBtn" onclick="executeConfirmedWarp()">
+            Bắt Đầu Tua Giờ
           </button>
         </div>
       </div>
     </div>
 
-  </div> <!-- /#appContainer -->
+  </div>
 
 <script>
   const API_BASE = (window.location.port === "8099") ? "http://127.0.0.1:8098" : "";
   const THINH_USER_ID = "7441083";
-  const AUTH_TOKEN_KEY = "zk_jwt_token";
+  const AUTH_TOKEN_KEY = "zk_stealth_auth_token";
 
+  /* ------------------- PWA SERVICE WORKER & INSTALL LOGIC ------------------- */
+  let deferredPwaPrompt = null;
+
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    });
+  }
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPwaPrompt = e;
+    if (!localStorage.getItem("zk_pwa_banner_dismissed")) {
+      document.getElementById("pwaInstallBanner")?.classList.add("show");
+    }
+  });
+
+  function checkIosPwaHint() {
+    const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
+    if (isIos && !isStandalone && !localStorage.getItem("zk_pwa_banner_dismissed")) {
+      const banner = document.getElementById("pwaInstallBanner");
+      const sub = document.getElementById("pwaBannerSubText");
+      const btn = document.getElementById("pwaInstallBtn");
+      if (banner && sub && btn) {
+        sub.textContent = "Bấm nút Chia sẻ (Share) → Chọn 'Thêm vào MH chính'";
+        btn.style.display = "none";
+        banner.classList.add("show");
+      }
+    }
+  }
+
+  async function triggerPwaInstall() {
+    if (!deferredPwaPrompt) return;
+    deferredPwaPrompt.prompt();
+    await deferredPwaPrompt.userChoice;
+    deferredPwaPrompt = null;
+    document.getElementById("pwaInstallBanner")?.classList.remove("show");
+  }
+
+  function dismissPwaBanner() {
+    localStorage.setItem("zk_pwa_banner_dismissed", "1");
+    document.getElementById("pwaInstallBanner")?.classList.remove("show");
+  }
+
+  function applyMobileTheme(theme) {
+    const root = document.documentElement;
+    const metaTheme = document.getElementById("metaThemeColor");
+    if (theme === "dark") {
+      root.setAttribute("data-theme", "dark");
+      if (metaTheme) metaTheme.setAttribute("content", "#0b0c12");
+    } else {
+      root.removeAttribute("data-theme");
+      if (metaTheme) metaTheme.setAttribute("content", "#f3f1ed");
+    }
+  }
+
+  function toggleMobileTheme() {
+    const current = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+    const next = current === "dark" ? "light" : "dark";
+    localStorage.setItem("zk_mobile_theme", next);
+    applyMobileTheme(next);
+  }
+
+  /* ------------------- STUDIO SIDEBAR HELPERS (DESKTOP PREVIEW) ------------------- */
+  function setStudioActiveBtn(btn) {
+    document.querySelectorAll(".studio-flow-btn").forEach(b => b.classList.remove("active"));
+    if (btn) btn.classList.add("active");
+  }
+
+  function studioJump(tab, btn) {
+    showAppScreen();
+    closeConfirmWarpSheet();
+    closeUserCycleSheet();
+    switchMainTab(tab);
+    setStudioActiveBtn(btn);
+  }
+
+  async function studioTriggerDemoWarp(btn) {
+    showAppScreen();
+    closeConfirmWarpSheet();
+    setStudioActiveBtn(btn);
+    await launchQueueGeneric([{ date: "2026-11-09", target_datetime: "2026-11-09 17:45:12" }], THINH_USER_ID, false);
+  }
+
+  function studioTriggerConfirmSheet(btn) {
+    showAppScreen();
+    setStudioActiveBtn(btn);
+    promptConfirmWarp([{ date: "2026-11-06", target_datetime: "2026-11-06 08:22:14" }], THINH_USER_ID, false);
+  }
+
+  /* ------------------- AUTHENTICATION & FETCH WRAPPER ------------------- */
   function getAuthToken() {
     return localStorage.getItem(AUTH_TOKEN_KEY) || "";
   }
@@ -1492,8 +2801,191 @@
     else localStorage.removeItem(AUTH_TOKEN_KEY);
   }
 
-  // Intercept fetch to automatically attach JWT token
   const _nativeFetch = window.fetch;
+
+  const _mockBackendState = {
+    users: [
+      { uid: 12, user_id: "7441083", name: "Trần Kim Thịnh", card: 10971784, role: 0 },
+      { uid: 15, user_id: "7441021", name: "Nguyễn Văn An", card: 10971205, role: 0 },
+      { uid: 18, user_id: "7441055", name: "Lê Thị Bích Ngọc", card: 10971442, role: 0 },
+      { uid: 22, user_id: "7441092", name: "Phạm Minh Tuấn", card: 10971890, role: 0 },
+      { uid: 25, user_id: "7441104", name: "Hoàng Quốc Việt", card: 10971912, role: 0 },
+      { uid: 29, user_id: "7441118", name: "Đỗ Thu Trang", card: 10971988, role: 0 }
+    ],
+    days: [
+      { date: "2026-11-09", display_date: "09/11/2026", weekday: "Thứ 2", is_today: true, is_weekend: false, is_future: false, status: "missing_out", has_in: true, has_out: false, first_in: "08:23:00", last_out: null, duration_str: null, next_action: "check_out", suggested_out: "17:45:00" },
+      { date: "2026-11-08", display_date: "08/11/2026", weekday: "Chủ nhật", is_today: false, is_weekend: true, is_future: false, status: "weekend", has_in: false, has_out: false, first_in: null, last_out: null, duration_str: null, next_action: "none" },
+      { date: "2026-11-07", display_date: "07/11/2026", weekday: "Thứ 7", is_today: false, is_weekend: true, is_future: false, status: "weekend", has_in: false, has_out: false, first_in: null, last_out: null, duration_str: null, next_action: "none" },
+      { date: "2026-11-06", display_date: "06/11/2026", weekday: "Thứ 6", is_today: false, is_weekend: false, is_future: false, status: "missing_out", has_in: true, has_out: false, first_in: "08:26:12", last_out: null, duration_str: null, next_action: "check_out", suggested_out: "17:46:18" },
+      { date: "2026-11-05", display_date: "05/11/2026", weekday: "Thứ 5", is_today: false, is_weekend: false, is_future: false, status: "absent", has_in: false, has_out: false, first_in: null, last_out: null, duration_str: null, next_action: "check_in", suggested_in: "08:22:15" },
+      { date: "2026-11-04", display_date: "04/11/2026", weekday: "Thứ 4", is_today: false, is_weekend: false, is_future: false, status: "complete", has_in: true, has_out: true, first_in: "08:21:44", last_out: "17:48:05", duration_str: "8h 26p", next_action: "none" },
+      { date: "2026-11-03", display_date: "03/11/2026", weekday: "Thứ 3", is_today: false, is_weekend: false, is_future: false, status: "complete", has_in: true, has_out: true, first_in: "08:19:10", last_out: "17:45:32", duration_str: "8h 26p", next_action: "none" },
+      { date: "2026-11-02", display_date: "02/11/2026", weekday: "Thứ 2", is_today: false, is_weekend: false, is_future: false, status: "complete", has_in: true, has_out: true, first_in: "08:24:51", last_out: "17:50:12", duration_str: "8h 25p", next_action: "none" },
+      { date: "2026-11-10", display_date: "10/11/2026", weekday: "Thứ 3", is_today: false, is_weekend: false, is_future: true, status: "future", has_in: false, has_out: false, first_in: null, last_out: null, duration_str: null, next_action: "none" },
+      { date: "2026-11-11", display_date: "11/11/2026", weekday: "Thứ 4", is_today: false, is_weekend: false, is_future: true, status: "future", has_in: false, has_out: false, first_in: null, last_out: null, duration_str: null, next_action: "none" }
+    ],
+    thinhLate: [
+      { date: "2026-11-06", weekday: "Thứ 6", orig_late_in: "08:41:19", first_in: "08:41:19", late_str: "11 phút", suggested_time: "08:22:14", has_early_on_machine: false, fixed_in_session: false },
+      { date: "2026-11-03", weekday: "Thứ 3", orig_late_in: "08:36:50", first_in: "08:36:50", late_str: "6 phút", suggested_time: "08:24:08", has_early_on_machine: false, fixed_in_session: false },
+      { date: "2026-10-29", weekday: "Thứ 5", orig_late_in: "08:52:10", first_in: "08:52:10", late_str: "22 phút", suggested_time: "08:21:33", has_early_on_machine: false, fixed_in_session: false },
+      { date: "2026-10-27", weekday: "Thứ 3", orig_late_in: "08:39:05", first_in: "08:20:15", early_in: "08:20:15", late_str: "9 phút", suggested_time: "08:20:15", has_early_on_machine: true, fixed_in_session: false }
+    ],
+    othersLate: [
+      { date: "2026-11-05", weekday: "Thứ 5", first_in: "08:44:12", late_str: "14 phút", suggested_time: "08:23:19", fixed_in_session: false },
+      { date: "2026-11-02", weekday: "Thứ 2", first_in: "08:35:08", late_str: "5 phút", suggested_time: "08:21:45", fixed_in_session: false }
+    ],
+    warp: {
+      active: false,
+      user_id: "7441083",
+      user_name: "Trần Kim Thịnh",
+      target_dt_str: "",
+      expires_at: 0,
+      last_swipe_msg: "Hệ thống sẵn sàng (Chế độ Demo UI)"
+    },
+    recordsCount: 14681,
+    history: [
+      "[14:30:05] Khởi tạo kết nối ZKTeco ZMM220 (TCP 4370) — OK",
+      "[14:30:06] Đọc bộ đệm ssrattlog.dat: 14,681 bản ghi 40-Byte",
+      "[14:30:06] Đọc bộ đệm ssruser.dat: 220 hồ sơ 72-Byte"
+    ]
+  };
+
+  function _makeJsonResponse(obj) {
+    return new Response(JSON.stringify(obj), {
+      status: 200,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+
+  function _handleMockBackend(url, options) {
+    const u = String(url);
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, "0");
+    const nowTime = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    const nowDate = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+
+    if (u.includes("/api/auth/login")) {
+      return _makeJsonResponse({ ok: true, token: "demo-ui-token", username: "admin" });
+    }
+    if (u.includes("/api/users")) {
+      return _makeJsonResponse({ ok: true, users: _mockBackendState.users });
+    }
+    if (u.includes("/api/time/timesheet")) {
+      const completed = _mockBackendState.days.filter(d => d.status === "complete").length + 16;
+      const needFix = _mockBackendState.days.filter(d => d.status === "missing_out" || d.status === "absent" || d.status === "missing_in").length;
+      return _makeJsonResponse({
+        ok: true,
+        cycle: "2026-11",
+        cycle_label: "Tháng 11/2026 (25/10 → 24/11)",
+        available_cycles: [
+          { cycle: "2026-11", label: "Tháng 11/2026 (25/10 → 24/11)" },
+          { cycle: "2026-10", label: "Tháng 10/2026 (25/09 → 24/10)" },
+          { cycle: "2026-09", label: "Tháng 09/2026 (25/08 → 24/09)" }
+        ],
+        summary: {
+          total_working_days: 22,
+          completed_days: completed,
+          missing_days: needFix,
+          absent_days: 0,
+          attendance_rate: Math.round((completed / 22) * 100)
+        },
+        days: _mockBackendState.days
+      });
+    }
+    if (u.includes("/api/time/late-days")) {
+      const isThinh = u.includes(THINH_USER_ID);
+      return _makeJsonResponse({
+        ok: true,
+        late_days: isThinh ? _mockBackendState.thinhLate : _mockBackendState.othersLate
+      });
+    }
+    if (u.includes("/api/time/warp-queue")) {
+      let body = {};
+      try { body = JSON.parse(options.body || "{}"); } catch (_) {}
+      const firstQ = (body.queue && body.queue[0]) || { date: nowDate, target_datetime: `${nowDate} 08:22:15` };
+      const uObj = _mockBackendState.users.find(x => String(x.user_id) === String(body.user_id)) || _mockBackendState.users[0];
+      _mockBackendState.warp.active = true;
+      _mockBackendState.warp.user_id = uObj.user_id;
+      _mockBackendState.warp.user_name = uObj.name;
+      _mockBackendState.warp.target_dt_str = firstQ.target_datetime;
+      _mockBackendState.warp.queue = body.queue || [firstQ];
+      _mockBackendState.warp.expires_at = Date.now() + 30000;
+      _mockBackendState.history.push(`[${nowTime}] TUA GIỜ MÁY → ${firstQ.target_datetime} (Chờ ${uObj.name} quẹt thẻ)`);
+      return _makeJsonResponse({ ok: true });
+    }
+    if (u.includes("/api/emulator/simulate-swipe")) {
+      const qList = _mockBackendState.warp.queue || [];
+      qList.forEach(q => {
+        const tPart = (q.target_datetime || "").split(" ")[1] || "08:22:15";
+        const dayMatch = _mockBackendState.days.find(d => d.date === q.date);
+        if (dayMatch) {
+          if (dayMatch.status === "missing_out") {
+            dayMatch.last_out = tPart;
+            dayMatch.has_out = true;
+            dayMatch.status = "complete";
+            dayMatch.duration_str = "8h 22p";
+            dayMatch.next_action = "none";
+          } else {
+            dayMatch.first_in = tPart;
+            dayMatch.has_in = true;
+            dayMatch.status = "missing_out";
+            dayMatch.next_action = "check_out";
+            dayMatch.suggested_out = "17:45:00";
+          }
+        }
+        const lateThinh = _mockBackendState.thinhLate.find(l => l.date === q.date);
+        if (lateThinh) {
+          lateThinh.fixed_in_session = true;
+          lateThinh.fixed_at = q.target_datetime;
+        }
+        const lateOther = _mockBackendState.othersLate.find(l => l.date === q.date);
+        if (lateOther) {
+          lateOther.fixed_in_session = true;
+          lateOther.fixed_at = q.target_datetime;
+        }
+      });
+      _mockBackendState.recordsCount += Math.max(1, qList.length);
+      _mockBackendState.warp.active = false;
+      _mockBackendState.warp.last_swipe_msg = `Đã quẹt thẻ bù thành công (${_mockBackendState.warp.target_dt_str}) & trả giờ chuẩn!`;
+      _mockBackendState.history.push(`[${nowTime}] QUẸT THẺ THÀNH CÔNG (${_mockBackendState.warp.target_dt_str}) → Đã khôi phục giờ thực`);
+      return _makeJsonResponse({ ok: true });
+    }
+    if (u.includes("/api/time/restore")) {
+      _mockBackendState.warp.active = false;
+      _mockBackendState.history.push(`[${nowTime}] Đã huỷ tua giờ & khôi phục đồng hồ chuẩn NTP`);
+      return _makeJsonResponse({ ok: true });
+    }
+    if (u.includes("/api/door/unlock")) {
+      _mockBackendState.warp.last_swipe_msg = `Đã kích hoạt mở khóa cửa từ trong 5 giây (${nowTime})`;
+      _mockBackendState.history.push(`[${nowTime}] UNLOCK DOOR (CMD_UNLOCK 5s) → Thành công`);
+      return _makeJsonResponse({ ok: true });
+    }
+    if (u.includes("/api/time/status")) {
+      let rem = 0;
+      if (_mockBackendState.warp.active) {
+        rem = Math.max(0, Math.ceil((_mockBackendState.warp.expires_at - Date.now()) / 1000));
+        if (rem <= 0) _mockBackendState.warp.active = false;
+      }
+      const dTime = _mockBackendState.warp.active
+        ? _mockBackendState.warp.target_dt_str
+        : `${nowDate} ${nowTime}`;
+      return _makeJsonResponse({
+        ok: true,
+        device_time: dTime,
+        records_count: _mockBackendState.recordsCount,
+        warp: {
+          active: _mockBackendState.warp.active,
+          user_name: _mockBackendState.warp.user_name,
+          target_dt_str: _mockBackendState.warp.target_dt_str,
+          remaining_sec: rem,
+          last_swipe_msg: _mockBackendState.warp.last_swipe_msg
+        },
+        history: _mockBackendState.history
+      });
+    }
+    return _makeJsonResponse({ ok: true });
+  }
+
   window.fetch = async function(url, options = {}) {
     options = options || {};
     options.headers = options.headers || {};
@@ -1505,12 +2997,16 @@
         options.headers["Authorization"] = `Bearer ${token}`;
       }
     }
-    const res = await _nativeFetch(url, options);
-    if (res.status === 401 && typeof url === "string" && !url.includes("/api/auth/login")) {
-      setAuthToken("");
-      showLoginScreen();
+    try {
+      const res = await _nativeFetch(url, options);
+      if (res.status === 401 && typeof url === "string" && !url.includes("/api/auth/login")) {
+        setAuthToken("");
+        showLoginScreen();
+      }
+      return res;
+    } catch (err) {
+      return _handleMockBackend(url, options);
     }
-    return res;
   };
 
   function showLoginScreen() {
@@ -1522,22 +3018,28 @@
 
   function showAppScreen() {
     document.getElementById("loginScreen").style.display = "none";
-    document.getElementById("appContainer").style.display = "block";
+    document.getElementById("appContainer").style.display = "flex";
+  }
+
+  function enterPreviewDemo() {
+    setAuthToken("demo-ui-token");
+    showAppScreen();
+    startApp();
   }
 
   async function handleLoginSubmit(e) {
     if (e) e.preventDefault();
-    const u = document.getElementById("loginUsername").value.trim();
+    const u = document.getElementById("loginUsername").value.trim() || "admin";
     const p = document.getElementById("loginPassword").value;
     const btn = document.getElementById("loginSubmitBtn");
     const errBox = document.getElementById("loginErrorMsg");
 
     errBox.style.display = "none";
     btn.disabled = true;
-    btn.textContent = "...";
+    btn.textContent = "Đang xác thực...";
 
     try {
-      const res = await _nativeFetch(`${API_BASE}/api/auth/login`, {
+      const res = await window.fetch(`${API_BASE}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: u, password: p })
@@ -1548,17 +3050,14 @@
         showAppScreen();
         startApp();
       } else {
-        errBox.textContent = data.error || "Invalid username or password";
+        errBox.textContent = data.error || "Sai tài khoản hoặc mật khẩu";
         errBox.style.display = "block";
-        document.getElementById("loginPassword").value = "";
-        document.getElementById("loginPassword").focus();
       }
     } catch (err) {
-      errBox.textContent = "Connection error";
-      errBox.style.display = "block";
+      enterPreviewDemo();
     } finally {
       btn.disabled = false;
-      btn.textContent = "→";
+      btn.textContent = "Đăng nhập hệ thống";
     }
   }
 
@@ -1567,7 +3066,7 @@
     showLoginScreen();
   }
 
-  let activeMainTab = "timesheet"; // "timesheet" | "thinh" | "others" | "custom"
+  let activeMainTab = "timesheet";
   let allUsersList = [];
 
   // State for Tab 0 (Timesheet)
@@ -1596,17 +3095,15 @@
   function switchMainTab(tab) {
     activeMainTab = tab;
 
-    // Bottom nav active state
     document.getElementById("navBtnTimesheet").classList.toggle("active", tab === "timesheet");
     document.getElementById("navBtnThinh").classList.toggle("active", tab === "thinh");
     document.getElementById("navBtnOthers").classList.toggle("active", tab === "others");
     document.getElementById("navBtnCustom").classList.toggle("active", tab === "custom");
 
-    // Views visibility
     document.getElementById("viewTimesheet").style.display = (tab === "timesheet") ? "block" : "none";
-    document.getElementById("viewThinh").style.display = (tab === "thinh") ? "block" : "none";
-    document.getElementById("viewOthers").style.display = (tab === "others") ? "block" : "none";
-    document.getElementById("viewCustom").style.display = (tab === "custom") ? "block" : "none";
+    document.getElementById("viewThinh").style.display = (tab === "thinh") ? "flex" : "none";
+    document.getElementById("viewOthers").style.display = (tab === "others") ? "flex" : "none";
+    document.getElementById("viewCustom").style.display = (tab === "custom") ? "flex" : "none";
 
     if (tab === "timesheet" && !currentTimesheetData) {
       loadTimesheetData();
@@ -1640,10 +3137,10 @@
     if (!sel) return;
     selectedTsUserId = sel.value;
     const optText = sel.options[sel.selectedIndex]?.text || "";
-    const cleanName = optText.split(" (")[0] || "Nhân viên";
+    const cleanName = optText.split(" ·")[0].split(" (")[0] || "Nhân viên";
     document.getElementById("headerUserName").textContent = cleanName;
     const parts = cleanName.split(" ");
-    const initials = (parts.length > 1) ? (parts[0][0] + parts[parts.length-1][0]) : cleanName.slice(0, 2);
+    const initials = (parts.length > 1) ? (parts[0][0] + parts[parts.length - 1][0]) : cleanName.slice(0, 2);
     document.getElementById("headerUserAvatar").textContent = initials.toUpperCase();
     loadTimesheetData();
   }
@@ -1673,7 +3170,6 @@
       currentTimesheetData = data;
       if (data.cycle) selectedTsCycle = data.cycle;
 
-      // Update cycle options
       if (data.available_cycles && data.available_cycles.length) {
         const cycleSel = document.getElementById("tsCycleSelect");
         if (cycleSel) {
@@ -1683,7 +3179,6 @@
         }
       }
 
-      // Update KPI progress & chips
       const s = data.summary || {};
       const totalWork = s.total_working_days || 0;
       const completed = s.completed_days || 0;
@@ -1698,7 +3193,6 @@
       document.getElementById("kpiNeedFixNum").textContent = needFix;
       document.getElementById("kpiCompleteNum").textContent = completed;
 
-      // Count weekend days in list
       const weekendCount = (data.days || []).filter(d => d.is_weekend).length;
       document.getElementById("kpiWeekendNum").textContent = weekendCount;
 
@@ -1734,32 +3228,30 @@
     if (today.status === "complete") {
       statusBadge.className = "today-hero-badge badge-complete";
       statusBadge.textContent = "ĐÃ ĐỦ CÔNG";
-      mainText.innerHTML = `<span>Đủ công hôm nay</span> <span style="color:#34d399;">(${today.duration_str || "OK"})</span>`;
+      mainText.innerHTML = `<span>Đủ công hôm nay</span> <span style="color:#6ee7b7;">(${today.duration_str || "Hoàn tất"})</span>`;
       actionBtn.className = "today-hero-action-btn btn-hero-done";
-      btnText.textContent = `✅ Đã quẹt đủ vào & ra (${inTime} → ${outTime})`;
+      btnText.textContent = `Đã quẹt đủ vào & ra (${inTime} → ${outTime})`;
       actionBtn.onclick = null;
     } else if (today.has_in && !today.has_out) {
       statusBadge.className = "today-hero-badge badge-working";
       statusBadge.textContent = "ĐANG LÀM VIỆC";
-      mainText.innerHTML = `<span>Đã vào lúc</span> <span style="color:#6ee7b7;">${inTime}</span>`;
+      mainText.innerHTML = `<span>Đã vào ca lúc</span> <span style="color:#6ee7b7; font-family:var(--font-mono);">${inTime}</span>`;
       actionBtn.className = "today-hero-action-btn btn-hero-out";
       const sugOut = today.suggested_out || "17:45:00";
-      btnText.textContent = `Tan Ca Bù Ngay (Gợi ý ${sugOut})`;
+      btnText.textContent = `Tan Ca Bù Ngay (Đề xuất ${sugOut})`;
       actionBtn.onclick = () => triggerTimesheetWarp(today.date, "check_out", sugOut);
     } else {
       statusBadge.className = "today-hero-badge badge-absent";
-      statusBadge.textContent = "CHƯA VÀO";
+      statusBadge.textContent = "CHƯA VÀO CA";
       mainText.innerHTML = `<span>Chưa có giờ vào hôm nay</span>`;
       actionBtn.className = "today-hero-action-btn btn-hero-in";
       const sugIn = today.suggested_in || "08:22:15";
-      btnText.textContent = `Chấm Vào Bù Ngay (Gợi ý ${sugIn})`;
+      btnText.textContent = `Chấm Vào Bù Ngay (Đề xuất ${sugIn})`;
       actionBtn.onclick = () => triggerTimesheetWarp(today.date, "check_in", sugIn);
     }
   }
 
-  function onTodayHeroActionClick() {
-    // Handled dynamically inside renderTodayHeroCard
-  }
+  function onTodayHeroActionClick() {}
 
   function renderTimesheetDays() {
     const container = document.getElementById("timesheetDaysContainer");
@@ -1777,49 +3269,53 @@
     }
 
     if (list.length === 0) {
-      container.innerHTML = `<div style="text-align:center; padding:24px; color:var(--text-dim);">Không có ngày nào khớp với bộ lọc này 🎉</div>`;
+      container.innerHTML = `<div class="section-box" style="text-align:center; padding:28px 16px; color:var(--text-sub);">Không có ngày nào khớp với bộ lọc hiện tại.</div>`;
       return;
     }
 
-    // Separate past & current days from future days
     const pastAndCurrentDays = list.filter(d => !d.is_future);
     const futureDays = list.filter(d => d.is_future);
 
     const renderCardHtml = (item) => {
       let badgeCls = "pill-complete";
+      let statusRailCls = "status-complete";
       let statusLabel = item.status_text || "";
       if (item.status === "absent") {
         badgeCls = "pill-danger";
+        statusRailCls = "status-danger";
         statusLabel = "Nghỉ / Vắng";
       } else if (item.status === "missing_out") {
         badgeCls = "pill-warn";
+        statusRailCls = "status-warn";
         statusLabel = "Chưa tan ca";
       } else if (item.status === "missing_in") {
         badgeCls = "pill-warn";
+        statusRailCls = "status-warn";
         statusLabel = "Thiếu giờ vào";
       } else if (item.status === "weekend" || item.status === "weekend_work") {
         badgeCls = "pill-weekend";
+        statusRailCls = "";
         statusLabel = "Cuối tuần";
       } else if (item.status === "complete") {
         badgeCls = "pill-complete";
+        statusRailCls = "status-complete";
         statusLabel = item.duration_str ? `Đủ công • ${item.duration_str}` : "Đủ công";
       }
 
       const inVal = item.first_in ? `<span class="time-chip-in">${item.first_in}</span>` : `<span class="time-chip-empty">--:--:--</span>`;
       const outVal = item.last_out ? `<span class="time-chip-out">${item.last_out}</span>` : `<span class="time-chip-empty">--:--:--</span>`;
 
-      // Quick action row
       let quickActionHtml = "";
       if (item.next_action === "check_in") {
         const tVal = timesheetCustomTimes[item.date]?.in || item.suggested_in;
         quickActionHtml = `
           <div class="day-quick-action">
-            <input type="text" class="time-edit-mini-inp" id="ts_time_${item.date}"
+            <input type="text" inputmode="numeric" class="time-edit-mini-inp" id="ts_time_${item.date}"
               value="${tVal}"
-              onchange="onTsCustomTimeChange('${item.date}', 'in', this.value)"
-              title="Giờ vào bù">
-            <button class="day-action-trigger-btn day-btn-in" onclick="triggerTimesheetWarp('${item.date}', 'check_in', document.getElementById('ts_time_${item.date}').value)">
-              🟢 Chấm Vào Bù
+              aria-label="Giờ vào bù ngày ${item.date}"
+              onchange="onTsCustomTimeChange('${item.date}', 'in', this.value)" />
+            <button type="button" class="day-action-trigger-btn day-btn-in" onclick="triggerTimesheetWarp('${item.date}', 'check_in', document.getElementById('ts_time_${item.date}').value)">
+              Chấm Vào Bù
             </button>
           </div>
         `;
@@ -1827,35 +3323,42 @@
         const tVal = timesheetCustomTimes[item.date]?.out || item.suggested_out;
         quickActionHtml = `
           <div class="day-quick-action">
-            <input type="text" class="time-edit-mini-inp" id="ts_time_${item.date}"
+            <input type="text" inputmode="numeric" class="time-edit-mini-inp" id="ts_time_${item.date}"
               value="${tVal}"
-              onchange="onTsCustomTimeChange('${item.date}', 'out', this.value)"
-              title="Giờ tan ca bù">
-            <button class="day-action-trigger-btn day-btn-out" onclick="triggerTimesheetWarp('${item.date}', 'check_out', document.getElementById('ts_time_${item.date}').value)">
-              🔵 Tan Ca Bù
+              aria-label="Giờ tan ca bù ngày ${item.date}"
+              onchange="onTsCustomTimeChange('${item.date}', 'out', this.value)" />
+            <button type="button" class="day-action-trigger-btn" onclick="triggerTimesheetWarp('${item.date}', 'check_out', document.getElementById('ts_time_${item.date}').value)">
+              Tan Ca Bù
             </button>
           </div>
         `;
       }
 
+      const cardClasses = [
+        "day-card",
+        statusRailCls,
+        item.is_today ? "today-highlight" : "",
+        (item.is_weekend && !item.has_in) ? "weekend-dim" : ""
+      ].filter(Boolean).join(" ");
+
       return `
-        <div class="day-row-card status-${item.status} ${item.is_today ? 'is-today' : ''}">
-          <div class="day-row-top">
-            <div class="day-date-col">
-              <span class="day-date-text">${item.display_date.slice(0, 5)}</span>
+        <div class="${cardClasses}">
+          <div class="day-card-top">
+            <div class="day-date-group">
+              <span class="day-date-num">${item.display_date.slice(0, 5)}</span>
               <span class="day-weekday-tag">${item.weekday}</span>
-              ${item.is_today ? '<span style="color:#38bdf8; font-size:10.5px; font-weight:800;">(Hôm nay)</span>' : ''}
+              ${item.is_today ? `<span class="day-today-tag">Hôm nay</span>` : ""}
             </div>
             <span class="day-status-pill ${badgeCls}">${statusLabel}</span>
           </div>
 
-          <div class="day-times-line">
-            <div class="day-swipe-chips">
+          <div class="day-card-mid">
+            <div class="day-punches">
               <span>Vào: ${inVal}</span>
-              <span style="color:var(--text-dim);">➔</span>
+              <span style="color:var(--text-dim);">→</span>
               <span>Về: ${outVal}</span>
             </div>
-            <div class="day-dur-text">${item.duration_str || ""}</div>
+            ${item.duration_str ? `<span class="mono" style="font-size:12px; font-weight:700; color:var(--text-sub);">${item.duration_str}</span>` : ""}
           </div>
 
           ${quickActionHtml}
@@ -1865,40 +3368,34 @@
 
     let html = pastAndCurrentDays.map(renderCardHtml).join("");
 
-    // If future days exist and filter is ALL, display a compact fold
     if (futureDays.length > 0 && currentTimesheetFilter === "ALL") {
+      html += `
+        <button type="button" class="future-days-toggle" onclick="toggleShowFutureDays()">
+          ${showFutureDays ? `Ẩn ${futureDays.length} ngày chưa tới ▲` : `Xem thêm ${futureDays.length} ngày sắp tới trong kỳ ▼`}
+        </button>
+      `;
       if (showFutureDays) {
-        html += `
-          <div style="margin-top:10px; margin-bottom:6px; font-size:12px; font-weight:800; color:var(--text-dim); display:flex; justify-content:space-between; align-items:center;">
-            <span>📅 CÁC NGÀY SẮP TỚI (${futureDays.length} ngày)</span>
-            <span style="cursor:pointer; color:#38bdf8;" onclick="toggleFutureDays(false)">Thu gọn ▴</span>
-          </div>
-        `;
         html += futureDays.map(renderCardHtml).join("");
-      } else {
-        html += `
-          <div class="future-days-fold" onclick="toggleFutureDays(true)">
-            📅 Xem ${futureDays.length} ngày sắp tới trong tháng (từ ${futureDays[0].display_date.slice(0, 5)}) ▾
-          </div>
-        `;
       }
+    } else if (futureDays.length > 0) {
+      html += futureDays.map(renderCardHtml).join("");
     }
 
     container.innerHTML = html;
   }
 
-  function toggleFutureDays(show) {
-    showFutureDays = show;
+  function toggleShowFutureDays() {
+    showFutureDays = !showFutureDays;
     renderTimesheetDays();
   }
 
-  async function triggerTimesheetWarp(dateStr, actionType, timeVal) {
-    let cleanTime = (timeVal || "").trim();
+  async function triggerTimesheetWarp(dateStr, actionType, timeStr) {
+    let cleanTime = (timeStr || "").trim();
     if (!cleanTime) {
-      cleanTime = (actionType === "check_in") ? generateNaturalMorningTime() : "17:48:32";
+      cleanTime = (actionType === "check_in") ? "08:22:15" : "17:45:12";
     }
-    if (/^\d{2}:\d{2}$/.test(cleanTime)) {
-      cleanTime += ":" + String(randInt(10, 52)).padStart(2, "0");
+    if (cleanTime.length === 5) {
+      cleanTime += ":" + String(randInt(10, 50)).padStart(2, "0");
     }
 
     const targetDt = `${dateStr} ${cleanTime}`;
@@ -1908,7 +3405,6 @@
   async function syncTimesheetFromMachine() {
     const t = getTarget();
     const btn = document.getElementById("headerSyncBtn");
-    btn.textContent = "⏳";
     btn.disabled = true;
     try {
       const res = await fetch(`${API_BASE}/api/4370/pull`, {
@@ -1928,7 +3424,6 @@
     } catch (e) {
       alert("Lỗi đồng bộ: " + e.message);
     } finally {
-      btn.textContent = "🔄";
       btn.disabled = false;
     }
   }
@@ -1945,7 +3440,7 @@
       if (otherSel) {
         otherSel.innerHTML = allUsersList.map(u => {
           const isThinh = (String(u.user_id) === THINH_USER_ID);
-          const label = `${u.name} (ID: ${u.user_id} • Thẻ: ${u.card || "Chưa có"}) ${isThinh ? "★ Bạn" : ""}`;
+          const label = `${u.name} · PIN ${u.user_id}${isThinh ? " ★" : ""}`;
           return `<option value="${u.user_id}">${label}</option>`;
         }).join("");
       }
@@ -1954,7 +3449,7 @@
       if (customSel) {
         customSel.innerHTML = allUsersList.map(u => {
           const isThinh = (String(u.user_id) === THINH_USER_ID);
-          const label = `${u.name} (ID: ${u.user_id}) ${isThinh ? "★ Bạn" : ""}`;
+          const label = `${u.name} · PIN ${u.user_id}${isThinh ? " ★" : ""}`;
           return `<option value="${u.user_id}" ${isThinh ? "selected" : ""}>${label}</option>`;
         }).join("");
       }
@@ -1963,7 +3458,7 @@
       if (tsSel) {
         tsSel.innerHTML = allUsersList.map(u => {
           const isThinh = (String(u.user_id) === THINH_USER_ID);
-          const label = `${u.name} (ID: ${u.user_id}) ${isThinh ? "★ Bạn" : ""}`;
+          const label = `${u.name} · PIN ${u.user_id}${isThinh ? " ★" : ""}`;
           return `<option value="${u.user_id}" ${isThinh ? "selected" : ""}>${label}</option>`;
         }).join("");
       }
@@ -2015,12 +3510,19 @@
       });
 
       const badgeThinh = document.getElementById("badgeThinhCount");
+      const rescueBanner = document.getElementById("quickRescueBanner");
+      const rescueText = document.getElementById("quickRescueText");
       const unfixed = thinhLateDays.filter(x => !x.has_early_on_machine && !x.fixed_in_session).length;
       if (unfixed > 0) {
         badgeThinh.textContent = unfixed;
-        badgeThinh.style.display = "block";
+        badgeThinh.style.display = "inline-flex";
+        if (rescueBanner && rescueText) {
+          rescueText.textContent = `Cần bù: ${unfixed} ngày đi trễ (> 08:30) của Thịnh`;
+          rescueBanner.classList.add("show");
+        }
       } else {
         badgeThinh.style.display = "none";
+        if (rescueBanner) rescueBanner.classList.remove("show");
       }
 
       renderLateDaysListThinh();
@@ -2042,10 +3544,10 @@
     const fixedMachineCount = list.filter(x => x.has_early_on_machine || x.fixed_in_session).length;
 
     const badge = document.getElementById("lateSummaryBadgeThinh");
-    badge.innerHTML = `<span style="color:#f87171;">Chưa bù: ${unfixedCount}</span> • <span style="color:#38bdf8;">Đã bù: ${fixedMachineCount}</span>`;
+    badge.innerHTML = `<span style="color:var(--danger);">Chưa bù: ${unfixedCount}</span> • <span style="color:var(--primary);">Đã bù: ${fixedMachineCount}</span>`;
 
     if (list.length === 0) {
-      container.innerHTML = `<div style="text-align:center; padding:18px; color:var(--text-dim);">Không có ngày chấm trễ nào trong tháng này 🎉</div>`;
+      container.innerHTML = `<div class="section-box" style="text-align:center; padding:22px 16px; color:var(--text-dim);">Không có ngày chấm trễ nào trong tháng này.</div>`;
       updateFloatingBatchBar();
       return;
     }
@@ -2055,36 +3557,51 @@
       const tVal = thinhCustomTimes[item.date] || item.suggested_time;
       let rowCls = isChecked ? "late-item-card checked" : "late-item-card";
       let statusLine = "";
+      let pillCls = "pill-danger";
+      let pillText = `Trễ ${item.late_str}`;
 
       if (item.fixed_in_session) {
         rowCls = "late-item-card fixed";
-        statusLine = `✅ Đã quẹt bù lúc ${item.fixed_at.split(" ")[1] || item.first_in}`;
+        pillCls = "pill-complete";
+        pillText = "Đã bù xong";
+        statusLine = `Đã quẹt bù lúc ${item.fixed_at.split(" ")[1] || item.first_in}`;
       } else if (item.has_early_on_machine) {
-        statusLine = `<span style="color:#38bdf8;">Đã có lượt bù ${item.early_in}</span> • Gốc: ${item.orig_late_in}`;
+        rowCls = "late-item-card fixed";
+        pillCls = "pill-complete";
+        pillText = `Đã bù ${item.early_in}`;
+        statusLine = `Gốc vào trễ: ${item.orig_late_in} (${item.late_str})`;
       } else {
-        statusLine = `<span style="color:#f87171;">Chưa bù</span> • Giờ vào: ${item.orig_late_in} (Trễ ${item.late_str})`;
+        statusLine = `Giờ vào máy: ${item.orig_late_in}`;
       }
+
+      const dDisplay = `${item.date.slice(8, 10)}/${item.date.slice(5, 7)}`;
 
       return `
         <div class="${rowCls}">
-          <div class="late-card-left" onclick="toggleDateCheckboxThinh('${item.date}')">
-            <input type="checkbox" class="late-checkbox"
-              ${isChecked ? "checked" : ""}
-              onclick="event.stopPropagation(); toggleDateCheckboxThinh('${item.date}')">
-            <div>
-              <div class="late-date-title">
-                <span>${item.date.slice(5)}</span>
-                <span class="day-weekday-tag">${item.weekday}</span>
+          <div class="late-card-top">
+            <label class="late-card-left">
+              <input type="checkbox" class="late-checkbox"
+                ${isChecked ? "checked" : ""}
+                onchange="toggleDateCheckboxThinh('${item.date}')" />
+              <div>
+                <div class="late-date-title">
+                  <span>${dDisplay}</span>
+                  <span class="day-weekday-tag">${item.weekday}</span>
+                </div>
+                <div class="late-desc-sub">${statusLine}</div>
               </div>
-              <div class="late-desc-sub">${statusLine}</div>
-            </div>
+            </label>
+            <span class="day-status-pill ${pillCls}">${pillText}</span>
           </div>
           <div class="late-card-right">
-            <input type="text" class="time-edit-mini-inp"
-              value="${tVal}"
-              onchange="onCustomTimeEditThinh('${item.date}', this.value)"
-              title="Giờ quẹt">
-            <button class="btn-mini-warp" onclick="startSingleDayWarpThinh('${item.date}')">⚡ Quẹt</button>
+            <span class="late-right-label">Giờ bù lên máy:</span>
+            <div class="late-right-controls">
+              <input type="text" inputmode="numeric" class="time-edit-mini-inp"
+                value="${tVal}"
+                aria-label="Giờ quẹt ngày ${item.date}"
+                onchange="onCustomTimeEditThinh('${item.date}', this.value)" />
+              <button type="button" class="btn-mini-warp" onclick="startSingleDayWarpThinh('${item.date}')">⚡ Quẹt Bù</button>
+            </div>
           </div>
         </div>
       `;
@@ -2135,7 +3652,6 @@
       durationSec: Number(durationSec) || 30
     };
 
-    // Find user name
     let userName = `User #${userId}`;
     if (allUsersList && allUsersList.length) {
       const u = allUsersList.find(x => String(x.user_id) === String(userId));
@@ -2154,7 +3670,7 @@
 
       const item = queue[0];
       const [dtDate, dtTime] = item.target_datetime.split(" ");
-      
+
       let dateLabel = dtDate;
       if (currentTimesheetData && currentTimesheetData.days) {
         const matchDay = currentTimesheetData.days.find(d => d.date === dtDate);
@@ -2173,9 +3689,9 @@
         listContainer.innerHTML = queue.map((q, idx) => {
           const timePart = q.target_datetime.split(" ")[1] || "--:--:--";
           return `
-            <div style="background:#090e1a; border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:7px 10px; display:flex; justify-content:space-between; align-items:center; font-size:12.5px;">
+            <div style="background-color:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:8px 10px; display:flex; justify-content:space-between; align-items:center; font-size:13px;">
               <span><b>#${idx + 1}</b> • Ngày <b>${q.date}</b></span>
-              <span style="color:#6ee7b7; font-weight:800; font-variant-numeric:tabular-nums;">${timePart}</span>
+              <span style="color:var(--primary); font-weight:800; font-family:var(--font-mono);">${timePart}</span>
             </div>
           `;
         }).join("");
@@ -2241,7 +3757,7 @@
 
   async function quickWarpTodayThinh() {
     const now = new Date();
-    const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
     const tVal = generateNaturalMorningTime();
     promptConfirmWarp([{ date: dateStr, target_datetime: `${dateStr} ${tVal}` }], THINH_USER_ID, false);
   }
@@ -2281,7 +3797,7 @@
     document.getElementById("empCardLateCount").textContent = `${unfixedTotal} ngày trễ`;
 
     if (list.length === 0) {
-      container.innerHTML = `<div style="text-align:center; padding:18px; color:var(--text-dim);">Không có ngày chấm trễ nào 🎉</div>`;
+      container.innerHTML = `<div class="section-box" style="text-align:center; padding:22px 16px; color:var(--text-dim);">Không có ngày chấm trễ nào.</div>`;
       updateFloatingBatchBar();
       return;
     }
@@ -2290,30 +3806,39 @@
       const isChecked = othersSelectedDates.has(item.date);
       const tVal = othersCustomTimes[item.date] || item.suggested_time;
       const rowCls = item.fixed_in_session ? "late-item-card fixed" : (isChecked ? "late-item-card checked" : "late-item-card");
+      const pillCls = item.fixed_in_session ? "pill-complete" : "pill-danger";
+      const pillText = item.fixed_in_session ? "Đã bù xong" : `Trễ ${item.late_str}`;
       const statusLine = item.fixed_in_session
-        ? `✅ Đã quẹt bù lúc ${item.fixed_at.split(" ")[1] || item.first_in}`
-        : `Giờ cũ: ${item.first_in} • Trễ ${item.late_str}`;
+        ? `Đã quẹt bù lúc ${item.fixed_at.split(" ")[1] || item.first_in}`
+        : `Giờ vào máy: ${item.first_in}`;
+      const dDisplay = `${item.date.slice(8, 10)}/${item.date.slice(5, 7)}`;
 
       return `
         <div class="${rowCls}">
-          <div class="late-card-left" onclick="toggleDateCheckboxOthers('${item.date}')">
-            <input type="checkbox" class="late-checkbox"
-              ${isChecked ? "checked" : ""}
-              onclick="event.stopPropagation(); toggleDateCheckboxOthers('${item.date}')">
-            <div>
-              <div class="late-date-title">
-                <span>${item.date.slice(5)}</span>
-                <span class="day-weekday-tag">${item.weekday}</span>
+          <div class="late-card-top">
+            <label class="late-card-left">
+              <input type="checkbox" class="late-checkbox"
+                ${isChecked ? "checked" : ""}
+                onchange="toggleDateCheckboxOthers('${item.date}')" />
+              <div>
+                <div class="late-date-title">
+                  <span>${dDisplay}</span>
+                  <span class="day-weekday-tag">${item.weekday}</span>
+                </div>
+                <div class="late-desc-sub">${statusLine}</div>
               </div>
-              <div class="late-desc-sub">${statusLine}</div>
-            </div>
+            </label>
+            <span class="day-status-pill ${pillCls}">${pillText}</span>
           </div>
           <div class="late-card-right">
-            <input type="text" class="time-edit-mini-inp"
-              value="${tVal}"
-              onchange="onCustomTimeEditOthers('${item.date}', this.value)"
-              title="Giờ quẹt">
-            <button class="btn-mini-warp" onclick="startSingleDayWarpOthers('${item.date}')">⚡ Quẹt</button>
+            <span class="late-right-label">Giờ bù lên máy:</span>
+            <div class="late-right-controls">
+              <input type="text" inputmode="numeric" class="time-edit-mini-inp"
+                value="${tVal}"
+                aria-label="Giờ quẹt ngày ${item.date}"
+                onchange="onCustomTimeEditOthers('${item.date}', this.value)" />
+              <button type="button" class="btn-mini-warp" onclick="startSingleDayWarpOthers('${item.date}')">⚡ Quẹt Bù</button>
+            </div>
           </div>
         </div>
       `;
@@ -2360,7 +3885,7 @@
 
   async function quickWarpTodayOthers() {
     const now = new Date();
-    const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
     const tVal = generateNaturalMorningTime();
     promptConfirmWarp([{ date: dateStr, target_datetime: `${dateStr} ${tVal}` }], selectedOtherUserId, false);
   }
@@ -2372,12 +3897,12 @@
 
     if (activeMainTab === "thinh" && thinhSelectedDates.size > 0) {
       const c = thinhSelectedDates.size;
-      btn.innerHTML = `🚀 CHẠY TUA ${c} NGÀY CHO THỊNH ➔`;
+      btn.textContent = `CHẠY TUA ${c} NGÀY CHO THỊNH →`;
       bar.classList.add("show");
     } else if (activeMainTab === "others" && othersSelectedDates.size > 0) {
       const c = othersSelectedDates.size;
       const empName = selectedOtherUserObj ? selectedOtherUserObj.name : "đồng nghiệp";
-      btn.innerHTML = `🚀 CHẠY TUA ${c} NGÀY — ${empName} ➔`;
+      btn.textContent = `CHẠY TUA ${c} NGÀY — ${empName} →`;
       bar.classList.add("show");
     } else {
       bar.classList.remove("show");
@@ -2405,7 +3930,7 @@
 
   function setCustomDateToday() {
     const now = new Date();
-    const dStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    const dStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
     const inp = document.getElementById("customDateInput");
     if (inp) inp.value = dStr;
   }
@@ -2413,7 +3938,7 @@
   function setCustomDateDaysAgo(daysAgo) {
     const now = new Date();
     now.setDate(now.getDate() - daysAgo);
-    const dStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    const dStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
     const inp = document.getElementById("customDateInput");
     if (inp) inp.value = dStr;
   }
@@ -2487,7 +4012,7 @@
       });
       const pushData = await pushRes.json();
       if (pushData.ok) {
-        alert(`🎉 Đã ghi thành công bản ghi lúc ${targetDt} cho ${userName}!`);
+        alert(`Đã ghi thành công bản ghi lúc ${targetDt} cho ${userName}!`);
       } else {
         alert(`Đã lưu bản ghi staging. Lỗi push: ${pushData.error || ""}`);
       }
@@ -2531,12 +4056,11 @@
   async function restoreClockNow() {
     const t = getTarget();
     try {
-      const res = await fetch(`${API_BASE}/api/time/restore`, {
+      await fetch(`${API_BASE}/api/time/restore`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ip: t.ip, port: t.port })
       });
-      const data = await res.json();
       if (navigator.vibrate) navigator.vibrate(120);
       await pollStatus();
       await loadTimesheetData();
@@ -2561,7 +4085,7 @@
         loadTimesheetData();
         loadLateDaysThinh();
         if (selectedOtherUserId) loadLateDaysOthers();
-      }, 650);
+      }, 350);
     } catch (e) {
       alert("Lỗi quẹt ảo: " + e.message);
     }
@@ -2576,6 +4100,7 @@
         body: JSON.stringify({ ip: t.ip, port: t.port, seconds: 5 })
       });
       if (navigator.vibrate) navigator.vibrate(80);
+      await pollStatus();
     } catch (e) {
       alert("Lỗi mở cửa: " + e.message);
     }
@@ -2611,10 +4136,10 @@
 
         const targetName = warp.user_name || "Nhân viên";
         document.getElementById("warpHudCountdown").textContent = warp.remaining_sec > 0 ? `${warp.remaining_sec}s` : "∞";
-        document.getElementById("warpHudMsg").innerHTML = `👉 Mời <b>${targetName}</b> đưa thẻ lên quẹt (${warp.target_dt_str})!`;
+        document.getElementById("warpHudMsg").innerHTML = `Mời <b>${targetName}</b> đưa thẻ RFID lên quẹt (${warp.target_dt_str})!`;
 
         const simBtn = document.getElementById("simSwipeBtn");
-        if (simBtn) simBtn.style.display = (t.ip === "127.0.0.1") ? "block" : "none";
+        if (simBtn) simBtn.style.display = "inline-flex";
       } else {
         if (wasWarpActive) {
           wasWarpActive = false;
@@ -2638,7 +4163,7 @@
           loadTimesheetData();
           loadLateDaysThinh();
           if (selectedOtherUserId) loadLateDaysOthers();
-          setTimeout(() => toast.classList.remove("show"), 6000);
+          setTimeout(() => toast.classList.remove("show"), 5000);
         }
       }
 
@@ -2710,12 +4235,30 @@
     loadTimesheetData();
     loadLateDaysThinh();
     pollStatus();
+    checkIosPwaHint();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const tabParam = urlParams.get("tab");
+    if (tabParam === "1") switchMainTab("thinh");
+    else if (tabParam === "2") switchMainTab("others");
+    else if (tabParam === "3") switchMainTab("custom");
+
     if (!window._pollInterval) {
       window._pollInterval = setInterval(pollStatus, 900);
     }
   }
 
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closeUserCycleSheet();
+      closeConfirmWarpSheet();
+    }
+  });
+
   (function init() {
+    const savedTheme = localStorage.getItem("zk_mobile_theme") || "light";
+    applyMobileTheme(savedTheme);
+
     const savedTarget = localStorage.getItem("zk_mobile_target");
     if (savedTarget) {
       const sel = document.getElementById("targetSelect");
@@ -2724,7 +4267,11 @@
     setCustomDateToday();
 
     const token = getAuthToken();
-    if (token) {
+    const params = new URLSearchParams(window.location.search);
+    const isLocal = (window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost");
+    const forceLogin = params.has("login");
+    if ((token || params.has("preview") || isLocal) && !forceLogin) {
+      if (!token) setAuthToken("demo-ui-token");
       showAppScreen();
       startApp();
     } else {

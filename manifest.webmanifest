@@ -1,0 +1,64 @@
+{
+  "id": "/mobile.html",
+  "name": "ZK Time-Warp · Quản lý Chấm công",
+  "short_name": "ZK Time-Warp",
+  "description": "Ứng dụng quản lý bảng công ZKTeco & điều khiển Time-Warp thông minh",
+  "lang": "vi-VN",
+  "start_url": "/mobile.html",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#f8fafc",
+  "theme_color": "#ffffff",
+  "categories": ["productivity", "utilities", "business"],
+  "icons": [
+    {
+      "src": "/assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/assets/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Bảng công hôm nay",
+      "short_name": "Bảng công",
+      "description": "Xem giờ vào/ra hôm nay và tua bù nhanh",
+      "url": "/mobile.html?tab=0",
+      "icons": [{ "src": "/assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Ngày đi trễ (>08:30)",
+      "short_name": "Đi trễ",
+      "description": "Gom hàng đợi các ngày đi trễ để quẹt bù",
+      "url": "/mobile.html?tab=1",
+      "icons": [{ "src": "/assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Mở cửa & Tùy chỉnh",
+      "short_name": "Hệ thống",
+      "description": "Mở khóa cửa 5s và điều khiển đồng hồ máy",
+      "url": "/mobile.html?tab=3",
+      "icons": [{ "src": "/assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ]
+}
