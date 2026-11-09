@@ -1,0 +1,2736 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#090d16">
+<title>ZKTeco Timesheet Mobile</title>
+<style>
+  :root {
+    --bg-base: #090d16;
+    --bg-surface: #101726;
+    --bg-card: #151f33;
+    --bg-card-elevated: #1c2944;
+    --bg-glass: rgba(16, 23, 38, 0.85);
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-medium: rgba(255, 255, 255, 0.14);
+    --border-glow: rgba(56, 189, 248, 0.35);
+
+    --primary: #38bdf8;
+    --primary-gradient: linear-gradient(135deg, #38bdf8, #2563eb);
+    --success: #10b981;
+    --success-gradient: linear-gradient(135deg, #10b981, #059669);
+    --warn: #f59e0b;
+    --warn-gradient: linear-gradient(135deg, #fbbf24, #d97706);
+    --danger: #ef4444;
+    --danger-gradient: linear-gradient(135deg, #ef4444, #b91c1c);
+    --purple: #a855f7;
+
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+
+    --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+    --radius-xl: 20px;
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+    --radius-full: 9999px;
+
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg-base);
+    color: var(--text-main);
+    min-height: 100vh;
+    padding-top: calc(var(--safe-top) + 60px);
+    padding-bottom: calc(var(--safe-bottom) + 84px);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* App Header Bar */
+  .app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: calc(var(--safe-top) + 58px);
+    padding-top: var(--safe-top);
+    padding-left: 14px;
+    padding-right: 14px;
+    background: rgba(9, 13, 22, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+  }
+
+  .header-user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  .user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, #1e3a8a, #0284c7);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 13px;
+    border: 1.5px solid rgba(56, 189, 248, 0.4);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+    flex-shrink: 0;
+  }
+
+  .user-text-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+
+  .user-title-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .user-name {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+  }
+
+  .user-cycle-chip {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Live Machine Mini Chip */
+  .machine-status-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    padding: 5px 9px;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+    transition: all 0.2s;
+  }
+  .machine-status-chip:active {
+    transform: scale(0.96);
+    background: var(--bg-card-elevated);
+  }
+  .machine-status-chip.warped {
+    border-color: var(--warn);
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 8px var(--success);
+    flex-shrink: 0;
+  }
+  .status-dot.warped {
+    background: var(--warn);
+    box-shadow: 0 0 10px var(--warn);
+    animation: pulseDot 0.8s infinite alternate;
+  }
+  @keyframes pulseDot {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0.4; transform: scale(1.3); }
+  }
+
+  .header-icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-full);
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .header-icon-btn:active {
+    transform: scale(0.92);
+    background: var(--bg-card-elevated);
+  }
+
+  /* Main Scrollable View */
+  .view-wrapper {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 10px 14px 20px 14px;
+  }
+
+  /* Active Time-Warp Floating HUD Banner */
+  .warp-hud-banner {
+    display: none;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(239, 68, 68, 0.16));
+    border: 1.5px solid var(--warn);
+    border-radius: var(--radius-lg);
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.25);
+    animation: fadeIn 0.3s ease;
+  }
+  .warp-hud-banner.active { display: block; }
+
+  .warp-hud-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .warp-hud-pill {
+    background: var(--warn);
+    color: #000;
+    font-size: 11px;
+    font-weight: 900;
+    padding: 3px 8px;
+    border-radius: var(--radius-full);
+    letter-spacing: 0.3px;
+  }
+  .warp-hud-timer {
+    font-size: 18px;
+    font-weight: 900;
+    color: #fbbf24;
+    font-variant-numeric: tabular-nums;
+  }
+  .warp-hud-msg {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #fef3c7;
+    line-height: 1.35;
+    margin-bottom: 8px;
+  }
+  .warp-hud-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  /* Realtime Swipe Toast Alert */
+  .swipe-toast-alert {
+    display: none;
+    background: rgba(16, 185, 129, 0.16);
+    border: 1px solid var(--success);
+    color: #a7f3d0;
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    font-size: 12.5px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    line-height: 1.4;
+    animation: slideDown 0.3s ease;
+  }
+  .swipe-toast-alert.show { display: block; }
+
+  /* ------------------- TODAY HERO CARD ------------------- */
+  .today-hero-card {
+    background: linear-gradient(145deg, #16243f, #0f182c);
+    border: 1.5px solid rgba(56, 189, 248, 0.35);
+    border-radius: var(--radius-xl);
+    padding: 15px;
+    margin-bottom: 14px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    position: relative;
+    overflow: hidden;
+  }
+  .today-hero-card::after {
+    content: "";
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.18), transparent 70%);
+    pointer-events: none;
+  }
+
+  .today-hero-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .today-hero-title {
+    font-size: 12px;
+    font-weight: 800;
+    color: #93c5fd;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .today-hero-badge {
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 9px;
+    border-radius: var(--radius-full);
+  }
+  .badge-complete {
+    background: rgba(16, 185, 129, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    color: #6ee7b7;
+  }
+  .badge-working {
+    background: rgba(56, 189, 248, 0.2);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    color: #7dd3fc;
+  }
+  .badge-absent {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #fca5a5;
+  }
+
+  .today-main-status {
+    font-size: 20px;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 12px;
+    line-height: 1.2;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .today-times-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    background: rgba(11, 17, 32, 0.65);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 10px 12px;
+    margin-bottom: 12px;
+  }
+  .today-col {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .today-col-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+  .today-col-val {
+    font-size: 14.5px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+  .today-col-val.in { color: #6ee7b7; }
+  .today-col-val.out { color: #93c5fd; }
+  .today-col-val.dur { color: #cbd5e1; }
+
+  .today-hero-action-btn {
+    width: 100%;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 13px 16px;
+    font-size: 14px;
+    font-weight: 800;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s, opacity 0.2s;
+  }
+  .today-hero-action-btn:active { transform: scale(0.98); }
+  .btn-hero-in {
+    background: var(--success-gradient);
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+  }
+  .btn-hero-out {
+    background: var(--primary-gradient);
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
+  }
+  .btn-hero-done {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-muted);
+    cursor: default;
+    border: 1px solid var(--border-subtle);
+  }
+
+  /* ------------------- MONTH KPI PROGRESS CARD ------------------- */
+  .month-kpi-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+  .month-kpi-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .month-kpi-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+  .month-kpi-rate {
+    font-size: 14px;
+    font-weight: 900;
+    color: #38bdf8;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .kpi-progress-bar {
+    width: 100%;
+    height: 7px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .kpi-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981, #38bdf8);
+    border-radius: var(--radius-full);
+    transition: width 0.4s ease;
+  }
+
+  .kpi-chips-row {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .kpi-chips-row::-webkit-scrollbar { display: none; }
+
+  .kpi-chip {
+    flex: 1;
+    min-width: 85px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 6px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .kpi-chip:active { transform: scale(0.97); }
+  .kpi-chip.active {
+    border-color: var(--primary);
+    background: rgba(56, 189, 248, 0.12);
+  }
+  .kpi-chip-num {
+    font-size: 15px;
+    font-weight: 900;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  .kpi-chip-label {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-top: 2px;
+    white-space: nowrap;
+    letter-spacing: -0.2px;
+  }
+
+  /* ------------------- FILTER PILLS ROW ------------------- */
+  .filter-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .filter-scroll {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    flex: 1;
+  }
+  .filter-scroll::-webkit-scrollbar { display: none; }
+
+  .filter-pill-btn {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+  }
+  .filter-pill-btn:active { transform: scale(0.96); }
+  .filter-pill-btn.active {
+    background: rgba(56, 189, 248, 0.18);
+    border-color: var(--primary);
+    color: #93c5fd;
+  }
+
+  /* ------------------- TIMESHEET DAYS LIST ------------------- */
+  .ts-days-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .day-row-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 10px 12px;
+    transition: all 0.15s ease;
+  }
+  .day-row-card.is-today {
+    border-color: rgba(56, 189, 248, 0.45);
+    background: linear-gradient(145deg, rgba(56, 189, 248, 0.08), var(--bg-surface));
+  }
+  .day-row-card.status-complete {
+    border-left: 3.5px solid var(--success);
+  }
+  .day-row-card.status-missing_out, .day-row-card.status-missing_in {
+    border-left: 3.5px solid var(--warn);
+  }
+  .day-row-card.status-absent {
+    border-left: 3.5px solid var(--danger);
+  }
+  .day-row-card.status-weekend {
+    border-left: 3.5px solid #475569;
+    opacity: 0.65;
+  }
+
+  .day-row-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .day-date-col {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .day-date-text {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+  .day-weekday-tag {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-dim);
+    background: rgba(255, 255, 255, 0.06);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  .day-status-pill {
+    font-size: 11px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: var(--radius-full);
+  }
+  .pill-complete {
+    background: rgba(16, 185, 129, 0.16);
+    color: #6ee7b7;
+  }
+  .pill-warn {
+    background: rgba(245, 158, 11, 0.16);
+    color: #fde68a;
+  }
+  .pill-danger {
+    background: rgba(239, 68, 68, 0.18);
+    color: #fca5a5;
+  }
+  .pill-weekend {
+    background: rgba(148, 163, 184, 0.12);
+    color: #94a3b8;
+  }
+
+  .day-times-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12.5px;
+  }
+  .day-swipe-chips {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+  .time-chip-in { color: #6ee7b7; font-weight: 700; }
+  .time-chip-out { color: #93c5fd; font-weight: 700; }
+  .time-chip-empty { color: var(--text-dim); }
+
+  .day-dur-text {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  /* Inline Quick Action inside Day Card */
+  .day-quick-action {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-subtle);
+  }
+  .time-edit-mini-inp {
+    width: 88px !important;
+    max-width: 88px !important;
+    flex-shrink: 0 !important;
+    padding: 7px 6px;
+    font-size: 13px;
+    font-weight: 800;
+    text-align: center;
+    color: #6ee7b7;
+    background: #0b1120;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-sm);
+    font-variant-numeric: tabular-nums;
+    outline: none;
+  }
+  .day-action-trigger-btn {
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: transform 0.1s;
+  }
+  .day-action-trigger-btn:active { transform: scale(0.97); }
+  .day-btn-in {
+    background: var(--success-gradient);
+    color: #fff;
+  }
+  .day-btn-out {
+    background: var(--primary-gradient);
+    color: #fff;
+  }
+
+  /* Collapsible Future Days Accordion */
+  .future-days-fold {
+    background: var(--bg-surface);
+    border: 1px dashed var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dim);
+    margin-top: 4px;
+    transition: all 0.2s;
+  }
+  .future-days-fold:active {
+    background: var(--bg-card);
+  }
+
+  /* ------------------- TAB 1 (THỊNH) & TAB 2 (OTHERS) LISTS ------------------- */
+  .section-box {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 13px;
+    margin-bottom: 12px;
+  }
+  .section-box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .section-box-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text-main);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .late-item-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: var(--bg-card);
+    border: 1.5px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 10px 11px;
+    margin-bottom: 8px;
+    transition: all 0.15s ease;
+  }
+  .late-item-card.checked {
+    border-color: var(--primary);
+    background: rgba(56, 189, 248, 0.12);
+  }
+  .late-item-card.fixed {
+    border-color: rgba(16, 185, 129, 0.45);
+    background: rgba(16, 185, 129, 0.08);
+  }
+
+  .late-card-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+    cursor: pointer;
+  }
+  .late-checkbox {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--primary);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .late-date-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .late-desc-sub {
+    font-size: 11.5px;
+    color: #fca5a5;
+    margin-top: 2px;
+    font-weight: 600;
+  }
+  .late-item-card.fixed .late-desc-sub {
+    color: #6ee7b7;
+  }
+
+  .late-card-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .btn-mini-warp {
+    background: rgba(16, 185, 129, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.5);
+    color: #6ee7b7;
+    font-weight: 800;
+    font-size: 11.5px;
+    padding: 7px 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  .btn-mini-warp:active { transform: scale(0.95); }
+
+  /* ------------------- FLOATING BATCH ACTION BAR ------------------- */
+  .floating-batch-bar {
+    position: fixed;
+    bottom: calc(var(--safe-bottom) + 68px);
+    left: 14px;
+    right: 14px;
+    max-width: 492px;
+    margin: 0 auto;
+    z-index: 95;
+    display: none;
+    animation: slideUp 0.25s ease;
+  }
+  .floating-batch-bar.show { display: block; }
+
+  .batch-launch-btn {
+    width: 100%;
+    background: var(--primary-gradient);
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 13px 16px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 800;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .batch-launch-btn:active { transform: scale(0.98); }
+
+  /* ------------------- BOTTOM NAVIGATION BAR ------------------- */
+  .app-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(var(--safe-bottom) + 62px);
+    padding-bottom: var(--safe-bottom);
+    background: rgba(9, 13, 22, 0.95);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 100;
+  }
+
+  .nav-tab-btn {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    position: relative;
+  }
+  .nav-tab-btn.active {
+    color: #38bdf8;
+  }
+  .nav-tab-icon {
+    font-size: 20px;
+    line-height: 1;
+    transition: transform 0.15s;
+  }
+  .nav-tab-btn.active .nav-tab-icon {
+    transform: scale(1.12);
+  }
+  .nav-tab-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+  .nav-badge-pill {
+    position: absolute;
+    top: 5px;
+    right: calc(50% - 22px);
+    background: #ef4444;
+    color: #fff;
+    font-size: 9.5px;
+    font-weight: 800;
+    padding: 1px 5px;
+    border-radius: var(--radius-full);
+  }
+
+  /* ------------------- BOTTOM SHEET MODALS ------------------- */
+  .bottom-sheet-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    animation: fadeIn 0.2s ease;
+  }
+  .bottom-sheet-backdrop.active { display: block; }
+
+  .bottom-sheet-content {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-width: 520px;
+    margin: 0 auto;
+    background: var(--bg-surface);
+    border-top: 1.5px solid var(--border-medium);
+    border-radius: 22px 22px 0 0;
+    padding: 16px 16px calc(var(--safe-bottom) + 24px) 16px;
+    z-index: 210;
+    max-height: 85vh;
+    overflow-y: auto;
+    animation: slideUp 0.25s ease;
+  }
+  .sheet-handle-bar {
+    width: 40px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-full);
+    margin: 0 auto 14px auto;
+  }
+  .sheet-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Form Elements */
+  select, input[type="date"], input[type="time"], input[type="text"] {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-main);
+    padding: 9px 12px;
+    border-radius: var(--radius-md);
+    font-size: 13.5px;
+    font-weight: 600;
+    outline: none;
+    width: 100%;
+  }
+  select:focus, input:focus {
+    border-color: var(--primary);
+  }
+
+  .btn-default {
+    width: 100%;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.1s;
+  }
+  .btn-default:active { transform: scale(0.98); }
+  .btn-primary { background: var(--primary-gradient); color: #fff; }
+  .btn-success { background: var(--success-gradient); color: #fff; }
+  .btn-danger { background: var(--danger-gradient); color: #fff; }
+  .btn-outline { background: var(--bg-card); border: 1px solid var(--border-subtle); color: var(--text-main); }
+
+  .log-container-box {
+    background: #050811;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    max-height: 140px;
+    overflow-y: auto;
+    line-height: 1.45;
+  }
+
+  /* Stealth Login */
+  .stealth-login-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #060a14;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    padding: 20px;
+  }
+  .stealth-login-box {
+    width: 100%;
+    max-width: 310px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .stealth-input {
+    width: 100%;
+    background: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    font-size: 15px;
+    color: #f8fafc;
+    outline: none;
+  }
+  .stealth-btn {
+    width: 100%;
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-md);
+    padding: 13px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #f8fafc;
+    cursor: pointer;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes slideDown { from { transform: translateY(-15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+</style>
+</head>
+<body>
+
+  <!-- Stealth Login Screen -->
+  <div id="loginScreen" class="stealth-login-overlay">
+    <form class="stealth-login-box" onsubmit="handleLoginSubmit(event)">
+      <input type="text" id="loginUsername" class="stealth-input" placeholder="Username" autocomplete="username" autofocus required>
+      <input type="password" id="loginPassword" class="stealth-input" placeholder="Password" autocomplete="current-password" required>
+      <button type="submit" id="loginSubmitBtn" class="stealth-btn">→</button>
+      <div id="loginErrorMsg" style="display:none; color:#f87171; font-size:12.5px; text-align:center;"></div>
+    </form>
+  </div>
+
+  <!-- Main Mobile App Layout -->
+  <div id="appContainer" style="display:none;">
+
+    <!-- Fixed App Header -->
+    <header class="app-header">
+      <div class="header-user-info" onclick="openUserCycleSheet()">
+        <div class="user-avatar" id="headerUserAvatar">TK</div>
+        <div class="user-text-col">
+          <div class="user-title-row">
+            <span class="user-name" id="headerUserName">Trần Kim Thịnh</span>
+            <span style="font-size:10px; color:var(--text-dim);">▾</span>
+          </div>
+          <span class="user-cycle-chip" id="headerCycleText">Tháng 11/2026</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Machine Status Pill (Click to open Device Sheet) -->
+        <div class="machine-status-chip" id="machineStatusChip" onclick="openDeviceSheet()" title="Xem chi tiết máy chấm công">
+          <div class="status-dot" id="headerStatusDot"></div>
+          <span id="headerDevClock">--:--</span>
+        </div>
+
+        <!-- Sync Button -->
+        <button class="header-icon-btn" onclick="syncTimesheetFromMachine()" id="headerSyncBtn" title="Đồng bộ từ máy">
+          🔄
+        </button>
+      </div>
+    </header>
+
+    <!-- Scrollable Main View -->
+    <main class="view-wrapper">
+
+      <!-- Active Time-Warp Floating Banner HUD -->
+      <div id="warpHudBanner" class="warp-hud-banner">
+        <div class="warp-hud-top">
+          <span class="warp-hud-pill" id="warpHudBadge">⚡ ĐANG TUA GIỜ</span>
+          <span class="warp-hud-timer" id="warpHudCountdown">30s</span>
+        </div>
+        <div class="warp-hud-msg" id="warpHudMsg">
+          👉 Hãy đưa thẻ RFID lên quẹt vào máy chấm công ngay!
+        </div>
+        <div class="warp-hud-actions">
+          <button id="simSwipeBtn" class="btn-default btn-success" style="flex:1; display:none; padding:9px 12px; font-size:12px;" onclick="simulateSwipeOnEmulator()">
+            💳 Quẹt Thẻ Ảo (Test)
+          </button>
+          <button class="btn-default btn-danger" style="flex:1; padding:9px 12px; font-size:12px;" onclick="restoreClockNow()">
+            🔄 Huỷ & Trả Giờ Chuẩn
+          </button>
+        </div>
+      </div>
+
+      <!-- Realtime Swipe Toast Alert -->
+      <div id="swipeToastAlert" class="swipe-toast-alert"></div>
+
+      <!-- ================= TAB 0: CHẤM CÔNG (TIMESHEET & TODAY HERO) ================= -->
+      <div id="viewTimesheet">
+        <!-- Today Hero Card -->
+        <div class="today-hero-card" id="todayHeroCard">
+          <div class="today-hero-header">
+            <span class="today-hero-title">
+              <span>⚡</span>
+              <span id="todayHeroDateLine">HÔM NAY • THỨ NĂM, 05/11</span>
+            </span>
+            <span class="today-hero-badge badge-working" id="todayHeroStatusBadge">ĐANG LÀM VIỆC</span>
+          </div>
+
+          <div class="today-main-status" id="todayHeroMainText">
+            <span>Đã chấm vào</span>
+            <span style="color:#6ee7b7;" id="todayHeroInDisplay">08:23:00</span>
+          </div>
+
+          <div class="today-times-row">
+            <div class="today-col">
+              <span class="today-col-label">Giờ Vào</span>
+              <span class="today-col-val in" id="todayHeroInVal">08:23:00</span>
+            </div>
+            <div class="today-col">
+              <span class="today-col-label">Giờ Về</span>
+              <span class="today-col-val out" id="todayHeroOutVal">--:--:--</span>
+            </div>
+            <div class="today-col">
+              <span class="today-col-label">Thời Gian</span>
+              <span class="today-col-val dur" id="todayHeroDurVal">Đang chạy</span>
+            </div>
+          </div>
+
+          <button id="todayHeroBtn" class="today-hero-action-btn btn-hero-out" onclick="onTodayHeroActionClick()">
+            <span>🔵</span>
+            <span id="todayHeroBtnText">Tan Ca Bù Ngay (17:44:07)</span>
+          </button>
+        </div>
+
+        <!-- Month KPI Progress Card -->
+        <div class="month-kpi-card">
+          <div class="month-kpi-top">
+            <span class="month-kpi-title" id="kpiCycleTitle">Công Tháng 11/2026</span>
+            <span class="month-kpi-rate" id="kpiRateText">3 / 4 ngày (75%)</span>
+          </div>
+          <div class="kpi-progress-bar">
+            <div class="kpi-progress-fill" id="kpiProgressFill" style="width: 75%;"></div>
+          </div>
+          <div class="kpi-chips-row">
+            <div class="kpi-chip active" id="kpiChipAll" onclick="setTimesheetFilter('ALL', this)">
+              <span class="kpi-chip-num" id="kpiTotalNum">4</span>
+              <span class="kpi-chip-label">Tất cả ngày</span>
+            </div>
+            <div class="kpi-chip" id="kpiChipNeedFix" onclick="setTimesheetFilter('NEED_FIX', this)">
+              <span class="kpi-chip-num" style="color:#fbbf24;" id="kpiNeedFixNum">1</span>
+              <span class="kpi-chip-label">Cần bù công</span>
+            </div>
+            <div class="kpi-chip" id="kpiChipCompleted" onclick="setTimesheetFilter('COMPLETED', this)">
+              <span class="kpi-chip-num" style="color:#34d399;" id="kpiCompleteNum">3</span>
+              <span class="kpi-chip-label">Đã đủ công</span>
+            </div>
+            <div class="kpi-chip" id="kpiChipWeekend" onclick="setTimesheetFilter('WEEKEND', this)">
+              <span class="kpi-chip-num" style="color:#94a3b8;" id="kpiWeekendNum">1</span>
+              <span class="kpi-chip-label">Cuối tuần</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Days Timeline List -->
+        <div class="ts-days-list" id="timesheetDaysContainer">
+          <div style="text-align:center; padding:30px; color:var(--text-dim);">Đang nạp dữ liệu ngày công...</div>
+        </div>
+      </div>
+
+      <!-- ================= TAB 1: CHẤM TRỄ THỊNH ================= -->
+      <div id="viewThinh" style="display:none;">
+        <div class="section-box">
+          <div class="section-box-header">
+            <div class="section-box-title">📋 Ngày Chấm Trễ (&gt; 08:30) — Thịnh</div>
+            <span id="lateSummaryBadgeThinh" style="font-size:12px; font-weight:800; color:#fca5a5;">--</span>
+          </div>
+
+          <div style="display:flex; gap:6px; margin-bottom:10px;">
+            <select id="monthFilterThinh" onchange="renderLateDaysListThinh()" style="flex:1.2;">
+              <option value="2026-11" selected>Tháng 11/2026</option>
+            </select>
+            <button class="btn-default btn-outline" style="flex:1; padding:7px 10px; font-size:12px;" onclick="toggleSelectAllThinh(true)">☑ Chọn hết</button>
+            <button class="btn-default btn-outline" style="flex:0.8; padding:7px 10px; font-size:12px;" onclick="randomizeTimesThinh()">🎲 Giờ</button>
+          </div>
+
+          <div id="lateDaysContainerThinh">
+            <div style="text-align:center; padding:20px; color:var(--text-dim);">Đang nạp danh sách ngày trễ...</div>
+          </div>
+        </div>
+
+        <!-- Quick utilities for Thinh -->
+        <div class="section-box">
+          <div class="section-box-header">
+            <div class="section-box-title">⚡ Tiện Ích Nhanh — Thịnh</div>
+          </div>
+          <button class="btn-default btn-success" style="margin-bottom:8px;" onclick="quickWarpTodayThinh()">
+            ⚡ TUA VỀ 08:2x HÔM NAY (QUẸT 1 LẦN)
+          </button>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+            <button class="btn-default btn-outline" onclick="unlockDoor()">🔓 Mở cửa (5s)</button>
+            <button class="btn-default btn-outline" onclick="restoreClockNow()">🔄 Đặt lại giờ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TAB 2: NHÂN VIÊN KHÁC ================= -->
+      <div id="viewOthers" style="display:none;">
+        <div class="section-box">
+          <div class="section-box-header">
+            <div class="section-box-title">👥 Chọn Nhân Viên Cần Bù</div>
+          </div>
+          <select id="otherUserSelect" onchange="onOtherUserSelected()" style="margin-bottom:10px; font-weight:800; border-color:#38bdf8;">
+            <option value="">Đang nạp danh sách...</option>
+          </select>
+
+          <!-- Selected Profile Info -->
+          <div style="background:var(--bg-card); border-radius:var(--radius-md); padding:10px 12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-size:15px; font-weight:800; color:#fff;" id="empCardName">--</div>
+              <div style="font-size:12px; color:var(--text-muted);">
+                Mã thẻ: <strong id="empCardId" style="color:#93c5fd;">--</strong>
+              </div>
+            </div>
+            <span id="empCardLateCount" style="font-size:12px; font-weight:800; color:#fca5a5; background:rgba(239,68,68,0.15); padding:3px 8px; border-radius:var(--radius-full);">--</span>
+          </div>
+
+          <div style="display:flex; gap:6px; margin-bottom:10px;">
+            <select id="monthFilterOthers" onchange="renderLateDaysListOthers()" style="flex:1.2;">
+              <option value="2026-11" selected>Tháng 11/2026</option>
+            </select>
+            <button class="btn-default btn-outline" style="flex:1; padding:7px 10px; font-size:12px;" onclick="toggleSelectAllOthers(true)">☑ Chọn hết</button>
+            <button class="btn-default btn-outline" style="flex:0.8; padding:7px 10px; font-size:12px;" onclick="randomizeTimesOthers()">🎲 Giờ</button>
+          </div>
+
+          <div id="lateDaysContainerOthers">
+            <div style="text-align:center; padding:20px; color:var(--text-dim);">Chọn nhân viên để xem ngày trễ...</div>
+          </div>
+        </div>
+
+        <div class="section-box">
+          <button class="btn-default btn-success" onclick="quickWarpTodayOthers()">
+            ⚡ TUA VỀ 08:2x HÔM NAY CHO NGƯỜI NÀY
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= TAB 3: THIẾT BỊ & GIỜ TÙY CHỌN ================= -->
+      <div id="viewCustom" style="display:none;">
+        <!-- Machine Status Details -->
+        <div class="section-box">
+          <div class="section-box-header">
+            <div class="section-box-title">🏢 Máy Chấm Công Port 4370</div>
+            <span class="user-cycle-chip" id="recCountBadge">-- lượt quẹt</span>
+          </div>
+
+          <div style="background:#090e1a; border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:12px; text-align:center; margin-bottom:10px;">
+            <div style="font-size:11px; font-weight:700; color:var(--text-dim); text-transform:uppercase;">Giờ hiện tại trên máy</div>
+            <div style="font-size:32px; font-weight:900; color:#38bdf8; font-variant-numeric:tabular-nums; margin:2px 0;" id="devClockFull">--:--:--</div>
+            <div style="font-size:12px; color:var(--text-muted);" id="devDateFull">----/--/--</div>
+          </div>
+
+          <div style="margin-bottom:10px;">
+            <div style="font-size:11.5px; font-weight:700; color:var(--text-dim); margin-bottom:4px;">KẾT NỐI MÁY MỤC TIÊU:</div>
+            <select id="targetSelect" onchange="onTargetChange()" style="font-weight:700;">
+              <option value="192.168.54.250:4370">🏢 Máy Thật Văn Phòng (192.168.54.250)</option>
+              <option value="127.0.0.1:4370">🧪 Máy Giả Lập Local (127.0.0.1)</option>
+            </select>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+            <button class="btn-default btn-outline" onclick="unlockDoor()">🔓 Mở cửa (5s)</button>
+            <button class="btn-default btn-outline" onclick="restoreClockNow()">🔄 Đặt lại giờ chuẩn</button>
+          </div>
+        </div>
+
+        <!-- Custom Date & Time Picker -->
+        <div class="section-box">
+          <div class="section-box-header">
+            <div class="section-box-title">⏱️ Chỉnh Giờ & Ngày Cụ Thể</div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:12px;">
+            <div>
+              <div style="font-size:11px; font-weight:700; color:var(--text-dim); margin-bottom:4px;">NHÂN VIÊN:</div>
+              <select id="customUserSelect" onchange="onCustomUserChange()" style="font-weight:700;">
+                <option value="7441083">Trần Kim Thịnh</option>
+              </select>
+            </div>
+
+            <div>
+              <div style="font-size:11px; font-weight:700; color:var(--text-dim); margin-bottom:4px;">NGÀY CẦN CHẤM:</div>
+              <input type="date" id="customDateInput" style="font-size:15px; font-weight:800; text-align:center;">
+              <div style="display:flex; gap:6px; margin-top:6px;">
+                <button type="button" class="filter-pill-btn active" style="flex:1;" onclick="setCustomDateToday()">Hôm nay</button>
+                <button type="button" class="filter-pill-btn" style="flex:1;" onclick="setCustomDateDaysAgo(1)">Hôm qua</button>
+                <button type="button" class="filter-pill-btn" style="flex:1;" onclick="setCustomDateDaysAgo(2)">Hôm kia</button>
+              </div>
+            </div>
+
+            <div>
+              <div style="font-size:11px; font-weight:700; color:var(--text-dim); margin-bottom:4px;">GIỜ:PHÚT:GIÂY:</div>
+              <input type="time" step="1" id="customTimeInput" value="08:22:15" style="font-size:18px; font-weight:900; color:#6ee7b7; text-align:center;">
+              <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:6px;">
+                <button type="button" class="filter-pill-btn" onclick="setCustomTimePreset('08:22:15')">🌅 08:22</button>
+                <button type="button" class="filter-pill-btn" onclick="setCustomTimePreset('11:58:10')">🕛 11:58</button>
+                <button type="button" class="filter-pill-btn" onclick="setCustomTimePreset('17:45:20')">🌇 17:45</button>
+                <button type="button" class="filter-pill-btn" onclick="setCustomTimePreset('18:05:00')">🌇 18:05</button>
+                <button type="button" class="filter-pill-btn" onclick="setCustomTimeRandom()">🎲 Random</button>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-default btn-success" style="margin-bottom:8px;" onclick="executeCustomTimeWarp()">
+            ⚡ BẬT TUA GIỜ NÀY TRÊN MÁY (QUẸT THẺ)
+          </button>
+          <button class="btn-default btn-outline" style="border-color:#38bdf8; color:#38bdf8;" onclick="executeDirectInsertRecord()">
+            📝 Ghi Trực Tiếp Vào File Máy (Direct Insert)
+          </button>
+        </div>
+
+        <!-- Realtime Swipes Log -->
+        <div class="section-box">
+          <div class="section-box-header">
+            <div class="section-box-title">📡 Nhật Ký Quẹt Thẻ Realtime</div>
+          </div>
+          <div id="logBox" class="log-container-box">Đang kết nối Backend...</div>
+        </div>
+
+        <div style="text-align:center; padding:10px 0;">
+          <button class="btn-default btn-outline" style="max-width:200px; margin:0 auto; color:#f87171;" onclick="logoutApp()">
+            🔒 Đăng xuất Portal
+          </button>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Floating Batch Action Bar (Appears when items are selected in Tab 1 or 2) -->
+    <div id="floatingBatchBar" class="floating-batch-bar">
+      <button class="batch-launch-btn" id="batchLaunchBtn" onclick="startSelectedQueue()">
+        🚀 CHẠY TUA GIỜ (0 NGÀY)
+      </button>
+    </div>
+
+    <!-- Bottom App Navigation Bar -->
+    <nav class="app-bottom-nav">
+      <button class="nav-tab-btn active" id="navBtnTimesheet" onclick="switchMainTab('timesheet')">
+        <span class="nav-tab-icon">📅</span>
+        <span class="nav-tab-label">Ngày Công</span>
+      </button>
+      <button class="nav-tab-btn" id="navBtnThinh" onclick="switchMainTab('thinh')">
+        <span class="nav-tab-icon">⚡</span>
+        <span class="nav-tab-label">Trễ Thịnh</span>
+        <span class="nav-badge-pill" id="badgeThinhCount" style="display:none;">0</span>
+      </button>
+      <button class="nav-tab-btn" id="navBtnOthers" onclick="switchMainTab('others')">
+        <span class="nav-tab-icon">👥</span>
+        <span class="nav-tab-label">Đồng Nghiệp</span>
+      </button>
+      <button class="nav-tab-btn" id="navBtnCustom" onclick="switchMainTab('custom')">
+        <span class="nav-tab-icon">⚙️</span>
+        <span class="nav-tab-label">Máy & Giờ</span>
+      </button>
+    </nav>
+
+    <!-- User & Month Selector Bottom Sheet -->
+    <div id="userCycleSheetBackdrop" class="bottom-sheet-backdrop" onclick="closeUserCycleSheet()">
+      <div class="bottom-sheet-content" onclick="event.stopPropagation()">
+        <div class="sheet-handle-bar"></div>
+        <div class="sheet-title">
+          <span>Chọn Nhân Viên & Kỳ Công</span>
+          <button style="background:transparent; border:none; color:var(--text-dim); font-size:18px;" onclick="closeUserCycleSheet()">✕</button>
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <div style="font-size:11px; font-weight:700; color:var(--text-dim); margin-bottom:4px;">NHÂN VIÊN:</div>
+          <select id="tsUserSelect" onchange="onTimesheetUserChange(); closeUserCycleSheet();" style="font-weight:800; border-color:#38bdf8;">
+            <option value="7441083">Trần Kim Thịnh ★ Bạn</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <div style="font-size:11px; font-weight:700; color:var(--text-dim); margin-bottom:4px;">KỲ CÔNG:</div>
+          <select id="tsCycleSelect" onchange="onTimesheetCycleChange(); closeUserCycleSheet();" style="font-weight:800;">
+            <option value="2026-11" selected>Tháng 11/2026</option>
+            <option value="2026-10">Tháng 10/2026</option>
+            <option value="2026-09">Tháng 09/2026</option>
+          </select>
+        </div>
+
+        <button class="btn-default btn-primary" onclick="closeUserCycleSheet()">Xong</button>
+      </div>
+    </div>
+
+    <!-- Confirm Time-Warp Bottom Sheet Modal -->
+    <div id="confirmWarpSheetBackdrop" class="bottom-sheet-backdrop" onclick="closeConfirmWarpSheet()">
+      <div class="bottom-sheet-content" onclick="event.stopPropagation()" style="border-top-color: var(--warn); max-width: 480px;">
+        <div class="sheet-handle-bar"></div>
+        
+        <div class="sheet-title" style="margin-bottom: 6px;">
+          <span style="display:flex; align-items:center; gap:8px; color:#fbbf24;">
+            <span style="font-size:20px;">⏱️</span>
+            <span>Xác Nhận Tua Ngược Thời Gian</span>
+          </span>
+          <button style="background:transparent; border:none; color:var(--text-dim); font-size:20px; cursor:pointer; padding:2px 8px;" onclick="closeConfirmWarpSheet()">✕</button>
+        </div>
+        
+        <div style="font-size:12.5px; color:var(--text-muted); margin-bottom:14px; line-height:1.45;">
+          Hệ thống sẽ <b>tua ngược đồng hồ máy chấm công</b> về mốc thời gian dưới đây. Bạn vui lòng kiểm tra chính xác:
+        </div>
+
+        <!-- Details Card -->
+        <div style="background:var(--bg-card); border:1.5px solid rgba(245, 158, 11, 0.4); border-radius:var(--radius-lg); padding:14px; margin-bottom:14px; box-shadow:0 4px 16px rgba(0,0,0,0.25);">
+          <!-- Employee row -->
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--border-subtle);">
+            <span style="font-size:12px; color:var(--text-dim); font-weight:700;">NHÂN VIÊN:</span>
+            <span id="confirmWarpUserName" style="font-size:14px; font-weight:900; color:#38bdf8;">--</span>
+          </div>
+
+          <!-- Single item view (when 1 day) -->
+          <div id="confirmSingleDayBox">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--border-subtle);">
+              <span style="font-size:12px; color:var(--text-dim); font-weight:700;">NGÀY CẦN CHẤM:</span>
+              <span id="confirmWarpDate" style="font-size:14.5px; font-weight:900; color:#fff;">--</span>
+            </div>
+
+            <div>
+              <div style="font-size:12px; color:var(--text-dim); font-weight:700; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+                <span>GIỜ SẼ TUA VỀ MÁY:</span>
+                <span style="color:#6ee7b7; font-size:11px; font-weight:700;">(Chạm để chỉnh sửa)</span>
+              </div>
+              <div style="margin-bottom:8px;">
+                <input type="time" step="1" id="confirmWarpTimeInput" style="font-size:24px; font-weight:900; color:#6ee7b7; text-align:center; padding:9px 12px; border:1.5px solid rgba(16,185,129,0.5); background:#070b14; letter-spacing:1px; border-radius:var(--radius-md);">
+              </div>
+              <!-- Quick adjust chips -->
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button type="button" class="filter-pill-btn" onclick="adjustConfirmTimeMinutes(-5)">⏱️ -5 phút</button>
+                <button type="button" class="filter-pill-btn" onclick="adjustConfirmTimeMinutes(5)">⏱️ +5 phút</button>
+                <button type="button" class="filter-pill-btn" onclick="randomizeConfirmTime()">🎲 Giờ tự nhiên</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Multiple items view (Batch queue) -->
+          <div id="confirmBatchDaysBox" style="display:none;">
+            <div style="font-size:12px; color:var(--text-dim); font-weight:700; margin-bottom:6px;">DANH SÁCH CÁC NGÀY SẼ LẦN LƯỢT TUA:</div>
+            <div id="confirmBatchDaysList" style="display:flex; flex-direction:column; gap:6px; max-height:160px; overflow-y:auto; padding-right:2px;">
+              <!-- dynamic items -->
+            </div>
+          </div>
+
+          <!-- Target machine & Duration note -->
+          <div style="margin-top:12px; padding-top:10px; border-top:1px solid var(--border-subtle); display:flex; justify-content:space-between; align-items:center; font-size:11.5px; color:var(--text-dim);">
+            <span>Máy đích: <strong id="confirmWarpTarget" style="color:#cbd5e1;">192.168.54.250</strong></span>
+            <span>Thời gian giữ giờ: <strong style="color:#fbbf24;">30s / lượt</strong></span>
+          </div>
+        </div>
+
+        <!-- Instruction hint -->
+        <div style="font-size:12px; color:#fde68a; background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.3); border-radius:var(--radius-sm); padding:10px 12px; margin-bottom:14px; line-height:1.45;">
+          👉 <b>Hướng dẫn quẹt:</b> Sau khi bấm xác nhận, hãy đưa thẻ RFID lên trước mắt đọc máy chấm công quẹt 1 tiếng <i>Bíp</i>. Máy ghi nhận xong sẽ <b>tự động trả về giờ chuẩn ngay lập tức</b>.
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <button class="btn-default btn-success" style="padding:14px; font-size:15px; font-weight:900; box-shadow:0 4px 16px rgba(16,185,129,0.35);" onclick="executeConfirmedWarp()">
+            ⚡ XÁC NHẬN ĐÚNG GIỜ & BẮT ĐẦU TUA
+          </button>
+          <button class="btn-default btn-outline" style="padding:12px; font-size:14px; color:var(--text-muted);" onclick="closeConfirmWarpSheet()">
+            ✕ Hủy Bỏ (Không Tua)
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- /#appContainer -->
+
+<script>
+  const API_BASE = (window.location.port === "8099") ? "http://127.0.0.1:8098" : "";
+  const THINH_USER_ID = "7441083";
+  const AUTH_TOKEN_KEY = "zk_jwt_token";
+
+  function getAuthToken() {
+    return localStorage.getItem(AUTH_TOKEN_KEY) || "";
+  }
+
+  function setAuthToken(token) {
+    if (token) localStorage.setItem(AUTH_TOKEN_KEY, token);
+    else localStorage.removeItem(AUTH_TOKEN_KEY);
+  }
+
+  // Intercept fetch to automatically attach JWT token
+  const _nativeFetch = window.fetch;
+  window.fetch = async function(url, options = {}) {
+    options = options || {};
+    options.headers = options.headers || {};
+    const token = getAuthToken();
+    if (token) {
+      if (options.headers instanceof Headers) {
+        options.headers.set("Authorization", `Bearer ${token}`);
+      } else {
+        options.headers["Authorization"] = `Bearer ${token}`;
+      }
+    }
+    const res = await _nativeFetch(url, options);
+    if (res.status === 401 && typeof url === "string" && !url.includes("/api/auth/login")) {
+      setAuthToken("");
+      showLoginScreen();
+    }
+    return res;
+  };
+
+  function showLoginScreen() {
+    document.getElementById("loginScreen").style.display = "flex";
+    document.getElementById("appContainer").style.display = "none";
+    const uInp = document.getElementById("loginUsername");
+    if (uInp) setTimeout(() => uInp.focus(), 60);
+  }
+
+  function showAppScreen() {
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("appContainer").style.display = "block";
+  }
+
+  async function handleLoginSubmit(e) {
+    if (e) e.preventDefault();
+    const u = document.getElementById("loginUsername").value.trim();
+    const p = document.getElementById("loginPassword").value;
+    const btn = document.getElementById("loginSubmitBtn");
+    const errBox = document.getElementById("loginErrorMsg");
+
+    errBox.style.display = "none";
+    btn.disabled = true;
+    btn.textContent = "...";
+
+    try {
+      const res = await _nativeFetch(`${API_BASE}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: u, password: p })
+      });
+      const data = await res.json();
+      if (data.ok && data.token) {
+        setAuthToken(data.token);
+        showAppScreen();
+        startApp();
+      } else {
+        errBox.textContent = data.error || "Invalid username or password";
+        errBox.style.display = "block";
+        document.getElementById("loginPassword").value = "";
+        document.getElementById("loginPassword").focus();
+      }
+    } catch (err) {
+      errBox.textContent = "Connection error";
+      errBox.style.display = "block";
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "→";
+    }
+  }
+
+  function logoutApp() {
+    setAuthToken("");
+    showLoginScreen();
+  }
+
+  let activeMainTab = "timesheet"; // "timesheet" | "thinh" | "others" | "custom"
+  let allUsersList = [];
+
+  // State for Tab 0 (Timesheet)
+  let currentTimesheetData = null;
+  let currentTimesheetFilter = "ALL";
+  let selectedTsUserId = THINH_USER_ID;
+  let selectedTsCycle = "2026-11";
+  let timesheetCustomTimes = {};
+  let showFutureDays = false;
+
+  // State for Tab 1 (Tran Kim Thinh)
+  let thinhLateDays = [];
+  let thinhSelectedDates = new Set();
+  let thinhCustomTimes = {};
+
+  // State for Tab 2 (Others)
+  let selectedOtherUserId = "";
+  let selectedOtherUserObj = null;
+  let othersLateDays = [];
+  let othersSelectedDates = new Set();
+  let othersCustomTimes = {};
+
+  let lastSeenSwipeMsg = "";
+  let wasWarpActive = false;
+
+  function switchMainTab(tab) {
+    activeMainTab = tab;
+
+    // Bottom nav active state
+    document.getElementById("navBtnTimesheet").classList.toggle("active", tab === "timesheet");
+    document.getElementById("navBtnThinh").classList.toggle("active", tab === "thinh");
+    document.getElementById("navBtnOthers").classList.toggle("active", tab === "others");
+    document.getElementById("navBtnCustom").classList.toggle("active", tab === "custom");
+
+    // Views visibility
+    document.getElementById("viewTimesheet").style.display = (tab === "timesheet") ? "block" : "none";
+    document.getElementById("viewThinh").style.display = (tab === "thinh") ? "block" : "none";
+    document.getElementById("viewOthers").style.display = (tab === "others") ? "block" : "none";
+    document.getElementById("viewCustom").style.display = (tab === "custom") ? "block" : "none";
+
+    if (tab === "timesheet" && !currentTimesheetData) {
+      loadTimesheetData();
+    }
+    updateFloatingBatchBar();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function openUserCycleSheet() {
+    document.getElementById("userCycleSheetBackdrop").classList.add("active");
+  }
+
+  function closeUserCycleSheet() {
+    document.getElementById("userCycleSheetBackdrop").classList.remove("active");
+  }
+
+  function openDeviceSheet() {
+    switchMainTab("custom");
+  }
+
+  /* ------------------- TAB 0: TIMESHEET & TODAY HERO ------------------- */
+  function setTimesheetFilter(filter, el) {
+    currentTimesheetFilter = filter;
+    document.querySelectorAll(".kpi-chip").forEach(c => c.classList.remove("active"));
+    if (el) el.classList.add("active");
+    renderTimesheetDays();
+  }
+
+  function onTimesheetUserChange() {
+    const sel = document.getElementById("tsUserSelect");
+    if (!sel) return;
+    selectedTsUserId = sel.value;
+    const optText = sel.options[sel.selectedIndex]?.text || "";
+    const cleanName = optText.split(" (")[0] || "Nhân viên";
+    document.getElementById("headerUserName").textContent = cleanName;
+    const parts = cleanName.split(" ");
+    const initials = (parts.length > 1) ? (parts[0][0] + parts[parts.length-1][0]) : cleanName.slice(0, 2);
+    document.getElementById("headerUserAvatar").textContent = initials.toUpperCase();
+    loadTimesheetData();
+  }
+
+  function onTimesheetCycleChange() {
+    const sel = document.getElementById("tsCycleSelect");
+    if (!sel) return;
+    selectedTsCycle = sel.value;
+    const optText = sel.options[sel.selectedIndex]?.text || `Tháng ${selectedTsCycle}`;
+    document.getElementById("headerCycleText").textContent = optText.split(" (")[0];
+    loadTimesheetData();
+  }
+
+  function onTsCustomTimeChange(dateStr, type, val) {
+    let clean = val.trim();
+    if (/^\d{2}:\d{2}$/.test(clean)) clean += ":" + String(randInt(10, 52)).padStart(2, "0");
+    if (!timesheetCustomTimes[dateStr]) timesheetCustomTimes[dateStr] = {};
+    timesheetCustomTimes[dateStr][type] = clean;
+  }
+
+  async function loadTimesheetData() {
+    try {
+      const res = await fetch(`${API_BASE}/api/time/timesheet?user_id=${selectedTsUserId}&cycle=${selectedTsCycle}`);
+      const data = await res.json();
+      if (!data.ok) return;
+
+      currentTimesheetData = data;
+      if (data.cycle) selectedTsCycle = data.cycle;
+
+      // Update cycle options
+      if (data.available_cycles && data.available_cycles.length) {
+        const cycleSel = document.getElementById("tsCycleSelect");
+        if (cycleSel) {
+          cycleSel.innerHTML = data.available_cycles.map(c => `
+            <option value="${c.cycle || c.code}" ${(c.cycle || c.code) === data.cycle ? "selected" : ""}>${c.label}</option>
+          `).join("");
+        }
+      }
+
+      // Update KPI progress & chips
+      const s = data.summary || {};
+      const totalWork = s.total_working_days || 0;
+      const completed = s.completed_days || 0;
+      const rate = s.attendance_rate || 0;
+      const needFix = (s.missing_days || 0) + (s.absent_days || 0);
+
+      document.getElementById("kpiCycleTitle").textContent = data.cycle_label ? data.cycle_label.split(" (")[0] : `Tháng ${data.cycle}`;
+      document.getElementById("kpiRateText").textContent = `${completed} / ${totalWork} ngày (${rate}%)`;
+      document.getElementById("kpiProgressFill").style.width = `${Math.min(100, Math.max(0, rate))}%`;
+
+      document.getElementById("kpiTotalNum").textContent = totalWork;
+      document.getElementById("kpiNeedFixNum").textContent = needFix;
+      document.getElementById("kpiCompleteNum").textContent = completed;
+
+      // Count weekend days in list
+      const weekendCount = (data.days || []).filter(d => d.is_weekend).length;
+      document.getElementById("kpiWeekendNum").textContent = weekendCount;
+
+      renderTodayHeroCard();
+      renderTimesheetDays();
+    } catch (e) {
+      console.error("loadTimesheetData error:", e);
+    }
+  }
+
+  function renderTodayHeroCard() {
+    if (!currentTimesheetData || !currentTimesheetData.days) return;
+    const days = currentTimesheetData.days;
+    const today = days.find(d => d.is_today) || days[0];
+    if (!today) return;
+
+    document.getElementById("todayHeroDateLine").textContent = `HÔM NAY • ${today.weekday.toUpperCase()}, ${today.display_date.slice(0, 5)}`;
+
+    const statusBadge = document.getElementById("todayHeroStatusBadge");
+    const mainText = document.getElementById("todayHeroMainText");
+    const inValEl = document.getElementById("todayHeroInVal");
+    const outValEl = document.getElementById("todayHeroOutVal");
+    const durValEl = document.getElementById("todayHeroDurVal");
+    const actionBtn = document.getElementById("todayHeroBtn");
+    const btnText = document.getElementById("todayHeroBtnText");
+
+    const inTime = today.first_in || "--:--:--";
+    const outTime = today.last_out || "--:--:--";
+    inValEl.textContent = inTime;
+    outValEl.textContent = outTime;
+    durValEl.textContent = today.duration_str || (today.has_in && !today.has_out ? "Đang tính" : "--");
+
+    if (today.status === "complete") {
+      statusBadge.className = "today-hero-badge badge-complete";
+      statusBadge.textContent = "ĐÃ ĐỦ CÔNG";
+      mainText.innerHTML = `<span>Đủ công hôm nay</span> <span style="color:#34d399;">(${today.duration_str || "OK"})</span>`;
+      actionBtn.className = "today-hero-action-btn btn-hero-done";
+      btnText.textContent = `✅ Đã quẹt đủ vào & ra (${inTime} → ${outTime})`;
+      actionBtn.onclick = null;
+    } else if (today.has_in && !today.has_out) {
+      statusBadge.className = "today-hero-badge badge-working";
+      statusBadge.textContent = "ĐANG LÀM VIỆC";
+      mainText.innerHTML = `<span>Đã vào lúc</span> <span style="color:#6ee7b7;">${inTime}</span>`;
+      actionBtn.className = "today-hero-action-btn btn-hero-out";
+      const sugOut = today.suggested_out || "17:45:00";
+      btnText.textContent = `Tan Ca Bù Ngay (Gợi ý ${sugOut})`;
+      actionBtn.onclick = () => triggerTimesheetWarp(today.date, "check_out", sugOut);
+    } else {
+      statusBadge.className = "today-hero-badge badge-absent";
+      statusBadge.textContent = "CHƯA VÀO";
+      mainText.innerHTML = `<span>Chưa có giờ vào hôm nay</span>`;
+      actionBtn.className = "today-hero-action-btn btn-hero-in";
+      const sugIn = today.suggested_in || "08:22:15";
+      btnText.textContent = `Chấm Vào Bù Ngay (Gợi ý ${sugIn})`;
+      actionBtn.onclick = () => triggerTimesheetWarp(today.date, "check_in", sugIn);
+    }
+  }
+
+  function onTodayHeroActionClick() {
+    // Handled dynamically inside renderTodayHeroCard
+  }
+
+  function renderTimesheetDays() {
+    const container = document.getElementById("timesheetDaysContainer");
+    if (!container || !currentTimesheetData) return;
+
+    let allDays = currentTimesheetData.days || [];
+    let list = allDays;
+
+    if (currentTimesheetFilter === "NEED_FIX") {
+      list = allDays.filter(d => d.next_action !== "none" || d.status === "absent" || d.status === "missing_out" || d.status === "missing_in");
+    } else if (currentTimesheetFilter === "COMPLETED") {
+      list = allDays.filter(d => d.status === "complete");
+    } else if (currentTimesheetFilter === "WEEKEND") {
+      list = allDays.filter(d => d.is_weekend);
+    }
+
+    if (list.length === 0) {
+      container.innerHTML = `<div style="text-align:center; padding:24px; color:var(--text-dim);">Không có ngày nào khớp với bộ lọc này 🎉</div>`;
+      return;
+    }
+
+    // Separate past & current days from future days
+    const pastAndCurrentDays = list.filter(d => !d.is_future);
+    const futureDays = list.filter(d => d.is_future);
+
+    const renderCardHtml = (item) => {
+      let badgeCls = "pill-complete";
+      let statusLabel = item.status_text || "";
+      if (item.status === "absent") {
+        badgeCls = "pill-danger";
+        statusLabel = "Nghỉ / Vắng";
+      } else if (item.status === "missing_out") {
+        badgeCls = "pill-warn";
+        statusLabel = "Chưa tan ca";
+      } else if (item.status === "missing_in") {
+        badgeCls = "pill-warn";
+        statusLabel = "Thiếu giờ vào";
+      } else if (item.status === "weekend" || item.status === "weekend_work") {
+        badgeCls = "pill-weekend";
+        statusLabel = "Cuối tuần";
+      } else if (item.status === "complete") {
+        badgeCls = "pill-complete";
+        statusLabel = item.duration_str ? `Đủ công • ${item.duration_str}` : "Đủ công";
+      }
+
+      const inVal = item.first_in ? `<span class="time-chip-in">${item.first_in}</span>` : `<span class="time-chip-empty">--:--:--</span>`;
+      const outVal = item.last_out ? `<span class="time-chip-out">${item.last_out}</span>` : `<span class="time-chip-empty">--:--:--</span>`;
+
+      // Quick action row
+      let quickActionHtml = "";
+      if (item.next_action === "check_in") {
+        const tVal = timesheetCustomTimes[item.date]?.in || item.suggested_in;
+        quickActionHtml = `
+          <div class="day-quick-action">
+            <input type="text" class="time-edit-mini-inp" id="ts_time_${item.date}"
+              value="${tVal}"
+              onchange="onTsCustomTimeChange('${item.date}', 'in', this.value)"
+              title="Giờ vào bù">
+            <button class="day-action-trigger-btn day-btn-in" onclick="triggerTimesheetWarp('${item.date}', 'check_in', document.getElementById('ts_time_${item.date}').value)">
+              🟢 Chấm Vào Bù
+            </button>
+          </div>
+        `;
+      } else if (item.next_action === "check_out") {
+        const tVal = timesheetCustomTimes[item.date]?.out || item.suggested_out;
+        quickActionHtml = `
+          <div class="day-quick-action">
+            <input type="text" class="time-edit-mini-inp" id="ts_time_${item.date}"
+              value="${tVal}"
+              onchange="onTsCustomTimeChange('${item.date}', 'out', this.value)"
+              title="Giờ tan ca bù">
+            <button class="day-action-trigger-btn day-btn-out" onclick="triggerTimesheetWarp('${item.date}', 'check_out', document.getElementById('ts_time_${item.date}').value)">
+              🔵 Tan Ca Bù
+            </button>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="day-row-card status-${item.status} ${item.is_today ? 'is-today' : ''}">
+          <div class="day-row-top">
+            <div class="day-date-col">
+              <span class="day-date-text">${item.display_date.slice(0, 5)}</span>
+              <span class="day-weekday-tag">${item.weekday}</span>
+              ${item.is_today ? '<span style="color:#38bdf8; font-size:10.5px; font-weight:800;">(Hôm nay)</span>' : ''}
+            </div>
+            <span class="day-status-pill ${badgeCls}">${statusLabel}</span>
+          </div>
+
+          <div class="day-times-line">
+            <div class="day-swipe-chips">
+              <span>Vào: ${inVal}</span>
+              <span style="color:var(--text-dim);">➔</span>
+              <span>Về: ${outVal}</span>
+            </div>
+            <div class="day-dur-text">${item.duration_str || ""}</div>
+          </div>
+
+          ${quickActionHtml}
+        </div>
+      `;
+    };
+
+    let html = pastAndCurrentDays.map(renderCardHtml).join("");
+
+    // If future days exist and filter is ALL, display a compact fold
+    if (futureDays.length > 0 && currentTimesheetFilter === "ALL") {
+      if (showFutureDays) {
+        html += `
+          <div style="margin-top:10px; margin-bottom:6px; font-size:12px; font-weight:800; color:var(--text-dim); display:flex; justify-content:space-between; align-items:center;">
+            <span>📅 CÁC NGÀY SẮP TỚI (${futureDays.length} ngày)</span>
+            <span style="cursor:pointer; color:#38bdf8;" onclick="toggleFutureDays(false)">Thu gọn ▴</span>
+          </div>
+        `;
+        html += futureDays.map(renderCardHtml).join("");
+      } else {
+        html += `
+          <div class="future-days-fold" onclick="toggleFutureDays(true)">
+            📅 Xem ${futureDays.length} ngày sắp tới trong tháng (từ ${futureDays[0].display_date.slice(0, 5)}) ▾
+          </div>
+        `;
+      }
+    }
+
+    container.innerHTML = html;
+  }
+
+  function toggleFutureDays(show) {
+    showFutureDays = show;
+    renderTimesheetDays();
+  }
+
+  async function triggerTimesheetWarp(dateStr, actionType, timeVal) {
+    let cleanTime = (timeVal || "").trim();
+    if (!cleanTime) {
+      cleanTime = (actionType === "check_in") ? generateNaturalMorningTime() : "17:48:32";
+    }
+    if (/^\d{2}:\d{2}$/.test(cleanTime)) {
+      cleanTime += ":" + String(randInt(10, 52)).padStart(2, "0");
+    }
+
+    const targetDt = `${dateStr} ${cleanTime}`;
+    promptConfirmWarp([{ date: dateStr, target_datetime: targetDt }], selectedTsUserId, false);
+  }
+
+  async function syncTimesheetFromMachine() {
+    const t = getTarget();
+    const btn = document.getElementById("headerSyncBtn");
+    btn.textContent = "⏳";
+    btn.disabled = true;
+    try {
+      const res = await fetch(`${API_BASE}/api/4370/pull`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ip: t.ip, port: t.port, com_key: 0 })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        await loadTimesheetData();
+        await loadLateDaysThinh();
+        if (selectedOtherUserId) await loadLateDaysOthers();
+        await pollStatus();
+      } else {
+        alert("Lỗi đồng bộ: " + data.error);
+      }
+    } catch (e) {
+      alert("Lỗi đồng bộ: " + e.message);
+    } finally {
+      btn.textContent = "🔄";
+      btn.disabled = false;
+    }
+  }
+
+  /* ------------------- LOAD USERS & EMPLOYEES ------------------- */
+  async function loadAllUsers() {
+    try {
+      const res = await fetch(`${API_BASE}/api/users`);
+      const data = await res.json();
+      allUsersList = (data.users || []).filter(u => u.uid !== 1);
+      allUsersList.sort((a, b) => a.name.localeCompare(b.name, "vi"));
+
+      const otherSel = document.getElementById("otherUserSelect");
+      if (otherSel) {
+        otherSel.innerHTML = allUsersList.map(u => {
+          const isThinh = (String(u.user_id) === THINH_USER_ID);
+          const label = `${u.name} (ID: ${u.user_id} • Thẻ: ${u.card || "Chưa có"}) ${isThinh ? "★ Bạn" : ""}`;
+          return `<option value="${u.user_id}">${label}</option>`;
+        }).join("");
+      }
+
+      const customSel = document.getElementById("customUserSelect");
+      if (customSel) {
+        customSel.innerHTML = allUsersList.map(u => {
+          const isThinh = (String(u.user_id) === THINH_USER_ID);
+          const label = `${u.name} (ID: ${u.user_id}) ${isThinh ? "★ Bạn" : ""}`;
+          return `<option value="${u.user_id}" ${isThinh ? "selected" : ""}>${label}</option>`;
+        }).join("");
+      }
+
+      const tsSel = document.getElementById("tsUserSelect");
+      if (tsSel) {
+        tsSel.innerHTML = allUsersList.map(u => {
+          const isThinh = (String(u.user_id) === THINH_USER_ID);
+          const label = `${u.name} (ID: ${u.user_id}) ${isThinh ? "★ Bạn" : ""}`;
+          return `<option value="${u.user_id}" ${isThinh ? "selected" : ""}>${label}</option>`;
+        }).join("");
+      }
+
+      const firstOther = allUsersList.find(u => String(u.user_id) !== THINH_USER_ID) || allUsersList[0];
+      if (firstOther) {
+        selectedOtherUserId = String(firstOther.user_id);
+        selectedOtherUserObj = firstOther;
+        if (otherSel) otherSel.value = selectedOtherUserId;
+        updateOtherEmployeeProfileCard();
+        await loadLateDaysOthers();
+      }
+    } catch (e) {
+      console.error("loadAllUsers error:", e);
+    }
+  }
+
+  function onOtherUserSelected() {
+    const sel = document.getElementById("otherUserSelect");
+    selectedOtherUserId = sel.value;
+    selectedOtherUserObj = allUsersList.find(u => String(u.user_id) === selectedOtherUserId) || null;
+    othersSelectedDates.clear();
+    othersCustomTimes = {};
+    updateOtherEmployeeProfileCard();
+    loadLateDaysOthers();
+  }
+
+  function updateOtherEmployeeProfileCard() {
+    if (!selectedOtherUserObj) return;
+    const u = selectedOtherUserObj;
+    document.getElementById("empCardName").textContent = u.name;
+    document.getElementById("empCardId").textContent = u.card ? Number(u.card).toLocaleString() : "Chưa có";
+  }
+
+  /* ------------------- TAB 1: THỊNH LATE DAYS ------------------- */
+  async function loadLateDaysThinh() {
+    try {
+      const res = await fetch(`${API_BASE}/api/time/late-days?user_id=${THINH_USER_ID}`);
+      const data = await res.json();
+      if (!data.ok) return;
+      thinhLateDays = data.late_days || [];
+      thinhLateDays.forEach(item => {
+        if (!thinhCustomTimes[item.date]) {
+          thinhCustomTimes[item.date] = item.suggested_time || generateNaturalMorningTime();
+        }
+        if (item.fixed_in_session && thinhSelectedDates.has(item.date)) {
+          thinhSelectedDates.delete(item.date);
+        }
+      });
+
+      const badgeThinh = document.getElementById("badgeThinhCount");
+      const unfixed = thinhLateDays.filter(x => !x.has_early_on_machine && !x.fixed_in_session).length;
+      if (unfixed > 0) {
+        badgeThinh.textContent = unfixed;
+        badgeThinh.style.display = "block";
+      } else {
+        badgeThinh.style.display = "none";
+      }
+
+      renderLateDaysListThinh();
+    } catch (e) {
+      console.error("loadLateDaysThinh error:", e);
+    }
+  }
+
+  function getFilteredLateDaysThinh() {
+    const mf = document.getElementById("monthFilterThinh")?.value;
+    if (!mf || mf === "ALL") return thinhLateDays;
+    return thinhLateDays.filter(item => item.date.startsWith(mf));
+  }
+
+  function renderLateDaysListThinh() {
+    const container = document.getElementById("lateDaysContainerThinh");
+    const list = getFilteredLateDaysThinh();
+    const unfixedCount = list.filter(x => !x.has_early_on_machine && !x.fixed_in_session).length;
+    const fixedMachineCount = list.filter(x => x.has_early_on_machine || x.fixed_in_session).length;
+
+    const badge = document.getElementById("lateSummaryBadgeThinh");
+    badge.innerHTML = `<span style="color:#f87171;">Chưa bù: ${unfixedCount}</span> • <span style="color:#38bdf8;">Đã bù: ${fixedMachineCount}</span>`;
+
+    if (list.length === 0) {
+      container.innerHTML = `<div style="text-align:center; padding:18px; color:var(--text-dim);">Không có ngày chấm trễ nào trong tháng này 🎉</div>`;
+      updateFloatingBatchBar();
+      return;
+    }
+
+    container.innerHTML = list.map(item => {
+      const isChecked = thinhSelectedDates.has(item.date);
+      const tVal = thinhCustomTimes[item.date] || item.suggested_time;
+      let rowCls = isChecked ? "late-item-card checked" : "late-item-card";
+      let statusLine = "";
+
+      if (item.fixed_in_session) {
+        rowCls = "late-item-card fixed";
+        statusLine = `✅ Đã quẹt bù lúc ${item.fixed_at.split(" ")[1] || item.first_in}`;
+      } else if (item.has_early_on_machine) {
+        statusLine = `<span style="color:#38bdf8;">Đã có lượt bù ${item.early_in}</span> • Gốc: ${item.orig_late_in}`;
+      } else {
+        statusLine = `<span style="color:#f87171;">Chưa bù</span> • Giờ vào: ${item.orig_late_in} (Trễ ${item.late_str})`;
+      }
+
+      return `
+        <div class="${rowCls}">
+          <div class="late-card-left" onclick="toggleDateCheckboxThinh('${item.date}')">
+            <input type="checkbox" class="late-checkbox"
+              ${isChecked ? "checked" : ""}
+              onclick="event.stopPropagation(); toggleDateCheckboxThinh('${item.date}')">
+            <div>
+              <div class="late-date-title">
+                <span>${item.date.slice(5)}</span>
+                <span class="day-weekday-tag">${item.weekday}</span>
+              </div>
+              <div class="late-desc-sub">${statusLine}</div>
+            </div>
+          </div>
+          <div class="late-card-right">
+            <input type="text" class="time-edit-mini-inp"
+              value="${tVal}"
+              onchange="onCustomTimeEditThinh('${item.date}', this.value)"
+              title="Giờ quẹt">
+            <button class="btn-mini-warp" onclick="startSingleDayWarpThinh('${item.date}')">⚡ Quẹt</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    updateFloatingBatchBar();
+  }
+
+  function toggleDateCheckboxThinh(dateStr) {
+    if (thinhSelectedDates.has(dateStr)) thinhSelectedDates.delete(dateStr);
+    else thinhSelectedDates.add(dateStr);
+    renderLateDaysListThinh();
+  }
+
+  function toggleSelectAllThinh(selectAll) {
+    const list = getFilteredLateDaysThinh();
+    list.forEach(item => {
+      if (selectAll && !item.fixed_in_session) thinhSelectedDates.add(item.date);
+      else thinhSelectedDates.delete(item.date);
+    });
+    renderLateDaysListThinh();
+  }
+
+  function onCustomTimeEditThinh(dateStr, val) {
+    let clean = val.trim();
+    if (/^\d{2}:\d{2}$/.test(clean)) clean += ":" + String(randInt(10, 52)).padStart(2, "0");
+    thinhCustomTimes[dateStr] = clean;
+  }
+
+  function randomizeTimesThinh() {
+    const list = getFilteredLateDaysThinh();
+    list.forEach(item => {
+      if (thinhSelectedDates.size === 0 || thinhSelectedDates.has(item.date)) {
+        thinhCustomTimes[item.date] = generateNaturalMorningTime();
+      }
+    });
+    renderLateDaysListThinh();
+  }
+
+  let pendingWarpRequest = null;
+
+  function promptConfirmWarp(queue, userId, proxyCard = false, durationSec = 30) {
+    if (!queue || queue.length === 0) return;
+    pendingWarpRequest = {
+      queue: JSON.parse(JSON.stringify(queue)),
+      userId: String(userId),
+      proxyCard: Boolean(proxyCard),
+      durationSec: Number(durationSec) || 30
+    };
+
+    // Find user name
+    let userName = `User #${userId}`;
+    if (allUsersList && allUsersList.length) {
+      const u = allUsersList.find(x => String(x.user_id) === String(userId));
+      if (u) userName = `${u.name} (ID: ${u.user_id})`;
+    } else if (String(userId) === THINH_USER_ID) {
+      userName = `Trần Kim Thịnh (7441083)`;
+    }
+    document.getElementById("confirmWarpUserName").textContent = userName;
+
+    const t = getTarget();
+    document.getElementById("confirmWarpTarget").textContent = `${t.ip}:${t.port}`;
+
+    if (queue.length === 1) {
+      document.getElementById("confirmSingleDayBox").style.display = "block";
+      document.getElementById("confirmBatchDaysBox").style.display = "none";
+
+      const item = queue[0];
+      const [dtDate, dtTime] = item.target_datetime.split(" ");
+      
+      let dateLabel = dtDate;
+      if (currentTimesheetData && currentTimesheetData.days) {
+        const matchDay = currentTimesheetData.days.find(d => d.date === dtDate);
+        if (matchDay) dateLabel = `${matchDay.weekday}, ${matchDay.display_date}`;
+      }
+      document.getElementById("confirmWarpDate").textContent = dateLabel;
+
+      const inp = document.getElementById("confirmWarpTimeInput");
+      if (inp) inp.value = dtTime || "08:22:15";
+    } else {
+      document.getElementById("confirmSingleDayBox").style.display = "none";
+      document.getElementById("confirmBatchDaysBox").style.display = "block";
+
+      const listContainer = document.getElementById("confirmBatchDaysList");
+      if (listContainer) {
+        listContainer.innerHTML = queue.map((q, idx) => {
+          const timePart = q.target_datetime.split(" ")[1] || "--:--:--";
+          return `
+            <div style="background:#090e1a; border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:7px 10px; display:flex; justify-content:space-between; align-items:center; font-size:12.5px;">
+              <span><b>#${idx + 1}</b> • Ngày <b>${q.date}</b></span>
+              <span style="color:#6ee7b7; font-weight:800; font-variant-numeric:tabular-nums;">${timePart}</span>
+            </div>
+          `;
+        }).join("");
+      }
+    }
+
+    document.getElementById("confirmWarpSheetBackdrop").classList.add("active");
+  }
+
+  function closeConfirmWarpSheet() {
+    document.getElementById("confirmWarpSheetBackdrop").classList.remove("active");
+    pendingWarpRequest = null;
+  }
+
+  function adjustConfirmTimeMinutes(deltaMinutes) {
+    const inp = document.getElementById("confirmWarpTimeInput");
+    if (!inp) return;
+    const parts = inp.value.split(":");
+    let hh = parseInt(parts[0] || "8", 10);
+    let mm = parseInt(parts[1] || "22", 10);
+    let ss = parts[2] || String(randInt(10, 50)).padStart(2, "0");
+
+    let totalMinutes = hh * 60 + mm + deltaMinutes;
+    if (totalMinutes < 0) totalMinutes = 0;
+    if (totalMinutes >= 24 * 60) totalMinutes = 24 * 60 - 1;
+
+    hh = Math.floor(totalMinutes / 60);
+    mm = totalMinutes % 60;
+    inp.value = `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}:${ss}`;
+  }
+
+  function randomizeConfirmTime() {
+    const inp = document.getElementById("confirmWarpTimeInput");
+    if (!inp) return;
+    const hh = parseInt(inp.value.split(":")[0] || "8", 10);
+    if (hh >= 16) {
+      const mm = String(randInt(35, 58)).padStart(2, "0");
+      const ss = String(randInt(4, 55)).padStart(2, "0");
+      inp.value = `17:${mm}:${ss}`;
+    } else {
+      inp.value = generateNaturalMorningTime();
+    }
+  }
+
+  async function executeConfirmedWarp() {
+    if (!pendingWarpRequest) return;
+    const req = pendingWarpRequest;
+
+    if (req.queue.length === 1) {
+      let tVal = document.getElementById("confirmWarpTimeInput").value.trim();
+      if (tVal.length === 5) tVal += ":" + String(randInt(10, 50)).padStart(2, "0");
+      req.queue[0].target_datetime = `${req.queue[0].date} ${tVal}`;
+    }
+
+    closeConfirmWarpSheet();
+    await launchQueueGeneric(req.queue, req.userId, req.proxyCard, req.durationSec);
+  }
+
+  async function startSingleDayWarpThinh(dateStr) {
+    const tVal = thinhCustomTimes[dateStr] || generateNaturalMorningTime();
+    promptConfirmWarp([{ date: dateStr, target_datetime: `${dateStr} ${tVal}` }], THINH_USER_ID, false);
+  }
+
+  async function quickWarpTodayThinh() {
+    const now = new Date();
+    const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    const tVal = generateNaturalMorningTime();
+    promptConfirmWarp([{ date: dateStr, target_datetime: `${dateStr} ${tVal}` }], THINH_USER_ID, false);
+  }
+
+  /* ------------------- TAB 2: OTHERS ------------------- */
+  async function loadLateDaysOthers() {
+    if (!selectedOtherUserId) return;
+    try {
+      const res = await fetch(`${API_BASE}/api/time/late-days?user_id=${selectedOtherUserId}`);
+      const data = await res.json();
+      if (!data.ok) return;
+      othersLateDays = data.late_days || [];
+      othersLateDays.forEach(item => {
+        if (!othersCustomTimes[item.date]) {
+          othersCustomTimes[item.date] = item.suggested_time || generateNaturalMorningTime();
+        }
+        if (item.fixed_in_session && othersSelectedDates.has(item.date)) {
+          othersSelectedDates.delete(item.date);
+        }
+      });
+      renderLateDaysListOthers();
+    } catch (e) {
+      console.error("loadLateDaysOthers error:", e);
+    }
+  }
+
+  function getFilteredLateDaysOthers() {
+    const mf = document.getElementById("monthFilterOthers")?.value;
+    if (!mf || mf === "ALL") return othersLateDays;
+    return othersLateDays.filter(item => item.date.startsWith(mf));
+  }
+
+  function renderLateDaysListOthers() {
+    const container = document.getElementById("lateDaysContainerOthers");
+    const list = getFilteredLateDaysOthers();
+    const unfixedTotal = othersLateDays.filter(x => !x.fixed_in_session).length;
+    document.getElementById("empCardLateCount").textContent = `${unfixedTotal} ngày trễ`;
+
+    if (list.length === 0) {
+      container.innerHTML = `<div style="text-align:center; padding:18px; color:var(--text-dim);">Không có ngày chấm trễ nào 🎉</div>`;
+      updateFloatingBatchBar();
+      return;
+    }
+
+    container.innerHTML = list.map(item => {
+      const isChecked = othersSelectedDates.has(item.date);
+      const tVal = othersCustomTimes[item.date] || item.suggested_time;
+      const rowCls = item.fixed_in_session ? "late-item-card fixed" : (isChecked ? "late-item-card checked" : "late-item-card");
+      const statusLine = item.fixed_in_session
+        ? `✅ Đã quẹt bù lúc ${item.fixed_at.split(" ")[1] || item.first_in}`
+        : `Giờ cũ: ${item.first_in} • Trễ ${item.late_str}`;
+
+      return `
+        <div class="${rowCls}">
+          <div class="late-card-left" onclick="toggleDateCheckboxOthers('${item.date}')">
+            <input type="checkbox" class="late-checkbox"
+              ${isChecked ? "checked" : ""}
+              onclick="event.stopPropagation(); toggleDateCheckboxOthers('${item.date}')">
+            <div>
+              <div class="late-date-title">
+                <span>${item.date.slice(5)}</span>
+                <span class="day-weekday-tag">${item.weekday}</span>
+              </div>
+              <div class="late-desc-sub">${statusLine}</div>
+            </div>
+          </div>
+          <div class="late-card-right">
+            <input type="text" class="time-edit-mini-inp"
+              value="${tVal}"
+              onchange="onCustomTimeEditOthers('${item.date}', this.value)"
+              title="Giờ quẹt">
+            <button class="btn-mini-warp" onclick="startSingleDayWarpOthers('${item.date}')">⚡ Quẹt</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    updateFloatingBatchBar();
+  }
+
+  function toggleDateCheckboxOthers(dateStr) {
+    if (othersSelectedDates.has(dateStr)) othersSelectedDates.delete(dateStr);
+    else othersSelectedDates.add(dateStr);
+    renderLateDaysListOthers();
+  }
+
+  function toggleSelectAllOthers(selectAll) {
+    const list = getFilteredLateDaysOthers();
+    list.forEach(item => {
+      if (selectAll && !item.fixed_in_session) othersSelectedDates.add(item.date);
+      else othersSelectedDates.delete(item.date);
+    });
+    renderLateDaysListOthers();
+  }
+
+  function onCustomTimeEditOthers(dateStr, val) {
+    let clean = val.trim();
+    if (/^\d{2}:\d{2}$/.test(clean)) clean += ":" + String(randInt(10, 52)).padStart(2, "0");
+    othersCustomTimes[dateStr] = clean;
+  }
+
+  function randomizeTimesOthers() {
+    const list = getFilteredLateDaysOthers();
+    list.forEach(item => {
+      if (othersSelectedDates.size === 0 || othersSelectedDates.has(item.date)) {
+        othersCustomTimes[item.date] = generateNaturalMorningTime();
+      }
+    });
+    renderLateDaysListOthers();
+  }
+
+  async function startSingleDayWarpOthers(dateStr) {
+    const tVal = othersCustomTimes[dateStr] || generateNaturalMorningTime();
+    promptConfirmWarp([{ date: dateStr, target_datetime: `${dateStr} ${tVal}` }], selectedOtherUserId, false);
+  }
+
+  async function quickWarpTodayOthers() {
+    const now = new Date();
+    const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    const tVal = generateNaturalMorningTime();
+    promptConfirmWarp([{ date: dateStr, target_datetime: `${dateStr} ${tVal}` }], selectedOtherUserId, false);
+  }
+
+  /* ------------------- FLOATING BATCH BAR ------------------- */
+  function updateFloatingBatchBar() {
+    const bar = document.getElementById("floatingBatchBar");
+    const btn = document.getElementById("batchLaunchBtn");
+
+    if (activeMainTab === "thinh" && thinhSelectedDates.size > 0) {
+      const c = thinhSelectedDates.size;
+      btn.innerHTML = `🚀 CHẠY TUA ${c} NGÀY CHO THỊNH ➔`;
+      bar.classList.add("show");
+    } else if (activeMainTab === "others" && othersSelectedDates.size > 0) {
+      const c = othersSelectedDates.size;
+      const empName = selectedOtherUserObj ? selectedOtherUserObj.name : "đồng nghiệp";
+      btn.innerHTML = `🚀 CHẠY TUA ${c} NGÀY — ${empName} ➔`;
+      bar.classList.add("show");
+    } else {
+      bar.classList.remove("show");
+    }
+  }
+
+  async function startSelectedQueue() {
+    if (activeMainTab === "thinh") {
+      if (thinhSelectedDates.size === 0) return;
+      const queue = thinhLateDays
+        .filter(x => thinhSelectedDates.has(x.date))
+        .map(x => ({ date: x.date, target_datetime: `${x.date} ${thinhCustomTimes[x.date] || generateNaturalMorningTime()}` }));
+      promptConfirmWarp(queue, THINH_USER_ID, false);
+    } else if (activeMainTab === "others") {
+      if (othersSelectedDates.size === 0) return;
+      const queue = othersLateDays
+        .filter(x => othersSelectedDates.has(x.date))
+        .map(x => ({ date: x.date, target_datetime: `${x.date} ${othersCustomTimes[x.date] || generateNaturalMorningTime()}` }));
+      promptConfirmWarp(queue, selectedOtherUserId, false);
+    }
+  }
+
+  /* ------------------- TAB 3: CUSTOM TIME PICKER & ACTIONS ------------------- */
+  function onCustomUserChange() {}
+
+  function setCustomDateToday() {
+    const now = new Date();
+    const dStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    const inp = document.getElementById("customDateInput");
+    if (inp) inp.value = dStr;
+  }
+
+  function setCustomDateDaysAgo(daysAgo) {
+    const now = new Date();
+    now.setDate(now.getDate() - daysAgo);
+    const dStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    const inp = document.getElementById("customDateInput");
+    if (inp) inp.value = dStr;
+  }
+
+  function setCustomTimePreset(timeStr) {
+    const inp = document.getElementById("customTimeInput");
+    if (inp) inp.value = timeStr;
+  }
+
+  function setCustomTimeRandom() {
+    const inp = document.getElementById("customTimeInput");
+    if (inp) inp.value = generateNaturalMorningTime();
+  }
+
+  async function executeCustomTimeWarp() {
+    const sel = document.getElementById("customUserSelect");
+    const userId = sel ? sel.value : THINH_USER_ID;
+    const dateVal = document.getElementById("customDateInput")?.value;
+    let timeVal = document.getElementById("customTimeInput")?.value;
+
+    if (!dateVal || !timeVal) {
+      alert("Vui lòng chọn ngày và giờ!");
+      return;
+    }
+    if (timeVal.length === 5) timeVal += ":" + String(randInt(10, 50)).padStart(2, "0");
+
+    const targetDt = `${dateVal} ${timeVal}`;
+    promptConfirmWarp([{ date: dateVal, target_datetime: targetDt }], userId, false);
+  }
+
+  async function executeDirectInsertRecord() {
+    const sel = document.getElementById("customUserSelect");
+    const userId = sel ? sel.value : THINH_USER_ID;
+    const userName = sel ? sel.options[sel.selectedIndex]?.text : `User #${userId}`;
+    const dateVal = document.getElementById("customDateInput")?.value;
+    let timeVal = document.getElementById("customTimeInput")?.value;
+
+    if (!dateVal || !timeVal) {
+      alert("Vui lòng chọn ngày và giờ!");
+      return;
+    }
+    if (timeVal.length === 5) timeVal += ":" + String(randInt(10, 50)).padStart(2, "0");
+    const targetDt = `${dateVal} ${timeVal}`;
+
+    if (!confirm(`Bạn có chắc muốn ghi thẳng bản ghi này vào máy chấm công?\n- Nhân viên: ${userName}\n- Thời gian: ${targetDt}`)) {
+      return;
+    }
+
+    const t = getTarget();
+    try {
+      const insertRes = await fetch(`${API_BASE}/api/attendance/insert`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: String(userId),
+          datetime: targetDt,
+          status: 4,
+          punch: 0
+        })
+      });
+      const insertData = await insertRes.json();
+      if (!insertData.ok) {
+        alert("Lỗi ghi bản ghi: " + (insertData.error || ""));
+        return;
+      }
+
+      const pushRes = await fetch(`${API_BASE}/api/4370/push`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ip: t.ip, port: t.port })
+      });
+      const pushData = await pushRes.json();
+      if (pushData.ok) {
+        alert(`🎉 Đã ghi thành công bản ghi lúc ${targetDt} cho ${userName}!`);
+      } else {
+        alert(`Đã lưu bản ghi staging. Lỗi push: ${pushData.error || ""}`);
+      }
+      await pollStatus();
+      await loadTimesheetData();
+    } catch (e) {
+      alert("Lỗi: " + e.message);
+    }
+  }
+
+  /* ------------------- CORE ACTIONS & POLLING ------------------- */
+  async function launchQueueGeneric(queueItems, userId, proxyCard) {
+    const t = getTarget();
+    try {
+      const res = await fetch(`${API_BASE}/api/time/warp-queue`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ip: t.ip,
+          port: t.port,
+          user_id: String(userId),
+          proxy_card: Boolean(proxyCard),
+          queue: queueItems,
+          duration_sec: 30,
+          auto_restore_on_swipe: true
+        })
+      });
+      const data = await res.json();
+      if (!data.ok) {
+        alert("Lỗi khi chỉnh giờ: " + (data.error || ""));
+        return;
+      }
+      if (navigator.vibrate) navigator.vibrate([80, 40, 80]);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      await pollStatus();
+    } catch (e) {
+      alert("Lỗi kết nối Backend: " + e.message);
+    }
+  }
+
+  async function restoreClockNow() {
+    const t = getTarget();
+    try {
+      const res = await fetch(`${API_BASE}/api/time/restore`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ip: t.ip, port: t.port })
+      });
+      const data = await res.json();
+      if (navigator.vibrate) navigator.vibrate(120);
+      await pollStatus();
+      await loadTimesheetData();
+      await loadLateDaysThinh();
+      if (selectedOtherUserId) await loadLateDaysOthers();
+    } catch (e) {
+      alert("Lỗi: " + e.message);
+    }
+  }
+
+  async function simulateSwipeOnEmulator() {
+    const targetUid = (activeMainTab === "thinh") ? THINH_USER_ID : (selectedOtherUserId || THINH_USER_ID);
+    try {
+      await fetch(`${API_BASE}/api/emulator/simulate-swipe`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: targetUid })
+      });
+      if (navigator.vibrate) navigator.vibrate(100);
+      setTimeout(() => {
+        pollStatus();
+        loadTimesheetData();
+        loadLateDaysThinh();
+        if (selectedOtherUserId) loadLateDaysOthers();
+      }, 650);
+    } catch (e) {
+      alert("Lỗi quẹt ảo: " + e.message);
+    }
+  }
+
+  async function unlockDoor() {
+    const t = getTarget();
+    try {
+      await fetch(`${API_BASE}/api/door/unlock`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ip: t.ip, port: t.port, seconds: 5 })
+      });
+      if (navigator.vibrate) navigator.vibrate(80);
+    } catch (e) {
+      alert("Lỗi mở cửa: " + e.message);
+    }
+  }
+
+  async function pollStatus() {
+    const t = getTarget();
+    try {
+      const res = await fetch(`${API_BASE}/api/time/status?ip=${encodeURIComponent(t.ip)}&port=${t.port}`);
+      const data = await res.json();
+      if (!data.ok) return;
+
+      const [dDate, dTime] = (data.device_time || "----/--/-- --:--:--").split(" ");
+      document.getElementById("headerDevClock").textContent = dTime ? dTime.slice(0, 5) : "--:--";
+
+      const devFull = document.getElementById("devClockFull");
+      if (devFull) devFull.textContent = dTime;
+      const devDateFull = document.getElementById("devDateFull");
+      if (devDateFull) devDateFull.textContent = `Ngày máy: ${dDate}`;
+      const recBadge = document.getElementById("recCountBadge");
+      if (recBadge) recBadge.textContent = `${Number(data.records_count).toLocaleString()} lượt quẹt`;
+
+      const warp = data.warp || {};
+      const dot = document.getElementById("headerStatusDot");
+      const chip = document.getElementById("machineStatusChip");
+      const hud = document.getElementById("warpHudBanner");
+
+      if (warp.active) {
+        wasWarpActive = true;
+        dot.classList.add("warped");
+        chip.classList.add("warped");
+        hud.classList.add("active");
+
+        const targetName = warp.user_name || "Nhân viên";
+        document.getElementById("warpHudCountdown").textContent = warp.remaining_sec > 0 ? `${warp.remaining_sec}s` : "∞";
+        document.getElementById("warpHudMsg").innerHTML = `👉 Mời <b>${targetName}</b> đưa thẻ lên quẹt (${warp.target_dt_str})!`;
+
+        const simBtn = document.getElementById("simSwipeBtn");
+        if (simBtn) simBtn.style.display = (t.ip === "127.0.0.1") ? "block" : "none";
+      } else {
+        if (wasWarpActive) {
+          wasWarpActive = false;
+          loadTimesheetData();
+          loadLateDaysThinh();
+          if (selectedOtherUserId) loadLateDaysOthers();
+        }
+        dot.classList.remove("warped");
+        chip.classList.remove("warped");
+        hud.classList.remove("active");
+      }
+
+      if (warp.last_swipe_msg && warp.last_swipe_msg !== lastSeenSwipeMsg) {
+        const isInitial = (lastSeenSwipeMsg === "");
+        lastSeenSwipeMsg = warp.last_swipe_msg;
+        if (!isInitial) {
+          const toast = document.getElementById("swipeToastAlert");
+          toast.textContent = warp.last_swipe_msg;
+          toast.classList.add("show");
+          if (navigator.vibrate) navigator.vibrate([120, 60, 150]);
+          loadTimesheetData();
+          loadLateDaysThinh();
+          if (selectedOtherUserId) loadLateDaysOthers();
+          setTimeout(() => toast.classList.remove("show"), 6000);
+        }
+      }
+
+      if (data.history && data.history.length) {
+        const lb = document.getElementById("logBox");
+        if (lb) lb.innerHTML = data.history.slice(-12).reverse().join("<br>");
+      }
+    } catch (e) {
+      console.warn("pollStatus error:", e);
+    }
+  }
+
+  function getTarget() {
+    const sel = document.getElementById("targetSelect");
+    const val = sel ? sel.value : "192.168.54.250:4370";
+    const [ip, port] = val.split(":");
+    return { ip, port: Number(port) };
+  }
+
+  function onTargetChange() {
+    const t = getTarget();
+    localStorage.setItem("zk_mobile_target", `${t.ip}:${t.port}`);
+    pollStatus();
+  }
+
+  function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function generateNaturalMorningTime() {
+    const mm = String(randInt(18, 27)).padStart(2, "0");
+    const ss = String(randInt(4, 55)).padStart(2, "0");
+    return `08:${mm}:${ss}`;
+  }
+
+  function initDynamicMonthFilters() {
+    const now = new Date();
+    const curY = now.getFullYear();
+    const curM = now.getMonth() + 1;
+    const curCode = `${curY}-${String(curM).padStart(2, "0")}`;
+
+    const generateOpts = (includeAll = true) => {
+      let opts = [];
+      for (let i = 0; i < 6; i++) {
+        let m = curM - i;
+        let y = curY;
+        while (m <= 0) {
+          m += 12;
+          y -= 1;
+        }
+        const code = `${y}-${String(m).padStart(2, "0")}`;
+        const isSel = (code === curCode) ? "selected" : "";
+        opts.push(`<option value="${code}" ${isSel}>Tháng ${String(m).padStart(2, "0")}/${y}</option>`);
+      }
+      if (includeAll) opts.push(`<option value="ALL">Tất cả các tháng</option>`);
+      return opts.join("");
+    };
+
+    const selThinh = document.getElementById("monthFilterThinh");
+    if (selThinh) selThinh.innerHTML = generateOpts(true);
+
+    const selOthers = document.getElementById("monthFilterOthers");
+    if (selOthers) selOthers.innerHTML = generateOpts(true);
+  }
+
+  function startApp() {
+    initDynamicMonthFilters();
+    loadAllUsers();
+    loadTimesheetData();
+    loadLateDaysThinh();
+    pollStatus();
+    if (!window._pollInterval) {
+      window._pollInterval = setInterval(pollStatus, 900);
+    }
+  }
+
+  (function init() {
+    const savedTarget = localStorage.getItem("zk_mobile_target");
+    if (savedTarget) {
+      const sel = document.getElementById("targetSelect");
+      if (sel && [...sel.options].some(o => o.value === savedTarget)) sel.value = savedTarget;
+    }
+    setCustomDateToday();
+
+    const token = getAuthToken();
+    if (token) {
+      showAppScreen();
+      startApp();
+    } else {
+      showLoginScreen();
+    }
+  })();
+</script>
+</body>
+</html>

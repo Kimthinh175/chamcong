@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>ZKTeco ZMM220 Port 4370 Binary Manager</title>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-title">ZKTECO :4370</div>
+    <div class="brand-sub">ZMM210_TFT Binary Protocol</div>
+  </div>
+
+  <div class="nav-group">Dữ liệu Chấm công (40-Byte)</div>
+  <div class="nav-item active" onclick="switchTab('attendance', this)">⚡ Attendance Log (40-Byte)</div>
+  <div class="nav-item" onclick="switchTab('protocol', this)">📡 Nhật ký Gói tin Port 4370</div>
+
+  <div class="nav-group">Quản lý Nhân sự (72-Byte)</div>
+  <div class="nav-item" onclick="switchTab('users', this)">👥 User Table (72-Byte SSR)</div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <strong style="font-size:18px;">ZKTeco Port 4370 Binary Attendance Editor</strong>
+        <span id="integrityBadge" class="badge ok">Kiểm tra cấu trúc 40-Byte...</span>
+        <span id="pendingBadge" class="badge"> Đã đồng bộ (0 thay đổi chờ)</span>
+      </div>
+      <div style="font-size:12.5px; color:var(--muted); margin-top:5px;" id="statsText">
+        Đang tải trạng thái bộ đệm 4370...
+      </div>
+    </div>
+
+    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+      <div style="display:flex; align-items:center; gap:6px; background:#0f172a; padding:6px 10px; border-radius:8px; border:1px solid var(--border);">
+        <span style="font-size:11.5px; color:var(--muted); font-weight:600;">Máy 4370:</span>
+        <input type="text" id="zkIp" value="127.0.0.1" style="width:120px; padding:5px 8px; font-size:12.5px;" title="127.0.0.1 (Máy giả lập) hoặc 192.168.54.250 (Máy thật)">
+        <span style="color:var(--muted);">:</span>
+        <input type="text" id="zkPort" value="4370" style="width:58px; padding:5px 8px; font-size:12.5px;">
+        <span style="font-size:11px; color:var(--muted);">Key:</span>
+        <input type="text" id="zkKey" value="0" style="width:42px; padding:5px 6px; font-size:12.5px;">
+        <button class="secondary" style="width:auto; padding:6px 11px; font-size:12px;" onclick="pullFrom4370()">📥 Tải Log về (Pull 4370)</button>
+        <button class="success" id="btnPush4370" style="width:auto; padding:6px 12px; font-size:12px;" onclick="pushTo4370()">📤 Ghi đè lên Máy (Push 4370)</button>
+      </div>
+      <button class="secondary" style="width:auto; padding:8px 12px;" onclick="openInsertModal()">➕ Thêm lượt chấm (Quên thẻ)</button>
+      <button class="secondary" style="width:auto; padding:8px 12px;" onclick="downloadDat()">💾 Tải ssrattlog.dat</button>
+      <button class="secondary" style="width:auto; padding:8px 12px;" onclick="downloadCsv()">📊 Xuất CSV</button>
+    </div>
+  </div>
+
+  <!-- TAB 1: ATTENDANCE LOG (40-BYTE) -->
+  <section id="view-attendance" class="view-section active">
+    <div class="controls">
+      <div>
+        <label>Ngày chấm công</label>
+        <input type="date" id="dateFilter" value="2026-10-20" onchange="loadData()">
+      </div>
+      <div>
+        <label>Nhân viên (Mã thẻ RFID)</label>
+        <select id="userFilter" onchange="loadData()">
+          <option value="ALL">-- Tất cả nhân viên --</option>
+        </select>
+      </div>
+      <div>
+        <label>Bộ lọc đi muộn</label>
+        <select id="lateFilter" onchange="loadData()">
+          <option value="0">Hiển thị tất cả lượt chấm</option>
+          <option value="1">Chỉ hiện Lần đầu trong ngày > 08:30 (Đi trễ)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th>Offset / STT</th>
+            <th>Mã Thẻ (User ID)</th>
+            <th>Họ và Tên</th>
+            <th>Thời gian (YYYY-MM-DD HH:MM:SS)</th>
+            <th>Uint32 TS</th>
+            <th>Xác thực / Trạng thái</th>
+            <th>Đánh dấu</th>
+            <th>40-Byte Binary Hex</th>
+            <th>Thao tác (Sửa trên Buffer)</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- TAB 2: PORT 4370 PROTOCOL LOG -->
+  <section id="view-protocol" class="view-section">
+    <div class="grid-2">
+      <div class="card" style="padding:20px;">
+        <h3 style="margin-top:0;">📡 Trạng thái Đồng bộ Giao thức TCP Port 4370</h3>
+        <div class="grid-2">
+          <div class="stat-box"><div class="k">Target IP : Port</div><div class="v" id="stTarget">-</div></div>
+          <div class="stat-box"><div class="k">Thay đổi chờ Push</div><div class="v" id="stPending">0</div></div>
+          <div class="stat-box"><div class="k">Lần Pull gần nhất</div><div class="v" id="stPull" style="font-size:13px;">-</div></div>
+          <div class="stat-box"><div class="k">Lần Push gần nhất</div><div class="v" id="stPush" style="font-size:13px;">-</div></div>
+        </div>
+        <p style="font-size:13px; color:var(--muted); line-height:1.6; margin-top:16px;">
+          <b>Cơ chế hoạt động thông minh qua cổng 4370:</b><br>
+          1. <b>📥 Pull 4370:</b> Tải <code>ssruser.dat</code> (72-byte) và <code>ssrattlog.dat</code> (40-byte) qua <code>CMD_DATA_WRRQ (1503/1504)</code> về bộ đệm.<br>
+          2. <b>✏️ Sửa / Chèn tức thì:</b> Mọi thao tác sửa giờ hoặc thêm lượt chấm thực hiện trực tiếp trên bộ đệm 40-byte, tự động sắp xếp theo <code>uint32 timestamp (+27..+30)</code> và đánh lại số thứ tự <code>seq (+0..+1)</code> trong <code>&lt; 1ms</code> mà không cần tải lại file.<br>
+          3. <b>📤 Push 4370 (Có Delta Merge chống mất dữ liệu):</b> Khi bấm <b>Ghi đè lên Máy</b>, hệ thống tự động kiểm tra xem có nhân viên nào vừa quẹt thẻ mới trên máy trong lúc bạn đang sửa hay không, tự động gộp các lượt quẹt mới đó vào rồi mới gửi <code>CMD_CLEAR_ATTLOG (15)</code> + <code>CMD_PREPARE_DATA (1500)</code> + <code>CMD_DATA (1501)</code> + <code>CMD_DATA_WRRQ (1502/1503)</code>.
+        </p>
+      </div>
+
+      <div class="card" style="padding:20px;">
+        <h3 style="margin-top:0;">📜 Nhật ký Lệnh Nhị phân Cổng 4370</h3>
+        <pre id="protocolLogBox" class="mono" style="background:#0f172a; padding:14px; border-radius:8px; border:1px solid var(--border); max-height:420px; overflow:auto; line-height:1.6; white-space:pre-wrap;"></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 3: USER TABLE (72-BYTE SSR) -->
+  <section id="view-users" class="view-section">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+      <h3 style="margin:0;">Danh sách Nhân viên (<code>ssruser.dat</code> — 72 Bytes/Record — Ghi trực tiếp qua CMD 110)</h3>
+      <button style="width:auto; padding:8px 14px;" onclick="openUserModal(0)">➕ Thêm User mới (CMD 110)</button>
+    </div>
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th>UID (2B)</th>
+            <th>Mã Thẻ / User ID (24B)</th>
+            <th>Họ và Tên (24B)</th>
+            <th>Quyền (Privilege)</th>
+            <th>Card Int32 (4B)</th>
+            <th>Password (8B)</th>
+            <th>72-Byte Hex</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody id="usersTableBody"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<!-- Modal chỉnh sửa 1 bản ghi chấm công 40-Byte -->
+<div class="modal-bg" id="editModal">
+  <div class="modal">
+    <h3>✏️ Chỉnh sửa Bản ghi Nhị phân 40-Byte</h3>
+    <input type="hidden" id="editIndex">
+    <div class="row">
+      <label>Nhân viên</label>
+      <input type="text" id="editUserLabel" disabled>
+    </div>
+    <div class="row">
+      <label>Thời gian mới (YYYY-MM-DD HH:MM:SS)</label>
+      <input type="text" id="editDatetime">
+    </div>
+    <div class="row">
+      <label>Phương thức xác thực (Status Byte +26)</label>
+      <select id="editStatus">
+        <option value="4">4 - Thẻ từ RFID (Card - Chuẩn máy công ty)</option>
+        <option value="1">1 - Vân tay (Fingerprint)</option>
+        <option value="0">0 - Mật khẩu (Password)</option>
+        <option value="2">2 - Thẻ phụ / Mã PIN (2)</option>
+      </select>
+    </div>
+    <div class="row">
+      <label>Trạng thái Punch (Byte +31)</label>
+      <select id="editPunch">
+        <option value="0">0 - Check-In (Vào)</option>
+        <option value="1">1 - Check-Out (Ra)</option>
+        <option value="4">4 - OT-In / Chấm thẻ</option>
+        <option value="5">5 - OT-Out</option>
+        <option value="201">201 - Khác (201)</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="secondary" onclick="closeModal('editModal')">Huỷ</button>
+      <button class="success" onclick="saveEdit()">💾 Lưu vào Buffer (Sắp xếp 40B)</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal thêm lượt chấm công mới (Quên chấm thẻ) -->
+<div class="modal-bg" id="insertModal">
+  <div class="modal">
+    <h3>➕ Thêm Lượt Chấm Công 40-Byte Mới</h3>
+    <div class="row">
+      <label>Chọn Nhân viên (Mã thẻ RFID)</label>
+      <select id="insertUser"></select>
+    </div>
+    <div class="row">
+      <label>Thời gian chấm (YYYY-MM-DD HH:MM:SS)</label>
+      <input type="text" id="insertDatetime">
+    </div>
+    <div class="row">
+      <label>Phương thức xác thực (Status Byte +26)</label>
+      <select id="insertStatus">
+        <option value="4">4 - Thẻ từ RFID (Card - Chuẩn máy công ty)</option>
+        <option value="1">1 - Vân tay (Fingerprint)</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="secondary" onclick="closeModal('insertModal')">Huỷ</button>
+      <button class="success" onclick="saveInsert()">➕ Chèn vào Buffer & Sắp xếp</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal chỉnh sửa / thêm User 72-Byte -->
+<div class="modal-bg" id="userModal">
+  <div class="modal">
+    <h3>👤 Cập nhật Bản ghi Nhân viên 72-Byte (CMD 110)</h3>
+    <div class="row">
+      <label>UID nội bộ (2 Bytes uint16)</label>
+      <input type="number" id="uUid">
+    </div>
+    <div class="row">
+      <label>Mã Thẻ / User ID (24 Bytes ASCII)</label>
+      <input type="text" id="uUserId">
+    </div>
+    <div class="row">
+      <label>Họ và Tên (24 Bytes)</label>
+      <input type="text" id="uName">
+    </div>
+    <div class="row">
+      <label>Quyền (Privilege Byte +2)</label>
+      <select id="uPriv">
+        <option value="0">0 - Nhân viên thường (User)</option>
+        <option value="2">2 - Đăng ký (Enroller)</option>
+        <option value="6">6 - Quản lý (Manager)</option>
+        <option value="14">14 - Quản trị tối cao (Super Admin)</option>
+      </select>
+    </div>
+    <div class="row">
+      <label>Mật khẩu (8 Bytes)</label>
+      <input type="text" id="uPass">
+    </div>
+    <div class="row">
+      <label>Card Number (4 Bytes uint32)</label>
+      <input type="number" id="uCard" value="0">
+    </div>
+    <div class="modal-actions">
+      <button class="secondary" onclick="closeModal('userModal')">Huỷ</button>
+      <button class="success" onclick="saveUser()">💾 Ghi 72-Byte qua Cổng 4370</button>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/app.js"></script>
+</body>
+</html>
