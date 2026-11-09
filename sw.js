@@ -1,4 +1,4 @@
-const CACHE_NAME = "zk-timewarp-pwa-v5";
+const CACHE_NAME = "zk-timewarp-pwa-v6";
 const APP_SHELL = [
   "/mobile.html",
   "/index.html",

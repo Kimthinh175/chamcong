@@ -138,6 +138,8 @@
       min-height: 100dvh;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
     }
 
     h1, h2, h3, .today-main-status, .hero-clock-val {
@@ -490,26 +492,26 @@
       appearance: none;
       background-color: var(--bg-card);
       border: 1px solid var(--border);
-      padding: 4px 10px 4px 4px;
+      padding: 3px 9px 3px 4px;
       border-radius: var(--radius-full);
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 6px;
       min-width: 0;
-      height: 40px;
+      height: 38px;
       cursor: pointer;
       text-align: left;
       box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
     }
 
     .user-avatar {
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: var(--radius-full);
       background-color: #4338ca;
       color: #ffffff;
       font-weight: 800;
-      font-size: 12px;
+      font-size: 11.5px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -540,7 +542,7 @@
     }
 
     .user-cycle-chip {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 600;
       color: var(--text-sub);
       white-space: nowrap;
@@ -549,25 +551,25 @@
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       flex-shrink: 0;
     }
 
     .machine-status-chip {
       appearance: none;
-      height: 36px;
-      padding: 0 9px;
+      height: 34px;
+      padding: 0 8px;
       border-radius: var(--radius-full);
       border: 1px solid var(--border);
       background-color: var(--bg-card);
       color: var(--text-main);
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
       white-space: nowrap;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       cursor: pointer;
       box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
     }
@@ -594,9 +596,9 @@
 
     .header-icon-btn {
       appearance: none;
-      width: 36px;
-      height: 36px;
-      min-width: 36px;
+      width: 34px;
+      height: 34px;
+      min-width: 34px;
       border-radius: var(--radius-full);
       border: 1px solid var(--border);
       background-color: var(--bg-card);
@@ -610,11 +612,11 @@
     }
 
     .header-icon-btn svg {
-      width: 16px;
-      height: 16px;
+      width: 15px;
+      height: 15px;
     }
 
-    @media (max-width: 350px) {
+    @media (max-width: 360px) {
       .app-header {
         padding-left: 10px;
         padding-right: 10px;
@@ -622,7 +624,7 @@
       }
       .header-user-info {
         height: 36px;
-        padding: 3px 8px 3px 3px;
+        padding: 3px 7px 3px 3px;
         gap: 5px;
       }
       .user-avatar {
@@ -637,11 +639,11 @@
         font-size: 10px;
       }
       .header-actions {
-        gap: 4px;
+        gap: 3px;
       }
       .machine-status-chip {
         height: 32px;
-        padding: 0 7px;
+        padding: 0 6px;
         font-size: 11px;
         gap: 4px;
       }
@@ -675,10 +677,10 @@
       background-color: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 12px 14px;
+      padding: 9px 10px;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 6px;
       box-shadow: var(--shadow-card);
     }
 
@@ -689,14 +691,15 @@
     .pwa-banner-left {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 7px;
       min-width: 0;
+      flex: 1;
     }
 
     .pwa-banner-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
       background-color: var(--primary);
       color: #ffffff;
       display: flex;
@@ -706,19 +709,25 @@
     }
 
     .pwa-banner-icon svg {
-      width: 20px;
-      height: 20px;
+      width: 17px;
+      height: 17px;
     }
 
     .pwa-banner-title {
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 12px;
+      font-weight: 800;
       color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .pwa-banner-sub {
-      font-size: 12px;
+      font-size: 10.5px;
       color: var(--text-sub);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     /* ==========================================================================
@@ -732,7 +741,7 @@
         radial-gradient(75% 75% at 5% 100%, rgba(99, 102, 241, 0.24) 0%, transparent 65%);
       border: 1px solid rgba(251, 191, 36, 0.38);
       border-radius: var(--radius-xl);
-      padding: 16px;
+      padding: 14px;
       color: #ffffff;
       box-shadow: 0 20px 44px -14px rgba(15, 17, 26, 0.52);
     }
@@ -740,7 +749,7 @@
     .warp-hud-banner.active {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .warp-hud-top {
@@ -748,36 +757,40 @@
       align-items: center;
       justify-content: space-between;
       gap: 8px;
+      flex-wrap: nowrap;
     }
 
     .warp-hud-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 800;
       color: #fde68a;
       background-color: #362916;
       border: 1px solid rgba(251, 191, 36, 0.35);
-      padding: 5px 11px;
+      padding: 4px 10px;
       border-radius: var(--radius-full);
-      letter-spacing: 0.03em;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
     }
 
     .warp-hud-timer {
       font-family: var(--font-mono);
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 800;
       color: #fbbf24;
       line-height: 1;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .warp-hud-msg {
       background-color: #1c1f2e;
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 14px;
-      padding: 11px 13px;
-      font-size: 13.5px;
+      padding: 10px 12px;
+      font-size: 13px;
       color: #f8fafc;
       line-height: 1.45;
     }
@@ -790,38 +803,38 @@
 
     .btn-hud-primary {
       appearance: none;
-      min-height: 46px;
-      padding: 0 12px;
-      border-radius: 14px;
+      min-height: 44px;
+      padding: 0 10px;
+      border-radius: 13px;
       border: none;
       background-color: #ffffff;
       color: #131520;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 800;
       white-space: nowrap;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 5px;
       cursor: pointer;
       box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.45);
     }
 
     .btn-hud-cancel {
       appearance: none;
-      min-height: 46px;
-      padding: 0 12px;
-      border-radius: 14px;
+      min-height: 44px;
+      padding: 0 10px;
+      border-radius: 13px;
       border: 1px solid rgba(251, 113, 133, 0.38);
       background-color: #2b1622;
       color: #fecdd3;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
       white-space: nowrap;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 5px;
       cursor: pointer;
     }
 
@@ -866,10 +879,10 @@
       color: var(--hero-text);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: var(--radius-xl);
-      padding: 16px;
+      padding: 15px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
       box-shadow: 0 18px 36px -16px rgba(19, 21, 32, 0.42);
     }
 
@@ -882,27 +895,27 @@
     }
 
     .today-hero-title {
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 700;
       color: var(--hero-muted);
-      letter-spacing: 0.03em;
+      letter-spacing: 0.02em;
       text-transform: uppercase;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
     }
 
     .today-hero-badge {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      height: 26px;
-      padding: 0 10px;
+      gap: 4px;
+      height: 24px;
+      padding: 0 9px;
       border-radius: var(--radius-full);
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 800;
       letter-spacing: 0.02em;
       white-space: nowrap;
@@ -928,14 +941,17 @@
     }
 
     .today-main-status {
-      font-size: clamp(18px, 5vw, 22px);
+      font-size: clamp(16.5px, 4.6vw, 20px);
       font-weight: 800;
+      letter-spacing: -0.02em;
       line-height: 1.2;
       color: #ffffff;
       display: flex;
       align-items: baseline;
       gap: 6px;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .today-times-row {
@@ -948,7 +964,7 @@
       background-color: #1d2030;
       border: 1px solid var(--hero-border);
       border-radius: 14px;
-      padding: 10px 6px;
+      padding: 9px 4px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -967,7 +983,7 @@
 
     .today-col-val {
       font-family: var(--font-mono);
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
       color: #ffffff;
       white-space: nowrap;
@@ -984,13 +1000,13 @@
     .today-hero-action-btn {
       appearance: none;
       width: 100%;
-      min-height: 48px;
-      padding: 0 14px;
+      min-height: 46px;
+      padding: 0 10px;
       border-radius: 14px;
       border: none;
       background-color: #ffffff;
       color: #131520;
-      font-size: 14px;
+      font-size: clamp(12.5px, 3.6vw, 13.5px);
       font-weight: 800;
       white-space: nowrap;
       display: inline-flex;
@@ -1052,8 +1068,8 @@
 
     .quick-rescue-btn {
       appearance: none;
-      height: 38px;
-      padding: 0 13px;
+      height: 36px;
+      padding: 0 12px;
       border-radius: var(--radius-full);
       border: none;
       background-color: #be123c;
@@ -1108,7 +1124,7 @@
 
     .week-day-pill {
       appearance: none;
-      height: 56px;
+      height: 54px;
       border: none;
       border-radius: 12px;
       background-color: var(--bg-soft);
@@ -1186,11 +1202,11 @@
     }
 
     .kpi-rate-badge {
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 800;
       color: var(--primary);
       background-color: var(--primary-soft);
-      padding: 3px 9px;
+      padding: 3px 8px;
       border-radius: var(--radius-full);
       white-space: nowrap;
       flex-shrink: 0;
@@ -1220,8 +1236,8 @@
 
     .kpi-chip {
       appearance: none;
-      min-height: 50px;
-      padding: 6px 2px;
+      min-height: 48px;
+      padding: 5px 2px;
       border-radius: 13px;
       border: 1px solid transparent;
       background-color: var(--bg-soft);
@@ -1244,7 +1260,7 @@
 
     .kpi-chip-num {
       font-family: var(--font-mono);
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 800;
       color: var(--text-main);
       line-height: 1.1;
@@ -1258,7 +1274,7 @@
       font-size: 11px;
       font-weight: 700;
       white-space: nowrap;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.02em;
     }
 
     /* ==========================================================================
@@ -1276,11 +1292,12 @@
       background-color: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 14px;
+      padding: 13px;
       display: flex;
       flex-direction: column;
       gap: 9px;
       box-shadow: var(--shadow-card);
+      overflow: hidden;
     }
 
     .day-card.today-highlight {
@@ -1310,31 +1327,31 @@
 
     .day-date-num {
       font-family: var(--font-mono);
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 800;
       color: var(--text-main);
     }
 
     .day-weekday-tag {
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--text-sub);
     }
 
     .day-today-tag {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 800;
       color: var(--primary);
       background-color: var(--primary-soft);
-      padding: 2px 8px;
+      padding: 2px 7px;
       border-radius: var(--radius-full);
       white-space: nowrap;
     }
 
     .day-status-pill {
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 800;
-      padding: 3px 9px;
+      padding: 3px 8px;
       border-radius: var(--radius-full);
       white-space: nowrap;
       flex-shrink: 0;
@@ -1374,8 +1391,8 @@
     .day-punches {
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 12.5px;
+      gap: 5px;
+      font-size: 12px;
       color: var(--text-sub);
       white-space: nowrap;
     }
@@ -1656,10 +1673,10 @@
       background-color: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 14px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 9px;
       box-shadow: var(--shadow-card);
       overflow: hidden;
     }
@@ -1696,8 +1713,13 @@
     .late-card-left {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       cursor: pointer;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .late-card-left > div {
       min-width: 0;
       flex: 1;
     }
@@ -1728,14 +1750,14 @@
       align-items: center;
       gap: 6px;
       font-family: var(--font-mono);
-      font-size: 14.5px;
+      font-size: 14px;
       font-weight: 800;
       color: var(--text-main);
       white-space: nowrap;
     }
 
     .late-desc-sub {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
       color: var(--text-sub);
       margin-top: 1px;
@@ -1841,12 +1863,12 @@
     .btn-default {
       appearance: none;
       height: 46px;
-      padding: 0 14px;
+      padding: 0 12px;
       border-radius: 13px;
       border: 1px solid var(--border-strong);
       background-color: var(--bg-card);
       color: var(--text-main);
-      font-size: 13.5px;
+      font-size: clamp(12.5px, 3.6vw, 13.5px);
       font-weight: 800;
       white-space: nowrap;
       display: inline-flex;
@@ -1889,7 +1911,7 @@
 
     .hero-clock-val {
       font-family: var(--font-mono);
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 800;
       color: #ffffff;
       line-height: 1.15;
@@ -1944,15 +1966,17 @@
       appearance: none;
       width: 100%;
       height: 48px;
-      padding: 0 16px;
+      padding: 0 14px;
       border-radius: 16px;
       border: none;
       background-color: #4338ca;
       background-image: linear-gradient(135deg, #4338ca 0%, #312e81 100%);
       color: #ffffff;
-      font-size: 13.5px;
+      font-size: clamp(12.5px, 3.6vw, 13.5px);
       font-weight: 800;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       cursor: pointer;
       box-shadow: 0 14px 28px -8px rgba(67, 56, 202, 0.55);
     }
@@ -2016,7 +2040,7 @@
       appearance: none;
       position: relative;
       height: 60px;
-      padding: 4px 1px 2px 1px;
+      padding: 2px 1px 4px 1px;
       border-radius: 0;
       border: none;
       background: transparent;
@@ -2033,21 +2057,21 @@
 
     .nav-btn.active {
       background-color: transparent;
-      background-image: radial-gradient(50% 60% at 50% 0%, rgba(129, 140, 248, 0.24) 0%, transparent 80%);
+      background-image: radial-gradient(50% 55% at 50% 100%, rgba(129, 140, 248, 0.22) 0%, transparent 80%);
       color: #ffffff;
     }
 
     .nav-btn.active::before {
       content: "";
       position: absolute;
-      top: 0;
+      bottom: 4px;
       left: 50%;
       transform: translateX(-50%);
-      width: 20px;
-      height: 3px;
-      border-radius: 0 0 4px 4px;
+      width: 16px;
+      height: 2.5px;
+      border-radius: 99px;
       background-color: #818cf8;
-      box-shadow: 0 2px 8px rgba(129, 140, 248, 0.85);
+      box-shadow: 0 0 8px rgba(129, 140, 248, 0.85);
     }
 
     .nav-icon {
@@ -2082,7 +2106,7 @@
 
     .nav-badge {
       position: absolute;
-      top: 3px;
+      top: 4px;
       left: calc(50% + 2px);
       z-index: 2;
       min-width: 16px;
@@ -2132,6 +2156,22 @@
       height: 20px;
     }
 
+    @media (max-width: 360px) {
+      .bottom-nav {
+        width: calc(100% - 16px);
+        padding: 0 4px;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 44px minmax(0, 1fr) minmax(0, 1fr);
+      }
+      .nav-label {
+        font-size: 10px;
+        letter-spacing: -0.03em;
+      }
+      .nav-center-orb {
+        width: 42px;
+        height: 42px;
+      }
+    }
+
     /* ==========================================================================
        Bottom Sheets
        ========================================================================== */
@@ -2156,10 +2196,10 @@
       background: var(--bg-card);
       border-top: 1px solid var(--border);
       border-radius: 28px 28px 0 0;
-      padding: 14px 20px calc(24px + var(--safe-bottom)) 20px;
+      padding: 14px 18px calc(22px + var(--safe-bottom)) 18px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
       max-height: 90dvh;
       overflow-y: auto;
     }
@@ -2169,7 +2209,7 @@
       height: 5px;
       border-radius: var(--radius-full);
       background: var(--border-strong);
-      margin: 0 auto 4px auto;
+      margin: 0 auto 2px auto;
     }
 
     .sheet-header {
@@ -2177,28 +2217,39 @@
       align-items: center;
       justify-content: space-between;
       gap: 8px;
+      flex-wrap: nowrap;
     }
 
     .sheet-title {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 800;
       color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .sheet-close-btn {
       appearance: none;
-      width: 44px;
-      height: 44px;
+      width: 36px;
+      height: 36px;
       border-radius: var(--radius-full);
       border: 1px solid var(--border);
       background: var(--bg-soft);
       color: var(--text-sub);
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
+      flex-shrink: 0;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+    }
+
+    .pwa-install-banner .sheet-close-btn {
+      width: 32px;
+      height: 32px;
+      font-size: 13px;
     }
   </style>
 </head>
@@ -2327,13 +2378,13 @@
           <div class="pwa-banner-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
           </div>
-          <div>
-            <div class="pwa-banner-title">Cài đặt App ZK Chấm Công</div>
-            <div class="pwa-banner-sub" id="pwaBannerSubText">Mở toàn màn hình nhanh như ứng dụng gốc</div>
+          <div style="min-width:0; flex:1;">
+            <div class="pwa-banner-title">Cài App Chấm Công</div>
+            <div class="pwa-banner-sub" id="pwaBannerSubText">Mở nhanh toàn màn hình</div>
           </div>
         </div>
-        <div style="display:flex; gap:6px; align-items:center;">
-          <button type="button" class="mini-tool-btn" id="pwaInstallBtn" style="background-color:var(--primary); color:#fff; border-color:var(--primary);" onclick="triggerPwaInstall()">Cài đặt</button>
+        <div style="display:flex; gap:5px; align-items:center; flex-shrink:0;">
+          <button type="button" class="mini-tool-btn" id="pwaInstallBtn" style="height:34px; padding:0 10px; font-size:11.5px; background-color:var(--primary); color:#fff; border-color:var(--primary);" onclick="triggerPwaInstall()">Cài đặt</button>
           <button type="button" class="sheet-close-btn" aria-label="Đóng gợi ý cài đặt" onclick="dismissPwaBanner()">✕</button>
         </div>
       </div>
@@ -2542,11 +2593,11 @@
               <option value="">-- Đang tải danh sách nhân viên --</option>
             </select>
           </div>
-          <label style="display:flex; align-items:center; gap:10px; margin-top:2px; padding:10px 12px; border-radius:12px; background-color:var(--bg-soft); border:1px solid var(--border); cursor:pointer;">
+          <label style="display:flex; align-items:center; gap:9px; margin-top:2px; padding:9px 11px; border-radius:12px; background-color:var(--bg-soft); border:1px solid var(--border); cursor:pointer;">
             <input type="checkbox" id="useProxyCardToggle" class="late-checkbox" checked />
             <div style="min-width:0; flex:1;">
               <div style="font-size:12.5px; font-weight:800; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Quẹt hộ bằng thẻ Trần Kim Thịnh</div>
-              <div style="font-size:11px; color:var(--text-sub); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Tạm gán mã thẻ 10971784 cho đồng nghiệp</div>
+              <div style="font-size:11px; color:var(--text-sub); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Gán tạm mã thẻ 10971784 khi quẹt</div>
             </div>
           </label>
         </div>
@@ -2600,8 +2651,8 @@
           <div>
             <label class="field-label" for="targetSelect">Thiết bị đích</label>
             <select id="targetSelect" class="big-select" onchange="onTargetChange()">
-              <option value="192.168.54.250:4370">Máy Công Ty • 192.168.54.250:4370</option>
-              <option value="127.0.0.1:4370">Máy Giả Lập • 127.0.0.1:4370</option>
+              <option value="192.168.54.250:4370">Máy Công Ty (192.168.54.250)</option>
+              <option value="127.0.0.1:4370">Máy Giả Lập (127.0.0.1)</option>
             </select>
           </div>
 
@@ -2764,25 +2815,25 @@
           <button type="button" class="sheet-close-btn" aria-label="Đóng" onclick="closeConfirmWarpSheet()">✕</button>
         </div>
 
-        <div style="background-color: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px; display:flex; flex-direction:column; gap:10px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px;">
-            <span style="color:var(--text-sub);">Nhân viên:</span>
-            <span id="confirmWarpUserName" style="font-weight:800; color:var(--text-main);">Trần Kim Thịnh</span>
+        <div style="background-color: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; display:flex; flex-direction:column; gap:9px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:12.5px;">
+            <span style="color:var(--text-sub); white-space:nowrap; flex-shrink:0;">Nhân viên:</span>
+            <span id="confirmWarpUserName" style="font-weight:800; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Trần Kim Thịnh</span>
           </div>
-          <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px;">
-            <span style="color:var(--text-sub);">Thiết bị đích:</span>
-            <span id="confirmWarpTarget" class="mono" style="font-weight:700; color:var(--primary);">192.168.54.250:4370</span>
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:12.5px;">
+            <span style="color:var(--text-sub); white-space:nowrap; flex-shrink:0;">Thiết bị đích:</span>
+            <span id="confirmWarpTarget" class="mono" style="font-weight:700; color:var(--primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">192.168.54.250:4370</span>
           </div>
-          <div id="confirmProxyCardRow" style="display:none; justify-content:space-between; align-items:center; font-size:13px; border-top:1px dashed var(--border); padding-top:8px;">
-            <label for="confirmProxyCardCheck" style="color:var(--text-sub); cursor:pointer;">Dùng thẻ Thịnh quẹt hộ:</label>
+          <div id="confirmProxyCardRow" style="display:none; justify-content:space-between; align-items:center; gap:8px; font-size:12.5px; border-top:1px dashed var(--border); padding-top:8px;">
+            <label for="confirmProxyCardCheck" style="color:var(--text-sub); cursor:pointer; white-space:nowrap;">Dùng thẻ Thịnh quẹt hộ:</label>
             <input type="checkbox" id="confirmProxyCardCheck" class="late-checkbox" checked />
           </div>
 
           <!-- Single day mode -->
-          <div id="confirmSingleDayBox" style="border-top:1px solid var(--border); padding-top:10px; display:none;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:13px;">
-              <span style="color:var(--text-sub);">Ngày chấm bù:</span>
-              <span id="confirmWarpDate" class="mono" style="font-weight:800; color:var(--text-main);">2026-11-09</span>
+          <div id="confirmSingleDayBox" style="border-top:1px solid var(--border); padding-top:9px; display:none;">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:8px; font-size:12.5px;">
+              <span style="color:var(--text-sub); white-space:nowrap; flex-shrink:0;">Ngày chấm bù:</span>
+              <span id="confirmWarpDate" class="mono" style="font-weight:800; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">2026-11-09</span>
             </div>
             <label class="field-label" for="confirmWarpTimeInput">Giờ sẽ đặt lên máy chấm công (HH:MM:SS)</label>
             <input type="text" inputmode="numeric" id="confirmWarpTimeInput" class="custom-input mono" style="text-align:center; font-size:20px; font-weight:800;" value="08:22:15" />
@@ -3505,7 +3556,7 @@
       } else if (item.status === "complete") {
         badgeCls = "pill-complete";
         statusRailCls = "status-complete";
-        statusLabel = item.duration_str ? `Đủ công • ${item.duration_str}` : "Đủ công";
+        statusLabel = "✓ Đủ công";
       }
 
       const inVal = item.first_in ? `<span class="time-chip-in">${item.first_in}</span>` : `<span class="time-chip-empty">--:--:--</span>`;
@@ -3564,7 +3615,7 @@
               <span style="color:var(--text-dim);">→</span>
               <span>Về: ${outVal}</span>
             </div>
-            ${item.duration_str ? `<span class="mono" style="font-size:12px; font-weight:700; color:var(--text-sub);">${item.duration_str}</span>` : ""}
+            ${item.duration_str ? `<span class="mono" style="font-size:11.5px; font-weight:700; color:var(--text-sub); white-space:nowrap; flex-shrink:0;">${item.duration_str}</span>` : ""}
           </div>
 
           ${quickActionHtml}
@@ -3647,7 +3698,7 @@
       if (otherSel) {
         otherSel.innerHTML = allUsersList.map(u => {
           const isThinh = (String(u.user_id) === THINH_USER_ID);
-          const label = `${u.name} · PIN ${u.user_id}${isThinh ? " ★" : ""}`;
+          const label = `${u.name} · #${u.user_id}${isThinh ? " ★" : ""}`;
           return `<option value="${u.user_id}">${label}</option>`;
         }).join("");
       }
@@ -3656,7 +3707,7 @@
       if (customSel) {
         customSel.innerHTML = allUsersList.map(u => {
           const isThinh = (String(u.user_id) === THINH_USER_ID);
-          const label = `${u.name} · PIN ${u.user_id}${isThinh ? " ★" : ""}`;
+          const label = `${u.name} · #${u.user_id}${isThinh ? " ★" : ""}`;
           return `<option value="${u.user_id}" ${isThinh ? "selected" : ""}>${label}</option>`;
         }).join("");
       }
@@ -3665,7 +3716,7 @@
       if (tsSel) {
         tsSel.innerHTML = allUsersList.map(u => {
           const isThinh = (String(u.user_id) === THINH_USER_ID);
-          const label = `${u.name} · PIN ${u.user_id}${isThinh ? " ★" : ""}`;
+          const label = `${u.name} · #${u.user_id}${isThinh ? " ★" : ""}`;
           return `<option value="${u.user_id}" ${isThinh ? "selected" : ""}>${label}</option>`;
         }).join("");
       }
@@ -3771,14 +3822,14 @@
         rowCls = "late-item-card fixed";
         pillCls = "pill-complete";
         pillText = "Đã bù xong";
-        statusLine = `Đã quẹt bù lúc ${item.fixed_at.split(" ")[1] || item.first_in}`;
+        statusLine = `Bù lúc: ${item.fixed_at.split(" ")[1] || item.first_in}`;
       } else if (item.has_early_on_machine) {
         rowCls = "late-item-card fixed";
         pillCls = "pill-complete";
         pillText = `Đã bù ${item.early_in}`;
-        statusLine = `Gốc vào trễ: ${item.orig_late_in} (${item.late_str})`;
+        statusLine = `Gốc: ${item.orig_late_in} (${item.late_str})`;
       } else {
-        statusLine = `Giờ vào máy: ${item.orig_late_in}`;
+        statusLine = `Vào máy: ${item.orig_late_in}`;
       }
 
       const dDisplay = `${item.date.slice(8, 10)}/${item.date.slice(5, 7)}`;
@@ -3870,9 +3921,9 @@
     let userName = `User #${userId}`;
     if (allUsersList && allUsersList.length) {
       const u = allUsersList.find(x => String(x.user_id) === String(userId));
-      if (u) userName = `${u.name} (ID: ${u.user_id})`;
+      if (u) userName = `${u.name} · #${u.user_id}`;
     } else if (String(userId) === THINH_USER_ID) {
-      userName = `Trần Kim Thịnh (7441083)`;
+      userName = `Trần Kim Thịnh · #7441083`;
     }
     document.getElementById("confirmWarpUserName").textContent = userName;
 
@@ -4035,8 +4086,8 @@
       const pillCls = item.fixed_in_session ? "pill-complete" : "pill-danger";
       const pillText = item.fixed_in_session ? "Đã bù xong" : `Trễ ${item.late_str}`;
       const statusLine = item.fixed_in_session
-        ? `Đã quẹt bù lúc ${item.fixed_at.split(" ")[1] || item.first_in}`
-        : `Giờ vào máy: ${item.first_in}`;
+        ? `Bù lúc: ${item.fixed_at.split(" ")[1] || item.first_in}`
+        : `Vào máy: ${item.first_in}`;
       const dDisplay = `${item.date.slice(8, 10)}/${item.date.slice(5, 7)}`;
 
       return `
@@ -4129,8 +4180,8 @@
       bar.classList.add("show");
     } else if (activeMainTab === "others" && othersSelectedDates.size > 0) {
       const c = othersSelectedDates.size;
-      const empName = selectedOtherUserObj ? selectedOtherUserObj.name : "đồng nghiệp";
-      btn.textContent = `CHẠY TUA ${c} NGÀY — ${empName} →`;
+      const empName = selectedOtherUserObj ? selectedOtherUserObj.name.trim().split(/\s+/).slice(-2).join(" ") : "đồng nghiệp";
+      btn.textContent = `CHẠY TUA ${c} NGÀY • ${empName} →`;
       bar.classList.add("show");
     } else {
       bar.classList.remove("show");
