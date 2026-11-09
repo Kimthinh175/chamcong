@@ -796,13 +796,14 @@
     }
 
     .warp-hud-actions {
-      display: grid;
-      grid-template-columns: 1.08fr 1fr;
-      gap: 8px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
     }
 
     .btn-hud-primary {
       appearance: none;
+      flex: 1.08;
       min-height: 44px;
       padding: 0 10px;
       border-radius: 13px;
@@ -822,6 +823,7 @@
 
     .btn-hud-cancel {
       appearance: none;
+      flex: 1;
       min-height: 44px;
       padding: 0 10px;
       border-radius: 13px;
@@ -2790,9 +2792,9 @@
         </div>
 
         <div>
-          <label class="field-label" for="tsCycleSelect">Kỳ tính công (Chu kỳ 25 → 24)</label>
+          <label class="field-label" for="tsCycleSelect">Kỳ tính công (Theo tháng 01 → cuối tháng)</label>
           <select id="tsCycleSelect" class="big-select" onchange="onTimesheetCycleChange()">
-            <option value="2026-11">Tháng 11/2026 (25/10 → 24/11)</option>
+            <option value="2026-11">Tháng 11/2026 (01/11 → 30/11)</option>
           </select>
         </div>
 
@@ -2960,11 +2962,13 @@
 
   /* ------------------- AUTHENTICATION & FETCH WRAPPER ------------------- */
   function getAuthToken() {
-    return localStorage.getItem(AUTH_TOKEN_KEY) || "";
+    const t = localStorage.getItem(AUTH_TOKEN_KEY) || "";
+    if (t === "demo-ui-token") return "";
+    return t;
   }
 
   function setAuthToken(token) {
-    if (token) localStorage.setItem(AUTH_TOKEN_KEY, token);
+    if (token && token !== "demo-ui-token") localStorage.setItem(AUTH_TOKEN_KEY, token);
     else localStorage.removeItem(AUTH_TOKEN_KEY);
   }
 
@@ -2981,7 +2985,7 @@
     ],
     days: [
       { date: "2026-11-09", display_date: "09/11/2026", weekday: "Thứ 2", is_today: true, is_weekend: false, is_future: false, status: "missing_out", has_in: true, has_out: false, first_in: "08:23:00", last_out: null, duration_str: null, next_action: "check_out", suggested_out: "17:45:00" },
-      { date: "2026-11-08", display_date: "08/11/2026", weekday: "Chủ nhật", is_today: false, is_weekend: true, is_future: false, status: "weekend", has_in: false, has_out: false, first_in: null, last_out: null, duration_str: null, next_action: "none" },
+      { date: "2026-11-08", display_date: "08/11/2026", weekday: "CN", is_today: false, is_weekend: true, is_future: false, status: "weekend", has_in: false, has_out: false, first_in: null, last_out: null, duration_str: null, next_action: "none" },
       { date: "2026-11-07", display_date: "07/11/2026", weekday: "Thứ 7", is_today: false, is_weekend: true, is_future: false, status: "weekend", has_in: false, has_out: false, first_in: null, last_out: null, duration_str: null, next_action: "none" },
       { date: "2026-11-06", display_date: "06/11/2026", weekday: "Thứ 6", is_today: false, is_weekend: false, is_future: false, status: "missing_out", has_in: true, has_out: false, first_in: "08:26:12", last_out: null, duration_str: null, next_action: "check_out", suggested_out: "17:46:18" },
       { date: "2026-11-05", display_date: "05/11/2026", weekday: "Thứ 5", is_today: false, is_weekend: false, is_future: false, status: "absent", has_in: false, has_out: false, first_in: null, last_out: null, duration_str: null, next_action: "check_in", suggested_in: "08:22:15" },
@@ -3043,11 +3047,11 @@
       return _makeJsonResponse({
         ok: true,
         cycle: "2026-11",
-        cycle_label: "Tháng 11/2026 (25/10 → 24/11)",
+        cycle_label: "Tháng 11/2026 (01/11 → 30/11)",
         available_cycles: [
-          { cycle: "2026-11", label: "Tháng 11/2026 (25/10 → 24/11)" },
-          { cycle: "2026-10", label: "Tháng 10/2026 (25/09 → 24/10)" },
-          { cycle: "2026-09", label: "Tháng 09/2026 (25/08 → 24/09)" }
+          { cycle: "2026-11", label: "Tháng 11/2026 (01/11 → 30/11)" },
+          { cycle: "2026-10", label: "Tháng 10/2026 (01/10 → 31/10)" },
+          { cycle: "2026-09", label: "Tháng 09/2026 (01/09 → 30/09)" }
         ],
         summary: {
           total_working_days: 22,
@@ -3154,7 +3158,7 @@
   }
 
   window.fetch = async function(url, options = {}) {
-    if (_isDemoMode || getAuthToken() === "demo-ui-token") {
+    if (_isDemoMode) {
       return _handleMockBackend(url, options);
     }
     options = options || {};
@@ -3175,7 +3179,7 @@
       }
       return res;
     } catch (err) {
-      if (_isDemoMode || getAuthToken() === "demo-ui-token") {
+      if (_isDemoMode) {
         return _handleMockBackend(url, options);
       }
       throw err;
@@ -3196,7 +3200,6 @@
 
   function enterPreviewDemo() {
     _isDemoMode = true;
-    setAuthToken("demo-ui-token");
     showAppScreen();
     startApp();
   }
@@ -3213,7 +3216,6 @@
     btn.textContent = "Đang xác thực...";
 
     try {
-      _isDemoMode = false;
       const res = await _nativeFetch(`${API_BASE}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -3221,6 +3223,7 @@
       });
       const data = await res.json();
       if (data.ok && data.token) {
+        _isDemoMode = false;
         setAuthToken(data.token);
         showAppScreen();
         startApp();
@@ -3394,12 +3397,23 @@
     if (!grid) return;
 
     const now = new Date();
-    const dayOfWeek = now.getDay(); // 0=CN, 1=T2...
-    const diffToMon = (dayOfWeek === 0) ? -6 : (1 - dayOfWeek);
-    const monday = new Date(now);
-    monday.setDate(now.getDate() + diffToMon);
-
     const pad = (n) => String(n).padStart(2, "0");
+    const ascDays = [...(days || [])].sort((a, b) => a.date.localeCompare(b.date));
+    let monday;
+    if (ascDays.length > 0) {
+      const refDay = ascDays.find(d => d.is_today) || ascDays.filter(d => !d.is_future).slice(-1)[0] || ascDays[0];
+      const [ry, rm, rd] = refDay.date.split("-").map(Number);
+      const refDt = new Date(ry, rm - 1, rd);
+      const jsDow = refDt.getDay();
+      const mondayOffset = (jsDow === 0) ? -6 : (1 - jsDow);
+      monday = new Date(ry, rm - 1, rd + mondayOffset);
+    } else {
+      const dayOfWeek = now.getDay();
+      const diffToMon = (dayOfWeek === 0) ? -6 : (1 - dayOfWeek);
+      monday = new Date(now);
+      monday.setDate(now.getDate() + diffToMon);
+    }
+
     const dayMap = {};
     (days || []).forEach(d => { dayMap[d.date] = d; });
 
@@ -3409,8 +3423,7 @@
     let lastLabel = "";
 
     for (let i = 0; i < 7; i++) {
-      const cur = new Date(monday);
-      cur.setDate(monday.getDate() + i);
+      const cur = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + i);
       const yStr = cur.getFullYear();
       const mStr = pad(cur.getMonth() + 1);
       const dStr = pad(cur.getDate());
@@ -3420,14 +3433,14 @@
       if (i === 6) lastLabel = shortDm;
 
       const info = dayMap[iso];
-      const isToday = info ? info.is_today : (iso === `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`);
+      const isToday = info ? Boolean(info.is_today) : (iso === `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`);
       let dotCls = "dot-none";
       let filterTarget = "ALL";
       let chipId = "filterChipAll";
       if (isToday) {
         dotCls = "dot-today";
       } else if (info) {
-        if (info.status === "complete") {
+        if (info.status === "complete" || info.status === "weekend_work") {
           dotCls = "dot-ok";
         } else if (info.status === "missing_out" || info.status === "missing_in") {
           dotCls = "dot-warn";
@@ -3656,7 +3669,8 @@
     }
 
     const targetDt = `${dateStr} ${cleanTime}`;
-    const defaultProxy = String(selectedTsUserId) !== THINH_USER_ID;
+    const isOther = String(selectedTsUserId) !== THINH_USER_ID;
+    const defaultProxy = isOther ? Boolean(document.getElementById("useProxyCardToggle")?.checked ?? true) : false;
     promptConfirmWarp([{ date: dateStr, target_datetime: targetDt }], selectedTsUserId, defaultProxy);
   }
 
@@ -4028,7 +4042,7 @@
     const now = new Date();
     const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
     let tVal = generateNaturalMorningTime();
-    if (currentTimesheetData && currentTimesheetData.days) {
+    if (currentTimesheetData && currentTimesheetData.days && String(selectedTsUserId) === THINH_USER_ID) {
       const todayRec = currentTimesheetData.days.find(d => d.date === dateStr || d.is_today);
       if (todayRec && todayRec.has_in && !todayRec.has_out) {
         tVal = todayRec.suggested_out || `17:${String(randInt(38, 54)).padStart(2, "0")}:${String(randInt(10, 52)).padStart(2, "0")}`;
@@ -4246,7 +4260,8 @@
     if (timeVal.length === 5) timeVal += ":" + String(randInt(10, 50)).padStart(2, "0");
 
     const targetDt = `${dateVal} ${timeVal}`;
-    const defaultProxy = String(userId) !== THINH_USER_ID;
+    const isOther = String(userId) !== THINH_USER_ID;
+    const defaultProxy = isOther ? Boolean(document.getElementById("useProxyCardToggle")?.checked ?? true) : false;
     promptConfirmWarp([{ date: dateVal, target_datetime: targetDt }], userId, defaultProxy);
   }
 
@@ -4420,7 +4435,7 @@
         document.getElementById("warpHudMsg").innerHTML = `Mời <b>${targetName}</b> đưa thẻ RFID lên quẹt (${warp.target_dt_str})!`;
 
         const simBtn = document.getElementById("simSwipeBtn");
-        if (simBtn) simBtn.style.display = "inline-flex";
+        if (simBtn) simBtn.style.display = (t.ip === "127.0.0.1" || _isDemoMode) ? "inline-flex" : "none";
       } else {
         if (wasWarpActive) {
           wasWarpActive = false;
@@ -4552,11 +4567,10 @@
     const forceLogin = params.has("login");
     if (params.has("preview") && !forceLogin) {
       enterPreviewDemo();
-    } else if (token && token !== "demo-ui-token" && !forceLogin) {
+    } else if ((token || _isDemoMode) && !forceLogin) {
       showAppScreen();
       startApp();
     } else {
-      if (token === "demo-ui-token") setAuthToken("");
       showLoginScreen();
     }
   })();
