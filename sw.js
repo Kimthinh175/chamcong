@@ -1,4 +1,4 @@
-const CACHE_NAME = "zk-timewarp-pwa-v4";
+const CACHE_NAME = "zk-timewarp-pwa-v5";
 const APP_SHELL = [
   "/mobile.html",
   "/index.html",
@@ -49,7 +49,7 @@ self.addEventListener("fetch", (event) => {
 
   // Network-First with Offline Cache Fallback for App Shell & static assets
   event.respondWith(
-    fetch(request)
+    fetch(request, { cache: "no-cache" })
       .then((networkResponse) => {
         if (networkResponse && networkResponse.status === 200 && url.origin === self.location.origin) {
           const responseClone = networkResponse.clone();

@@ -23,22 +23,22 @@
       --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
 
-      /* Warm Neutral Canvas & Elevated Surfaces */
-      --bg-page: #f4f3ef;
+      /* Clean Slate-White Canvas & Elevated Surfaces */
+      --bg-page: #f3f4f8;
       --bg-card: #ffffff;
-      --bg-muted: #ebe9e4;
-      --bg-soft: #f5f5f8;
-      --bg-glass: rgba(255, 255, 255, 0.88);
+      --bg-muted: #e5e7f0;
+      --bg-soft: #f5f6fa;
+      --bg-glass: rgba(255, 255, 255, 0.92);
 
       /* Typography */
-      --text-main: #14141b;
-      --text-sub: #3f3d4a;
-      --text-dim: #525060;
+      --text-main: #11131a;
+      --text-sub: #474b5c;
+      --text-dim: #64697d;
 
       /* Borders & Shadows */
-      --border: rgba(15, 23, 42, 0.05);
-      --border-strong: #cbc6bc;
-      --shadow-card: 0 12px 32px -14px rgba(15, 23, 42, 0.07), 0 2px 6px rgba(15, 23, 42, 0.03);
+      --border: rgba(15, 23, 42, 0.06);
+      --border-strong: #cfd3e0;
+      --shadow-card: 0 4px 16px -4px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.03);
       --shadow-float: 0 18px 40px -12px rgba(15, 23, 42, 0.18);
 
       /* Primary Brand Accent: Royal Indigo */
@@ -366,15 +366,10 @@
     .ambient-mesh {
       position: absolute;
       inset: 0 0 auto 0;
-      height: 360px;
+      height: 220px;
       pointer-events: none;
       z-index: 0;
-      background:
-        radial-gradient(60% 50% at 12% 10%, rgba(67, 56, 202, 0.18) 0%, transparent 70%),
-        radial-gradient(50% 45% at 88% 18%, rgba(245, 158, 11, 0.15) 0%, transparent 72%),
-        radial-gradient(70% 55% at 50% 55%, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
-      -webkit-mask-image: linear-gradient(#000 55%, transparent);
-      mask-image: linear-gradient(#000 55%, transparent);
+      background: linear-gradient(180deg, rgba(67, 56, 202, 0.05) 0%, transparent 100%);
     }
 
     /* ==========================================================================
@@ -385,9 +380,6 @@
       inset: 0;
       z-index: 9999;
       background-color: var(--bg-page);
-      background-image:
-        radial-gradient(65% 45% at 20% 15%, rgba(67, 56, 202, 0.16) 0%, transparent 70%),
-        radial-gradient(55% 45% at 85% 80%, rgba(245, 158, 11, 0.12) 0%, transparent 70%);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -486,38 +478,38 @@
       background-color: var(--bg-glass);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-      padding: calc(10px + var(--safe-top)) 16px 10px 16px;
+      border-bottom: 1px solid var(--border);
+      padding: calc(8px + var(--safe-top)) 12px 8px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
     }
 
     .header-user-info {
       appearance: none;
       background-color: var(--bg-card);
       border: 1px solid var(--border);
-      padding: 4px 12px 4px 5px;
+      padding: 4px 10px 4px 4px;
       border-radius: var(--radius-full);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
       min-width: 0;
-      min-height: 44px;
+      height: 40px;
       cursor: pointer;
       text-align: left;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
     }
 
     .user-avatar {
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       border-radius: var(--radius-full);
       background-color: #4338ca;
       color: #ffffff;
       font-weight: 800;
-      font-size: 13px;
+      font-size: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -527,13 +519,15 @@
     .user-text-col {
       display: flex;
       flex-direction: column;
+      justify-content: center;
       min-width: 0;
+      line-height: 1.15;
     }
 
     .user-title-row {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
     }
 
     .user-name {
@@ -546,34 +540,36 @@
     }
 
     .user-cycle-chip {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       color: var(--text-sub);
+      white-space: nowrap;
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       flex-shrink: 0;
     }
 
     .machine-status-chip {
       appearance: none;
-      min-height: 44px;
-      padding: 0 12px;
+      height: 36px;
+      padding: 0 9px;
       border-radius: var(--radius-full);
       border: 1px solid var(--border);
       background-color: var(--bg-card);
       color: var(--text-main);
       font-family: var(--font-mono);
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
+      white-space: nowrap;
       display: inline-flex;
       align-items: center;
-      gap: 7px;
+      gap: 5px;
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
     }
 
     .machine-status-chip.warped {
@@ -583,22 +579,24 @@
     }
 
     .status-dot {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background-color: var(--success);
-      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18);
+      box-shadow: 0 0 0 2.5px rgba(22, 163, 74, 0.18);
+      flex-shrink: 0;
     }
 
     .status-dot.warped {
       background-color: #d97706;
-      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25);
+      box-shadow: 0 0 0 2.5px rgba(245, 158, 11, 0.25);
     }
 
     .header-icon-btn {
       appearance: none;
-      width: 44px;
-      height: 44px;
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
       border-radius: var(--radius-full);
       border: 1px solid var(--border);
       background-color: var(--bg-card);
@@ -608,12 +606,54 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
     }
 
     .header-icon-btn svg {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
+    }
+
+    @media (max-width: 350px) {
+      .app-header {
+        padding-left: 10px;
+        padding-right: 10px;
+        gap: 4px;
+      }
+      .header-user-info {
+        height: 36px;
+        padding: 3px 8px 3px 3px;
+        gap: 5px;
+      }
+      .user-avatar {
+        width: 28px;
+        height: 28px;
+        font-size: 11px;
+      }
+      .user-name {
+        font-size: 12px;
+      }
+      .user-cycle-chip {
+        font-size: 10px;
+      }
+      .header-actions {
+        gap: 4px;
+      }
+      .machine-status-chip {
+        height: 32px;
+        padding: 0 7px;
+        font-size: 11px;
+        gap: 4px;
+      }
+      .header-icon-btn {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+      }
+      .header-icon-btn svg {
+        width: 14px;
+        height: 14px;
+      }
     }
 
     /* ==========================================================================
@@ -623,10 +663,10 @@
       position: relative;
       z-index: 1;
       flex: 1;
-      padding: 12px 16px calc(116px + var(--safe-bottom)) 16px;
+      padding: 12px 12px calc(110px + var(--safe-bottom)) 12px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     /* PWA Install Prompt Banner */
@@ -821,46 +861,52 @@
       overflow: hidden;
       background-color: #131520;
       background-image:
-        radial-gradient(85% 90% at 95% 5%, rgba(99, 102, 241, 0.32) 0%, transparent 65%),
-        radial-gradient(75% 70% at 5% 95%, rgba(245, 158, 11, 0.18) 0%, transparent 65%);
+        radial-gradient(85% 90% at 95% 5%, rgba(99, 102, 241, 0.28) 0%, transparent 65%),
+        radial-gradient(75% 70% at 5% 95%, rgba(67, 56, 202, 0.18) 0%, transparent 65%);
       color: var(--hero-text);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: var(--radius-xl);
-      padding: 20px 18px 18px 18px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      box-shadow: 0 22px 44px -16px rgba(19, 21, 32, 0.45);
+      gap: 14px;
+      box-shadow: 0 18px 36px -16px rgba(19, 21, 32, 0.42);
     }
 
     .today-hero-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
+      flex-wrap: nowrap;
     }
 
     .today-hero-title {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
       color: var(--hero-muted);
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
       text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
 
     .today-hero-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      height: 28px;
-      padding: 0 12px;
+      gap: 5px;
+      height: 26px;
+      padding: 0 10px;
       border-radius: var(--radius-full);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
       letter-spacing: 0.02em;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .badge-working {
@@ -882,41 +928,46 @@
     }
 
     .today-main-status {
-      font-size: 24px;
+      font-size: clamp(18px, 5vw, 22px);
       font-weight: 800;
       line-height: 1.2;
       color: #ffffff;
       display: flex;
       align-items: baseline;
-      gap: 8px;
-      flex-wrap: wrap;
+      gap: 6px;
+      white-space: nowrap;
     }
 
     .today-times-row {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
+      gap: 6px;
     }
 
     .today-col {
       background-color: #1d2030;
       border: 1px solid var(--hero-border);
-      border-radius: var(--radius-md);
-      padding: 11px 10px;
+      border-radius: 14px;
+      padding: 10px 6px;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
       gap: 3px;
+      min-width: 0;
     }
 
     .today-col-label {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       color: var(--hero-muted);
+      white-space: nowrap;
     }
 
     .today-col-val {
       font-family: var(--font-mono);
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       color: #ffffff;
       white-space: nowrap;
@@ -933,20 +984,21 @@
     .today-hero-action-btn {
       appearance: none;
       width: 100%;
-      min-height: 52px;
-      padding: 0 18px;
-      border-radius: var(--radius-md);
+      min-height: 48px;
+      padding: 0 14px;
+      border-radius: 14px;
       border: none;
       background-color: #ffffff;
       color: #131520;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 800;
+      white-space: nowrap;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       cursor: pointer;
-      box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.35);
     }
 
     .today-hero-action-btn.btn-hero-in {
@@ -972,13 +1024,13 @@
     .quick-rescue-banner {
       display: none;
       background-color: var(--bg-card);
-      border: 1px solid rgba(225, 29, 72, 0.14);
+      border: 1px solid rgba(225, 29, 72, 0.16);
       border-radius: var(--radius-lg);
-      padding: 14px 16px;
+      padding: 12px 14px;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      margin-top: 12px;
+      gap: 10px;
+      margin-top: 10px;
       box-shadow: var(--shadow-card);
     }
 
@@ -994,14 +1046,14 @@
     .quick-rescue-text {
       font-size: 13px;
       font-weight: 800;
-      color: var(--text-main);
-      line-height: 1.35;
+      color: var(--danger);
+      line-height: 1.3;
     }
 
     .quick-rescue-btn {
       appearance: none;
-      min-height: 44px;
-      padding: 0 15px;
+      height: 38px;
+      padding: 0 13px;
       border-radius: var(--radius-full);
       border: none;
       background-color: #be123c;
@@ -1020,8 +1072,8 @@
       background-color: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 14px 12px;
-      margin-top: 12px;
+      padding: 13px 12px;
+      margin-top: 10px;
       box-shadow: var(--shadow-card);
     }
 
@@ -1029,64 +1081,72 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 4px 10px 4px;
+      gap: 8px;
+      padding: 0 2px 10px 2px;
+      flex-wrap: nowrap;
     }
 
     .week-strip-title {
       font-size: 13px;
       font-weight: 800;
       color: var(--text-main);
+      white-space: nowrap;
     }
 
     .week-strip-sub {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
       color: var(--text-sub);
+      white-space: nowrap;
     }
 
     .week-grid {
       display: grid;
       grid-template-columns: repeat(7, minmax(0, 1fr));
-      gap: 0;
+      gap: 4px;
     }
 
     .week-day-pill {
       appearance: none;
-      height: 60px;
-      border: 2px solid transparent;
-      background-clip: padding-box;
-      border-radius: 14px;
+      height: 56px;
+      border: none;
+      border-radius: 12px;
       background-color: var(--bg-soft);
       color: var(--text-sub);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 3px;
+      gap: 2px;
       cursor: pointer;
+      min-width: 0;
     }
 
     .week-day-pill.is-today {
       background-color: var(--primary);
       color: #ffffff;
+      box-shadow: 0 4px 12px -2px rgba(67, 56, 202, 0.35);
     }
 
     .week-day-pill .w-label {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
+      line-height: 1.1;
     }
 
     .week-day-pill .w-num {
       font-family: var(--font-mono);
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 800;
       color: inherit;
+      line-height: 1.15;
     }
 
     .week-day-pill .w-dot {
-      width: 6px;
-      height: 6px;
+      width: 5px;
+      height: 5px;
       border-radius: 50%;
+      margin-top: 1px;
     }
 
     .w-dot.dot-ok { background-color: #16a34a; }
@@ -1102,11 +1162,11 @@
       background-color: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 16px;
+      padding: 14px 12px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin-top: 12px;
+      gap: 10px;
+      margin-top: 10px;
       box-shadow: var(--shadow-card);
     }
 
@@ -1114,27 +1174,31 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
+      flex-wrap: nowrap;
     }
 
     .kpi-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 800;
       color: var(--text-main);
+      white-space: nowrap;
     }
 
     .kpi-rate-badge {
-      font-size: 13px;
+      font-size: 11.5px;
       font-weight: 800;
       color: var(--primary);
       background-color: var(--primary-soft);
-      padding: 4px 10px;
+      padding: 3px 9px;
       border-radius: var(--radius-full);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .kpi-progress-bar {
       width: 100%;
-      height: 10px;
+      height: 8px;
       background-color: var(--bg-muted);
       border-radius: var(--radius-full);
       overflow: hidden;
@@ -1156,9 +1220,9 @@
 
     .kpi-chip {
       appearance: none;
-      min-height: 54px;
-      padding: 6px 4px;
-      border-radius: var(--radius-md);
+      min-height: 50px;
+      padding: 6px 2px;
+      border-radius: 13px;
       border: 1px solid transparent;
       background-color: var(--bg-soft);
       color: var(--text-sub);
@@ -1168,20 +1232,22 @@
       justify-content: center;
       gap: 2px;
       cursor: pointer;
+      min-width: 0;
     }
 
     .kpi-chip.active {
       background-color: #4338ca;
       border-color: #4338ca;
       color: #ffffff;
-      box-shadow: 0 6px 16px -4px rgba(67, 56, 202, 0.38);
+      box-shadow: 0 6px 14px -4px rgba(67, 56, 202, 0.35);
     }
 
     .kpi-chip-num {
       font-family: var(--font-mono);
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       color: var(--text-main);
+      line-height: 1.1;
     }
 
     .kpi-chip.active .kpi-chip-num {
@@ -1189,8 +1255,10 @@
     }
 
     .kpi-chip-label {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
+      white-space: nowrap;
+      letter-spacing: -0.01em;
     }
 
     /* ==========================================================================
@@ -1200,7 +1268,7 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-top: 12px;
+      margin-top: 10px;
     }
 
     .day-card {
@@ -1208,16 +1276,16 @@
       background-color: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 16px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 9px;
       box-shadow: var(--shadow-card);
     }
 
     .day-card.today-highlight {
       border-color: rgba(67, 56, 202, 0.32);
-      box-shadow: 0 12px 28px -12px rgba(67, 56, 202, 0.18);
+      box-shadow: 0 10px 24px -12px rgba(67, 56, 202, 0.16);
     }
 
     .day-card.weekend-dim {
@@ -1228,43 +1296,48 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
-      flex-wrap: wrap;
+      gap: 6px;
+      flex-wrap: nowrap;
     }
 
     .day-date-group {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      min-width: 0;
+      white-space: nowrap;
     }
 
     .day-date-num {
       font-family: var(--font-mono);
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       color: var(--text-main);
     }
 
     .day-weekday-tag {
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
       color: var(--text-sub);
     }
 
     .day-today-tag {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
       color: var(--primary);
       background-color: var(--primary-soft);
-      padding: 3px 9px;
+      padding: 2px 8px;
       border-radius: var(--radius-full);
+      white-space: nowrap;
     }
 
     .day-status-pill {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 800;
-      padding: 4px 10px;
+      padding: 3px 9px;
       border-radius: var(--radius-full);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .pill-complete {
@@ -1291,19 +1364,20 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
-      flex-wrap: wrap;
+      gap: 6px;
+      flex-wrap: nowrap;
       background-color: var(--bg-soft);
-      padding: 9px 12px;
-      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      border-radius: 10px;
     }
 
     .day-punches {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 13px;
+      gap: 6px;
+      font-size: 12.5px;
       color: var(--text-sub);
+      white-space: nowrap;
     }
 
     .time-chip-in {
@@ -1324,33 +1398,35 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      padding-top: 4px;
+      padding-top: 2px;
     }
 
     .time-edit-mini-inp {
-      width: 112px;
-      height: 44px;
-      padding: 0 10px;
-      border-radius: var(--radius-md);
+      width: 104px;
+      height: 42px;
+      padding: 0 8px;
+      border-radius: 12px;
       border: 1px solid var(--border-strong);
       background-color: var(--bg-card);
       color: var(--text-main);
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       text-align: center;
+      flex-shrink: 0;
     }
 
     .day-action-trigger-btn {
       appearance: none;
       flex: 1;
-      min-height: 44px;
-      padding: 0 14px;
-      border-radius: var(--radius-md);
+      height: 42px;
+      padding: 0 12px;
+      border-radius: 12px;
       border: none;
       background-color: var(--primary);
       color: var(--primary-fg);
       font-size: 13px;
       font-weight: 800;
+      white-space: nowrap;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -1366,14 +1442,15 @@
     .future-days-toggle {
       appearance: none;
       width: 100%;
-      min-height: 46px;
-      padding: 0 16px;
+      min-height: 44px;
+      padding: 0 14px;
       border-radius: var(--radius-lg);
       border: 1px dashed var(--border-strong);
       background-color: var(--bg-card);
       color: var(--text-sub);
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
+      white-space: nowrap;
       cursor: pointer;
     }
 
@@ -1383,17 +1460,17 @@
     .tab-stack {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .section-box {
       background-color: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 16px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
       box-shadow: var(--shadow-card);
     }
 
@@ -1401,45 +1478,45 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
-      flex-wrap: wrap;
+      gap: 6px;
+      flex-wrap: nowrap;
     }
 
     .section-title {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 800;
       color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .emp-profile-card {
-      background-color: #eef2ff;
-      color: #1e1b4b;
-      border: 1px solid #e0e7ff;
+      background-color: #131520;
+      background-image: radial-gradient(80% 90% at 95% 10%, rgba(99, 102, 241, 0.25) 0%, transparent 65%);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: var(--radius-lg);
-      padding: 16px;
+      padding: 13px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 8px;
       flex-wrap: nowrap;
-      box-shadow: var(--shadow-card);
-    }
-
-    html[data-theme="dark"] .emp-profile-card {
-      background-color: #1b1e2e;
-      border-color: rgba(255, 255, 255, 0.1);
-      color: #ffffff;
+      box-shadow: 0 12px 28px -12px rgba(19, 21, 32, 0.35);
+      overflow: hidden;
     }
 
     .emp-info-col {
       min-width: 0;
       flex: 1;
+      overflow: hidden;
     }
 
     .emp-name-big {
-      font-size: 16px;
+      font-size: 14.5px;
       font-weight: 800;
-      color: inherit;
+      color: #ffffff;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -1448,58 +1525,63 @@
     .emp-meta-row {
       display: flex;
       align-items: center;
-      gap: 6px;
-      margin-top: 6px;
-      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 5px;
+      flex-wrap: nowrap;
     }
 
     .emp-chip {
-      font-size: 12px;
+      font-size: 10.5px;
       font-weight: 700;
-      padding: 4px 10px;
+      padding: 2px 7px;
       border-radius: var(--radius-full);
-      background-color: #ffffff;
-      color: #3730a3;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #e0e7ff;
       white-space: nowrap;
     }
 
-    html[data-theme="dark"] .emp-chip {
-      background-color: #272b42;
-      color: #e0e7ff;
-    }
-
     .emp-chip.danger {
-      background-color: #ffe4e6;
-      color: #be123c;
-    }
-
-    html[data-theme="dark"] .emp-chip.danger {
-      background-color: #3b1929;
+      background-color: rgba(244, 63, 94, 0.22);
       color: #fecdd3;
     }
 
     .btn-quick-today {
       appearance: none;
-      min-height: 44px;
-      padding: 0 14px;
-      border-radius: 14px;
+      height: 36px;
+      padding: 0 10px;
+      border-radius: 10px;
       border: none;
-      background-color: #4338ca;
+      background-color: #4f46e5;
       color: #ffffff;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 800;
       white-space: nowrap;
       flex-shrink: 0;
       cursor: pointer;
-      box-shadow: 0 6px 16px -4px rgba(67, 56, 202, 0.38);
+      box-shadow: 0 6px 14px -4px rgba(79, 70, 229, 0.5);
+    }
+
+    @media (max-width: 350px) {
+      .emp-profile-card {
+        padding: 11px;
+        gap: 6px;
+      }
+      .emp-chip {
+        font-size: 10px;
+        padding: 2px 5.5px;
+      }
+      .btn-quick-today {
+        height: 34px;
+        padding: 0 8px;
+        font-size: 11px;
+      }
     }
 
     .toolbar-row {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
+      align-items: stretch;
       gap: 8px;
-      flex-wrap: wrap;
     }
 
     .month-filter-select,
@@ -1507,16 +1589,16 @@
       appearance: none;
       -webkit-appearance: none;
       width: 100%;
-      height: 46px;
-      padding: 0 38px 0 14px;
-      border-radius: var(--radius-md);
+      height: 44px;
+      padding: 0 36px 0 12px;
+      border-radius: 12px;
       border: 1px solid var(--border-strong);
       background-color: var(--bg-soft);
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233f3d4a' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23474b5c' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 12px center;
       color: var(--text-main);
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 700;
       white-space: nowrap;
       overflow: hidden;
@@ -1531,42 +1613,35 @@
 
     .custom-input {
       width: 100%;
-      height: 46px;
-      padding: 0 14px;
-      border-radius: var(--radius-md);
+      height: 44px;
+      padding: 0 12px;
+      border-radius: 12px;
       border: 1px solid var(--border-strong);
       background-color: var(--bg-soft);
       color: var(--text-main);
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
     }
 
-    .month-filter-select {
-      width: auto;
-      flex: 1;
-      min-width: 132px;
-      height: 44px;
-      font-size: 13px;
-    }
-
     .toolbar-btns {
-      display: flex;
-      align-items: center;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 6px;
-      flex-wrap: nowrap;
+      width: 100%;
     }
 
     .mini-tool-btn {
       appearance: none;
-      min-height: 44px;
-      padding: 0 11px;
-      border-radius: 13px;
+      height: 40px;
+      padding: 0 8px;
+      border-radius: 11px;
       border: 1px solid var(--border);
       background-color: var(--bg-soft);
       color: var(--text-main);
       font-size: 12px;
       font-weight: 700;
       white-space: nowrap;
+      text-align: center;
       cursor: pointer;
     }
 
@@ -1581,11 +1656,12 @@
       background-color: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 15px 16px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
       gap: 10px;
       box-shadow: var(--shadow-card);
+      overflow: hidden;
     }
 
     .late-item-card.checked {
@@ -1594,15 +1670,27 @@
     }
 
     .late-item-card.fixed {
-      background-color: var(--success-bg);
+      background-color: #f4fbf7;
       border-color: var(--success-border);
+    }
+
+    html[data-theme="dark"] .late-item-card.fixed {
+      background-color: rgba(16, 185, 129, 0.08);
+      border-color: rgba(16, 185, 129, 0.28);
+    }
+
+    .late-item-card.fixed .pill-complete {
+      background-color: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: var(--success);
     }
 
     .late-card-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
+      flex-wrap: nowrap;
     }
 
     .late-card-left {
@@ -1617,9 +1705,9 @@
     .late-checkbox {
       appearance: none;
       -webkit-appearance: none;
-      width: 22px;
-      height: 22px;
-      border-radius: 7px;
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
       border: 2px solid var(--border-strong);
       background-color: var(--bg-card);
       flex-shrink: 0;
@@ -1630,7 +1718,7 @@
     .late-checkbox:checked {
       background-color: var(--primary);
       border-color: var(--primary);
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: center;
     }
@@ -1638,39 +1726,47 @@
     .late-date-title {
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 6px;
       font-family: var(--font-mono);
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 800;
       color: var(--text-main);
+      white-space: nowrap;
     }
 
     .late-desc-sub {
       font-size: 12px;
       font-weight: 600;
       color: var(--text-sub);
-      margin-top: 2px;
+      margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .late-card-right {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
       background-color: var(--bg-soft);
-      padding: 8px 10px;
-      border-radius: 13px;
+      padding: 6px 8px;
+      border-radius: 12px;
+      min-width: 0;
+      overflow: hidden;
     }
 
-    .late-item-card.checked .late-card-right {
+    .late-item-card.checked .late-card-right,
+    .late-item-card.fixed .late-card-right {
       background-color: var(--bg-card);
     }
 
     .late-right-label {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
       color: var(--text-sub);
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .late-right-controls {
@@ -1678,21 +1774,32 @@
       align-items: center;
       gap: 6px;
       flex: 1;
+      min-width: 0;
       justify-content: flex-end;
+    }
+
+    .late-right-controls .time-edit-mini-inp {
+      width: 92px;
+      min-width: 0;
+      flex: 0 1 92px;
+      height: 36px;
+      font-size: 13px;
+      padding: 0 4px;
     }
 
     .btn-mini-warp {
       appearance: none;
-      min-height: 44px;
-      padding: 0 14px;
-      border-radius: 12px;
+      height: 36px;
+      padding: 0 10px;
+      border-radius: 10px;
       border: none;
       background-color: var(--primary);
       color: var(--primary-fg);
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 800;
       cursor: pointer;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .field-label {
@@ -1700,14 +1807,14 @@
       font-size: 12px;
       font-weight: 700;
       color: var(--text-sub);
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
 
     .preset-chips {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 6px;
-      margin-top: 8px;
+      gap: 5px;
+      margin-top: 7px;
     }
 
     .preset-chips.cols-5 {
@@ -1716,34 +1823,36 @@
 
     .preset-chip {
       appearance: none;
-      min-height: 44px;
-      padding: 0 6px;
-      border-radius: 12px;
+      height: 38px;
+      padding: 0 4px;
+      border-radius: 10px;
       border: 1px solid var(--border);
       background-color: var(--bg-soft);
       color: var(--text-main);
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
       white-space: nowrap;
+      letter-spacing: -0.02em;
       text-align: center;
       cursor: pointer;
+      min-width: 0;
     }
 
     .btn-default {
       appearance: none;
-      min-height: 48px;
-      padding: 0 16px;
-      border-radius: var(--radius-md);
+      height: 46px;
+      padding: 0 14px;
+      border-radius: 13px;
       border: 1px solid var(--border-strong);
       background-color: var(--bg-card);
       color: var(--text-main);
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 800;
       white-space: nowrap;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       cursor: pointer;
     }
 
@@ -1768,27 +1877,30 @@
     .device-clock-panel {
       background-color: #131520;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: var(--radius-md);
-      padding: 14px 16px;
+      border-radius: 14px;
+      padding: 12px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 8px;
       color: #ffffff;
+      flex-wrap: nowrap;
     }
 
     .hero-clock-val {
       font-family: var(--font-mono);
-      font-size: 26px;
+      font-size: 22px;
       font-weight: 800;
       color: #ffffff;
       line-height: 1.15;
+      white-space: nowrap;
     }
 
     .hero-clock-date {
-      font-size: 12px;
+      font-size: 11.5px;
       color: #cbd5e1;
-      margin-top: 3px;
+      margin-top: 2px;
+      white-space: nowrap;
     }
 
     .device-action-grid {
@@ -1800,14 +1912,14 @@
     .log-box {
       background-color: #131520;
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: var(--radius-md);
+      border-radius: 13px;
       padding: 12px;
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11.5px;
       color: #c7d2fe;
       max-height: 180px;
       overflow-y: auto;
-      line-height: 1.6;
+      line-height: 1.55;
     }
 
     /* ==========================================================================
@@ -1817,9 +1929,9 @@
       position: fixed;
       left: 50%;
       transform: translateX(-50%);
-      bottom: calc(88px + var(--safe-bottom));
+      bottom: calc(86px + var(--safe-bottom));
       z-index: 86;
-      width: calc(100% - 32px);
+      width: calc(100% - 24px);
       max-width: 400px;
       display: none;
     }
@@ -1831,17 +1943,18 @@
     .batch-launch-btn {
       appearance: none;
       width: 100%;
-      min-height: 52px;
-      padding: 0 20px;
-      border-radius: 18px;
+      height: 48px;
+      padding: 0 16px;
+      border-radius: 16px;
       border: none;
       background-color: #4338ca;
       background-image: linear-gradient(135deg, #4338ca 0%, #312e81 100%);
       color: #ffffff;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 800;
+      white-space: nowrap;
       cursor: pointer;
-      box-shadow: 0 16px 32px -8px rgba(67, 56, 202, 0.55);
+      box-shadow: 0 14px 28px -8px rgba(67, 56, 202, 0.55);
     }
 
     /* ==========================================================================
@@ -1854,8 +1967,8 @@
       bottom: 0;
       width: 100%;
       max-width: 520px;
-      height: calc(96px + var(--safe-bottom));
-      background: linear-gradient(to top, var(--bg-page) 60%, rgba(244, 243, 239, 0) 100%);
+      height: calc(90px + var(--safe-bottom));
+      background: linear-gradient(to top, var(--bg-page) 60%, rgba(243, 244, 248, 0) 100%);
       pointer-events: none;
       z-index: 80;
     }
@@ -1866,22 +1979,22 @@
 
     .bottom-nav {
       position: fixed;
-      bottom: calc(12px + var(--safe-bottom));
+      bottom: calc(10px + var(--safe-bottom));
       left: 50%;
       transform: translateX(-50%);
       z-index: 85;
-      width: calc(100% - 24px);
+      width: calc(100% - 20px);
       max-width: 430px;
-      height: 64px;
+      height: 62px;
       background-color: #131520;
       background-image: linear-gradient(180deg, #191c2b 0%, #131520 100%);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 26px;
-      padding: 0 10px;
+      border-radius: 24px;
+      padding: 0 6px;
       display: grid;
-      grid-template-columns: 1fr 1fr 52px 1fr 1fr;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 48px minmax(0, 1fr) minmax(0, 1fr);
       align-items: center;
-      gap: 2px;
+      gap: 0;
       box-shadow:
         0 18px 36px -10px rgba(10, 12, 24, 0.48),
         0 4px 10px -2px rgba(10, 12, 24, 0.22);
@@ -1902,8 +2015,8 @@
     .nav-btn {
       appearance: none;
       position: relative;
-      height: 62px;
-      padding: 4px 2px 2px 2px;
+      height: 60px;
+      padding: 4px 1px 2px 1px;
       border-radius: 0;
       border: none;
       background: transparent;
@@ -1913,13 +2026,14 @@
       align-items: center;
       justify-content: center;
       gap: 4px;
+      min-width: 0;
       cursor: pointer;
       transition: color 0.2s;
     }
 
     .nav-btn.active {
       background-color: transparent;
-      background-image: radial-gradient(55% 65% at 50% 0%, rgba(129, 140, 248, 0.26) 0%, transparent 80%);
+      background-image: radial-gradient(50% 60% at 50% 0%, rgba(129, 140, 248, 0.24) 0%, transparent 80%);
       color: #ffffff;
     }
 
@@ -1929,11 +2043,11 @@
       top: 0;
       left: 50%;
       transform: translateX(-50%);
-      width: 22px;
+      width: 20px;
       height: 3px;
       border-radius: 0 0 4px 4px;
       background-color: #818cf8;
-      box-shadow: 0 2px 10px rgba(129, 140, 248, 0.9);
+      box-shadow: 0 2px 8px rgba(129, 140, 248, 0.85);
     }
 
     .nav-icon {
@@ -1949,14 +2063,14 @@
     }
 
     .nav-icon svg {
-      width: 19px;
-      height: 19px;
+      width: 18px;
+      height: 18px;
     }
 
     .nav-label {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
-      letter-spacing: -0.025em;
+      letter-spacing: -0.02em;
       line-height: 1;
       white-space: nowrap;
     }
@@ -1968,19 +2082,20 @@
 
     .nav-badge {
       position: absolute;
-      top: 6px;
-      right: calc(50% - 22px);
+      top: 3px;
+      left: calc(50% + 2px);
       z-index: 2;
-      min-width: 18px;
-      height: 18px;
+      min-width: 16px;
+      height: 16px;
       padding: 0 4px;
       border-radius: var(--radius-full);
       background-color: #e11d48;
       color: #ffffff;
-      border: 1.5px solid #151826;
+      border: 1.5px solid #131520;
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 10px;
       font-weight: 800;
+      line-height: 1;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -1997,11 +2112,11 @@
     .nav-center-orb {
       appearance: none;
       position: relative;
-      bottom: 12px;
-      width: 50px;
-      height: 50px;
+      bottom: 11px;
+      width: 46px;
+      height: 46px;
       border-radius: 50%;
-      border: 3.5px solid var(--bg-page);
+      border: 3px solid var(--bg-page);
       background-color: #4338ca;
       background-image: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
       color: #ffffff;
@@ -2009,12 +2124,12 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 10px 22px -6px rgba(67, 56, 202, 0.68);
+      box-shadow: 0 8px 18px -4px rgba(67, 56, 202, 0.65);
     }
 
     .nav-center-orb svg {
-      width: 21px;
-      height: 21px;
+      width: 20px;
+      height: 20px;
     }
 
     /* ==========================================================================
@@ -2280,17 +2395,17 @@
           </div>
 
           <button type="button" id="todayHeroBtn" class="today-hero-action-btn btn-hero-out" onclick="onTodayHeroActionClick()">
-            <span id="todayHeroBtnText">Tan Ca Bù Ngay (Đề xuất 17:45:00)</span>
+            <span id="todayHeroBtnText">Tan Ca Bù Ngay • 17:45:00</span>
           </button>
         </div>
 
         <!-- Quick Late-Days Queue Banner -->
         <div id="quickRescueBanner" class="quick-rescue-banner">
-          <div>
-            <div class="quick-rescue-text" id="quickRescueText">Phát hiện 3 ngày đi trễ (&gt; 08:30) cần bù</div>
-            <div style="font-size:12px; color:var(--text-sub); margin-top:2px;">Bấm để chọn &amp; chạy tua hàng loạt về trước 08:30</div>
+          <div style="min-width:0;">
+            <div class="quick-rescue-text" id="quickRescueText" style="white-space:nowrap;">3 ngày đi trễ cần bù</div>
+            <div style="font-size:11px; color:var(--text-sub); margin-top:2px; white-space:nowrap;">Tua hàng loạt về trước 08:30</div>
           </div>
-          <button type="button" class="quick-rescue-btn" onclick="switchMainTab('thinh')">Cứu hộ ngay →</button>
+          <button type="button" class="quick-rescue-btn" onclick="switchMainTab('thinh')">Cứu hộ →</button>
         </div>
 
         <!-- Interactive 7-Day Week Strip -->
@@ -2321,12 +2436,12 @@
               <span class="w-dot dot-warn"></span>
             </button>
             <button type="button" role="tab" class="week-day-pill" onclick="setTimesheetFilter('WEEKEND', document.getElementById('filterChipWeekend'))">
-              <span class="w-label">T7</span>
+              <span class="w-label">T6</span>
               <span class="w-num">07</span>
               <span class="w-dot dot-none"></span>
             </button>
             <button type="button" role="tab" class="week-day-pill" onclick="setTimesheetFilter('WEEKEND', document.getElementById('filterChipWeekend'))">
-              <span class="w-label">CN</span>
+              <span class="w-label">T7</span>
               <span class="w-num">08</span>
               <span class="w-dot dot-none"></span>
             </button>
@@ -2342,7 +2457,7 @@
         <div class="kpi-summary-card">
           <div class="kpi-top-row">
             <span class="kpi-title">Tiến độ <span id="kpiCycleTitle">Tháng 11/2026</span></span>
-            <span class="kpi-rate-badge" id="kpiRateText">19 / 22 ngày (86%)</span>
+            <span class="kpi-rate-badge" id="kpiRateText">19/22 ngày (86%)</span>
           </div>
           <div class="kpi-progress-bar">
             <div class="kpi-progress-fill" id="kpiProgressFill" style="width: 86%;"></div>
@@ -2383,19 +2498,19 @@
             <div class="emp-name-big">Trần Kim Thịnh</div>
             <div class="emp-meta-row">
               <span class="emp-chip">PIN 7441083</span>
-              <span class="emp-chip">RFID 10,971,784</span>
+              <span class="emp-chip">Thẻ 10971784</span>
             </div>
           </div>
           <button type="button" class="btn-quick-today" onclick="quickWarpTodayThinh()">
-            ⚡ Tua Hôm Nay
+            ⚡ Tua Ngay
           </button>
         </div>
 
         <!-- Filter & Batch Toolbar Card -->
         <div class="section-box">
           <div class="section-head">
-            <span class="section-title">Ca đi trễ (&gt; 08:30)</span>
-            <span id="lateSummaryBadgeThinh" style="font-size:12px; font-weight:800; color:var(--text-sub);">Đang tải...</span>
+            <span class="section-title">Ngày đi trễ</span>
+            <span id="lateSummaryBadgeThinh" style="font-size:12px; font-weight:800; color:var(--text-sub); white-space:nowrap;">Đang tải...</span>
           </div>
 
           <div class="toolbar-row">
@@ -2427,9 +2542,12 @@
               <option value="">-- Đang tải danh sách nhân viên --</option>
             </select>
           </div>
-          <label style="display:flex; align-items:center; gap:10px; padding:10px 12px; background-color:var(--bg-soft); border:1px solid var(--border); border-radius:var(--radius-sm); cursor:pointer; font-size:12.5px; font-weight:700; color:var(--text-main);">
+          <label style="display:flex; align-items:center; gap:10px; margin-top:2px; padding:10px 12px; border-radius:12px; background-color:var(--bg-soft); border:1px solid var(--border); cursor:pointer;">
             <input type="checkbox" id="useProxyCardToggle" class="late-checkbox" checked />
-            <span>💳 Dùng thẻ của Thịnh để quẹt hộ (Tự đổi &amp; hoàn trả mã thẻ sau khi quẹt)</span>
+            <div style="min-width:0; flex:1;">
+              <div style="font-size:12.5px; font-weight:800; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Quẹt hộ bằng thẻ Trần Kim Thịnh</div>
+              <div style="font-size:11px; color:var(--text-sub); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Tạm gán mã thẻ 10971784 cho đồng nghiệp</div>
+            </div>
           </label>
         </div>
 
@@ -2439,12 +2557,12 @@
             <div class="emp-info-col">
               <div class="emp-name-big" id="empCardName">---</div>
               <div class="emp-meta-row">
-                <span class="emp-chip">RFID <span id="empCardId">---</span></span>
+                <span class="emp-chip">Thẻ <span id="empCardId">---</span></span>
                 <span class="emp-chip danger" id="empCardLateCount">0 ngày trễ</span>
               </div>
             </div>
             <button type="button" class="btn-quick-today" onclick="quickWarpTodayOthers()">
-              ⚡ Tua Hôm Nay
+              ⚡ Tua Ngay
             </button>
           </div>
 
@@ -2475,7 +2593,7 @@
         <!-- Machine Status & Door Control -->
         <div class="section-box">
           <div class="section-head">
-            <span class="section-title">Thiết bị ZKTeco (TCP 4370)</span>
+            <span class="section-title">Thiết bị ZKTeco</span>
             <span class="emp-chip" id="recCountBadge" style="background-color:var(--primary-soft); color:var(--primary);">14,681 lượt quẹt</span>
           </div>
 
@@ -2521,7 +2639,7 @@
               <button type="button" class="preset-chip" onclick="setCustomDateToday()">Hôm nay</button>
               <button type="button" class="preset-chip" onclick="setCustomDateDaysAgo(1)">Hôm qua</button>
               <button type="button" class="preset-chip" onclick="setCustomDateDaysAgo(2)">Hôm kia</button>
-              <button type="button" class="preset-chip" onclick="setCustomDateDaysAgo(3)">3 ngày qua</button>
+              <button type="button" class="preset-chip" onclick="setCustomDateDaysAgo(3)">-3 ngày</button>
             </div>
           </div>
 
@@ -2548,8 +2666,8 @@
         <!-- Activity Log -->
         <div class="section-box">
           <div class="section-head">
-            <span class="section-title">Nhật ký điều khiển thiết bị</span>
-            <a href="/index.html" style="font-size:12px; font-weight:700; color:var(--primary); text-decoration:none;">Mở Web Console →</a>
+            <span class="section-title">Nhật ký thiết bị</span>
+            <a href="/index.html" style="font-size:12px; font-weight:700; color:var(--primary); text-decoration:none; white-space:nowrap;">Web Console →</a>
           </div>
           <div class="log-box" id="logBox">Sẵn sàng điều khiển...</div>
         </div>
@@ -2621,9 +2739,9 @@
         </div>
 
         <div>
-          <label class="field-label" for="tsCycleSelect">Kỳ tính công (Theo tháng 01 → cuối tháng)</label>
+          <label class="field-label" for="tsCycleSelect">Kỳ tính công (Chu kỳ 25 → 24)</label>
           <select id="tsCycleSelect" class="big-select" onchange="onTimesheetCycleChange()">
-            <option value="2026-11">Tháng 11/2026 (01/11 → 30/11)</option>
+            <option value="2026-11">Tháng 11/2026 (25/10 → 24/11)</option>
           </select>
         </div>
 
@@ -2656,11 +2774,8 @@
             <span id="confirmWarpTarget" class="mono" style="font-weight:700; color:var(--primary);">192.168.54.250:4370</span>
           </div>
           <div id="confirmProxyCardRow" style="display:none; justify-content:space-between; align-items:center; font-size:13px; border-top:1px dashed var(--border); padding-top:8px;">
-            <span style="color:var(--text-sub);">Chế độ thẻ RFID:</span>
-            <label style="display:inline-flex; align-items:center; gap:6px; font-weight:800; color:var(--primary); cursor:pointer;">
-              <input type="checkbox" id="confirmProxyCardCheck" class="late-checkbox" style="width:16px; height:16px;" />
-              <span>💳 Quẹt hộ bằng thẻ Thịnh</span>
-            </label>
+            <label for="confirmProxyCardCheck" style="color:var(--text-sub); cursor:pointer;">Dùng thẻ Thịnh quẹt hộ:</label>
+            <input type="checkbox" id="confirmProxyCardCheck" class="late-checkbox" checked />
           </div>
 
           <!-- Single day mode -->
@@ -2707,9 +2822,7 @@
   </div>
 
 <script>
-  const API_BASE = (window.location.port === "8099")
-    ? `${window.location.protocol}//${window.location.hostname}:8098`
-    : "";
+  const API_BASE = (window.location.port === "8099") ? `${window.location.protocol}//${window.location.hostname}:8098` : "";
   const THINH_USER_ID = "7441083";
   const AUTH_TOKEN_KEY = "zk_stealth_auth_token";
   let _isDemoMode = new URLSearchParams(window.location.search).has("preview");
@@ -2732,18 +2845,7 @@
   });
 
   function checkIosPwaHint() {
-    const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
-    const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
-    if (isIos && !isStandalone && !localStorage.getItem("zk_pwa_banner_dismissed")) {
-      const banner = document.getElementById("pwaInstallBanner");
-      const sub = document.getElementById("pwaBannerSubText");
-      const btn = document.getElementById("pwaInstallBtn");
-      if (banner && sub && btn) {
-        sub.textContent = "Bấm nút Chia sẻ (Share) → Chọn 'Thêm vào MH chính'";
-        btn.style.display = "none";
-        banner.classList.add("show");
-      }
-    }
+    // Only show install banner when explicitly supported by browser beforeinstallprompt
   }
 
   async function triggerPwaInstall() {
@@ -2767,7 +2869,7 @@
       if (metaTheme) metaTheme.setAttribute("content", "#0b0c12");
     } else {
       root.removeAttribute("data-theme");
-      if (metaTheme) metaTheme.setAttribute("content", "#f3f1ed");
+      if (metaTheme) metaTheme.setAttribute("content", "#f3f4f8");
     }
   }
 
@@ -2807,13 +2909,11 @@
 
   /* ------------------- AUTHENTICATION & FETCH WRAPPER ------------------- */
   function getAuthToken() {
-    const t = localStorage.getItem(AUTH_TOKEN_KEY) || "";
-    if (t === "demo-ui-token") return "";
-    return t;
+    return localStorage.getItem(AUTH_TOKEN_KEY) || "";
   }
 
   function setAuthToken(token) {
-    if (token && token !== "demo-ui-token") localStorage.setItem(AUTH_TOKEN_KEY, token);
+    if (token) localStorage.setItem(AUTH_TOKEN_KEY, token);
     else localStorage.removeItem(AUTH_TOKEN_KEY);
   }
 
@@ -2830,7 +2930,7 @@
     ],
     days: [
       { date: "2026-11-09", display_date: "09/11/2026", weekday: "Thứ 2", is_today: true, is_weekend: false, is_future: false, status: "missing_out", has_in: true, has_out: false, first_in: "08:23:00", last_out: null, duration_str: null, next_action: "check_out", suggested_out: "17:45:00" },
-      { date: "2026-11-08", display_date: "08/11/2026", weekday: "CN", is_today: false, is_weekend: true, is_future: false, status: "weekend", has_in: false, has_out: false, first_in: null, last_out: null, duration_str: null, next_action: "none" },
+      { date: "2026-11-08", display_date: "08/11/2026", weekday: "Chủ nhật", is_today: false, is_weekend: true, is_future: false, status: "weekend", has_in: false, has_out: false, first_in: null, last_out: null, duration_str: null, next_action: "none" },
       { date: "2026-11-07", display_date: "07/11/2026", weekday: "Thứ 7", is_today: false, is_weekend: true, is_future: false, status: "weekend", has_in: false, has_out: false, first_in: null, last_out: null, duration_str: null, next_action: "none" },
       { date: "2026-11-06", display_date: "06/11/2026", weekday: "Thứ 6", is_today: false, is_weekend: false, is_future: false, status: "missing_out", has_in: true, has_out: false, first_in: "08:26:12", last_out: null, duration_str: null, next_action: "check_out", suggested_out: "17:46:18" },
       { date: "2026-11-05", display_date: "05/11/2026", weekday: "Thứ 5", is_today: false, is_weekend: false, is_future: false, status: "absent", has_in: false, has_out: false, first_in: null, last_out: null, duration_str: null, next_action: "check_in", suggested_in: "08:22:15" },
@@ -2892,11 +2992,11 @@
       return _makeJsonResponse({
         ok: true,
         cycle: "2026-11",
-        cycle_label: "Tháng 11/2026 (01/11 → 30/11)",
+        cycle_label: "Tháng 11/2026 (25/10 → 24/11)",
         available_cycles: [
-          { cycle: "2026-11", label: "Tháng 11/2026 (01/11 → 30/11)" },
-          { cycle: "2026-10", label: "Tháng 10/2026 (01/10 → 31/10)" },
-          { cycle: "2026-09", label: "Tháng 09/2026 (01/09 → 30/09)" }
+          { cycle: "2026-11", label: "Tháng 11/2026 (25/10 → 24/11)" },
+          { cycle: "2026-10", label: "Tháng 10/2026 (25/09 → 24/10)" },
+          { cycle: "2026-09", label: "Tháng 09/2026 (25/08 → 24/09)" }
         ],
         summary: {
           total_working_days: 22,
@@ -3003,7 +3103,7 @@
   }
 
   window.fetch = async function(url, options = {}) {
-    if (_isDemoMode) {
+    if (_isDemoMode || getAuthToken() === "demo-ui-token") {
       return _handleMockBackend(url, options);
     }
     options = options || {};
@@ -3024,7 +3124,10 @@
       }
       return res;
     } catch (err) {
-      return _handleMockBackend(url, options);
+      if (_isDemoMode || getAuthToken() === "demo-ui-token") {
+        return _handleMockBackend(url, options);
+      }
+      throw err;
     }
   };
 
@@ -3042,6 +3145,7 @@
 
   function enterPreviewDemo() {
     _isDemoMode = true;
+    setAuthToken("demo-ui-token");
     showAppScreen();
     startApp();
   }
@@ -3058,6 +3162,7 @@
     btn.textContent = "Đang xác thực...";
 
     try {
+      _isDemoMode = false;
       const res = await _nativeFetch(`${API_BASE}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -3065,7 +3170,6 @@
       });
       const data = await res.json();
       if (data.ok && data.token) {
-        _isDemoMode = false;
         setAuthToken(data.token);
         showAppScreen();
         startApp();
@@ -3074,7 +3178,12 @@
         errBox.style.display = "block";
       }
     } catch (err) {
-      enterPreviewDemo();
+      if (_isDemoMode) {
+        enterPreviewDemo();
+      } else {
+        errBox.textContent = "Không kết nối được Backend API: " + (err.message || "Lỗi mạng");
+        errBox.style.display = "block";
+      }
     } finally {
       btn.disabled = false;
       btn.textContent = "Đăng nhập hệ thống";
@@ -3094,7 +3203,7 @@
   let currentTimesheetData = null;
   let currentTimesheetFilter = "ALL";
   let selectedTsUserId = THINH_USER_ID;
-  let selectedTsCycle = "2026-11";
+  let selectedTsCycle = "";
   let timesheetCustomTimes = {};
   let showFutureDays = false;
 
@@ -3200,18 +3309,17 @@
         }
       }
 
-      const cycleShort = data.cycle_label ? data.cycle_label.split(" (")[0] : `Kỳ ${data.cycle}`;
-      const hdrCycle = document.getElementById("headerCycleText");
-      if (hdrCycle) hdrCycle.textContent = cycleShort;
-
       const s = data.summary || {};
       const totalWork = s.total_working_days || 0;
       const completed = s.completed_days || 0;
       const rate = s.attendance_rate || 0;
       const needFix = (s.missing_days || 0) + (s.absent_days || 0);
 
+      const cycleShort = data.cycle_label ? data.cycle_label.split(" (")[0] : `Tháng ${data.cycle}`;
       document.getElementById("kpiCycleTitle").textContent = cycleShort;
-      document.getElementById("kpiRateText").textContent = `${completed} / ${totalWork} ngày (${rate}%)`;
+      const hdrCycle = document.getElementById("headerCycleText");
+      if (hdrCycle) hdrCycle.textContent = cycleShort;
+      document.getElementById("kpiRateText").textContent = `${completed}/${totalWork} ngày (${rate}%)`;
       document.getElementById("kpiProgressFill").style.width = `${Math.min(100, Math.max(0, rate))}%`;
 
       document.getElementById("kpiTotalNum").textContent = totalWork;
@@ -3221,71 +3329,84 @@
       const weekendCount = (data.days || []).filter(d => d.is_weekend).length;
       document.getElementById("kpiWeekendNum").textContent = weekendCount;
 
+      renderWeekStrip(data.days || []);
       renderTodayHeroCard();
-      renderWeekStrip();
       renderTimesheetDays();
     } catch (e) {
       console.error("loadTimesheetData error:", e);
     }
   }
 
-  function renderWeekStrip() {
-    if (!currentTimesheetData || !currentTimesheetData.days) return;
+  function renderWeekStrip(days) {
     const grid = document.getElementById("weekStripGrid");
-    const rangeEl = document.getElementById("weekStripRangeText");
+    const rangeText = document.getElementById("weekStripRangeText");
     if (!grid) return;
 
-    const ascDays = [...currentTimesheetData.days].sort((a, b) => a.date.localeCompare(b.date));
-    if (!ascDays.length) return;
+    const now = new Date();
+    const dayOfWeek = now.getDay(); // 0=CN, 1=T2...
+    const diffToMon = (dayOfWeek === 0) ? -6 : (1 - dayOfWeek);
+    const monday = new Date(now);
+    monday.setDate(now.getDate() + diffToMon);
 
-    let refDay = ascDays.find(d => d.is_today) || ascDays.filter(d => !d.is_future).slice(-1)[0] || ascDays[0];
-    const [ry, rm, rd] = refDay.date.split("-").map(Number);
-    const refDt = new Date(ry, rm - 1, rd);
-    const jsDow = refDt.getDay(); // 0=Sun..6=Sat
-    const mondayOffset = (jsDow === 0) ? -6 : (1 - jsDow);
-    const mondayDt = new Date(ry, rm - 1, rd + mondayOffset);
-
+    const pad = (n) => String(n).padStart(2, "0");
     const dayMap = {};
-    ascDays.forEach(d => { dayMap[d.date] = d; });
+    (days || []).forEach(d => { dayMap[d.date] = d; });
 
     const dowLabels = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
-    const weekCells = [];
+    let cellsHtml = "";
     let firstLabel = "";
     let lastLabel = "";
 
     for (let i = 0; i < 7; i++) {
-      const dt = new Date(mondayDt.getFullYear(), mondayDt.getMonth(), mondayDt.getDate() + i);
-      const yStr = dt.getFullYear();
-      const mStr = String(dt.getMonth() + 1).padStart(2, "0");
-      const dStr = String(dt.getDate()).padStart(2, "0");
+      const cur = new Date(monday);
+      cur.setDate(monday.getDate() + i);
+      const yStr = cur.getFullYear();
+      const mStr = pad(cur.getMonth() + 1);
+      const dStr = pad(cur.getDate());
       const iso = `${yStr}-${mStr}-${dStr}`;
-      const shortDisp = `${dStr}/${mStr}`;
-      if (i === 0) firstLabel = shortDisp;
-      if (i === 6) lastLabel = shortDisp;
+      const shortDm = `${dStr}/${mStr}`;
+      if (i === 0) firstLabel = shortDm;
+      if (i === 6) lastLabel = shortDm;
 
-      const item = dayMap[iso];
+      const info = dayMap[iso];
+      const isToday = info ? info.is_today : (iso === `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`);
       let dotCls = "dot-none";
-      const isToday = item ? Boolean(item.is_today) : false;
-      if (item) {
-        if (item.status === "complete" || item.status === "weekend_work") dotCls = "dot-ok";
-        else if (item.status === "missing_out" || item.status === "missing_in") dotCls = "dot-warn";
-        else if (item.status === "absent") dotCls = "dot-err";
-        else dotCls = "dot-none";
+      let filterTarget = "ALL";
+      let chipId = "filterChipAll";
+      if (isToday) {
+        dotCls = "dot-today";
+      } else if (info) {
+        if (info.status === "complete") {
+          dotCls = "dot-ok";
+        } else if (info.status === "missing_out" || info.status === "missing_in") {
+          dotCls = "dot-warn";
+          filterTarget = "NEED_FIX";
+          chipId = "filterChipNeedFix";
+        } else if (info.status === "absent") {
+          dotCls = "dot-err";
+          filterTarget = "NEED_FIX";
+          chipId = "filterChipNeedFix";
+        } else if (info.is_weekend) {
+          dotCls = "dot-none";
+          filterTarget = "WEEKEND";
+          chipId = "filterChipWeekend";
+        }
       }
 
-      weekCells.push(`
-        <div class="week-day-cell${isToday ? " is-today" : ""}">
-          <span class="week-day-name">${dowLabels[i]}</span>
-          <span class="week-day-num">${dStr}</span>
-          <span class="week-day-dot ${dotCls}"></span>
-        </div>
-      `);
+      const topLabel = isToday ? "Nay" : dowLabels[i];
+      cellsHtml += `
+        <button type="button" role="tab" ${isToday ? 'aria-selected="true"' : ""} class="week-day-pill${isToday ? " is-today" : ""}" onclick="setTimesheetFilter('${filterTarget}', document.getElementById('${chipId}'))">
+          <span class="w-label">${topLabel}</span>
+          <span class="w-num">${dStr}</span>
+          <span class="w-dot ${dotCls}"></span>
+        </button>
+      `;
     }
 
-    if (rangeEl && firstLabel && lastLabel) {
-      rangeEl.textContent = `${firstLabel} – ${lastLabel}`;
+    if (rangeText && firstLabel && lastLabel) {
+      rangeText.textContent = `${firstLabel} – ${lastLabel}`;
     }
-    grid.innerHTML = weekCells.join("");
+    grid.innerHTML = cellsHtml;
   }
 
   function renderTodayHeroCard() {
@@ -3315,7 +3436,7 @@
       statusBadge.textContent = "ĐÃ ĐỦ CÔNG";
       mainText.innerHTML = `<span>Đủ công hôm nay</span> <span style="color:#6ee7b7;">(${today.duration_str || "Hoàn tất"})</span>`;
       actionBtn.className = "today-hero-action-btn btn-hero-done";
-      btnText.textContent = `Đã quẹt đủ vào & ra (${inTime} → ${outTime})`;
+      btnText.textContent = `✓ Đã đủ công (${inTime} → ${outTime})`;
       actionBtn.onclick = null;
     } else if (today.has_in && !today.has_out) {
       statusBadge.className = "today-hero-badge badge-working";
@@ -3323,7 +3444,7 @@
       mainText.innerHTML = `<span>Đã vào ca lúc</span> <span style="color:#6ee7b7; font-family:var(--font-mono);">${inTime}</span>`;
       actionBtn.className = "today-hero-action-btn btn-hero-out";
       const sugOut = today.suggested_out || "17:45:00";
-      btnText.textContent = `Tan Ca Bù Ngay (Đề xuất ${sugOut})`;
+      btnText.textContent = `Tan Ca Bù Ngay • ${sugOut}`;
       actionBtn.onclick = () => triggerTimesheetWarp(today.date, "check_out", sugOut);
     } else {
       statusBadge.className = "today-hero-badge badge-absent";
@@ -3331,7 +3452,7 @@
       mainText.innerHTML = `<span>Chưa có giờ vào hôm nay</span>`;
       actionBtn.className = "today-hero-action-btn btn-hero-in";
       const sugIn = today.suggested_in || "08:22:15";
-      btnText.textContent = `Chấm Vào Bù Ngay (Đề xuất ${sugIn})`;
+      btnText.textContent = `Chấm Vào Bù Ngay • ${sugIn}`;
       actionBtn.onclick = () => triggerTimesheetWarp(today.date, "check_in", sugIn);
     }
   }
@@ -3484,8 +3605,7 @@
     }
 
     const targetDt = `${dateStr} ${cleanTime}`;
-    const isOther = String(selectedTsUserId) !== THINH_USER_ID;
-    const defaultProxy = isOther ? Boolean(document.getElementById("useProxyCardToggle")?.checked ?? true) : false;
+    const defaultProxy = String(selectedTsUserId) !== THINH_USER_ID;
     promptConfirmWarp([{ date: dateStr, target_datetime: targetDt }], selectedTsUserId, defaultProxy);
   }
 
@@ -3577,7 +3697,7 @@
     if (!selectedOtherUserObj) return;
     const u = selectedOtherUserObj;
     document.getElementById("empCardName").textContent = u.name;
-    document.getElementById("empCardId").textContent = u.card ? Number(u.card).toLocaleString() : "Chưa có";
+    document.getElementById("empCardId").textContent = u.card ? String(u.card) : "Chưa có";
   }
 
   /* ------------------- TAB 1: THỊNH LATE DAYS ------------------- */
@@ -3604,7 +3724,7 @@
         badgeThinh.textContent = unfixed;
         badgeThinh.style.display = "inline-flex";
         if (rescueBanner && rescueText) {
-          rescueText.textContent = `Cần bù: ${unfixed} ngày đi trễ (> 08:30) của Thịnh`;
+          rescueText.textContent = `${unfixed} ngày đi trễ cần bù`;
           rescueBanner.classList.add("show");
         }
       } else {
@@ -3681,7 +3801,7 @@
             <span class="day-status-pill ${pillCls}">${pillText}</span>
           </div>
           <div class="late-card-right">
-            <span class="late-right-label">Giờ bù lên máy:</span>
+            <span class="late-right-label">Giờ bù:</span>
             <div class="late-right-controls">
               <input type="text" inputmode="numeric" class="time-edit-mini-inp"
                 value="${tVal}"
@@ -3732,12 +3852,20 @@
 
   function promptConfirmWarp(queue, userId, proxyCard = false, durationSec = 30) {
     if (!queue || queue.length === 0) return;
+    const isOtherUser = String(userId) !== THINH_USER_ID;
     pendingWarpRequest = {
       queue: JSON.parse(JSON.stringify(queue)),
       userId: String(userId),
       proxyCard: Boolean(proxyCard),
       durationSec: Number(durationSec) || 30
     };
+
+    const proxyRow = document.getElementById("confirmProxyCardRow");
+    const proxyCheck = document.getElementById("confirmProxyCardCheck");
+    if (proxyRow && proxyCheck) {
+      proxyRow.style.display = isOtherUser ? "flex" : "none";
+      proxyCheck.checked = Boolean(proxyCard);
+    }
 
     let userName = `User #${userId}`;
     if (allUsersList && allUsersList.length) {
@@ -3750,18 +3878,6 @@
 
     const t = getTarget();
     document.getElementById("confirmWarpTarget").textContent = `${t.ip}:${t.port}`;
-
-    const proxyRow = document.getElementById("confirmProxyCardRow");
-    const proxyChk = document.getElementById("confirmProxyCardCheck");
-    if (proxyRow && proxyChk) {
-      if (String(userId) !== THINH_USER_ID) {
-        proxyRow.style.display = "flex";
-        proxyChk.checked = Boolean(proxyCard);
-      } else {
-        proxyRow.style.display = "none";
-        proxyChk.checked = false;
-      }
-    }
 
     if (queue.length === 1) {
       document.getElementById("confirmSingleDayBox").style.display = "block";
@@ -3845,13 +3961,11 @@
       req.queue[0].target_datetime = `${req.queue[0].date} ${tVal}`;
     }
 
-    const proxyChk = document.getElementById("confirmProxyCardCheck");
-    if (proxyChk && String(req.userId) !== THINH_USER_ID) {
-      req.proxyCard = Boolean(proxyChk.checked);
-    }
+    const proxyCheck = document.getElementById("confirmProxyCardCheck");
+    const useProxy = (String(req.userId) !== THINH_USER_ID && proxyCheck) ? proxyCheck.checked : Boolean(req.proxyCard);
 
     closeConfirmWarpSheet();
-    await launchQueueGeneric(req.queue, req.userId, req.proxyCard, req.durationSec);
+    await launchQueueGeneric(req.queue, req.userId, useProxy, req.durationSec);
   }
 
   async function startSingleDayWarpThinh(dateStr) {
@@ -3863,11 +3977,13 @@
     const now = new Date();
     const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
     let tVal = generateNaturalMorningTime();
-    if (currentTimesheetData && currentTimesheetData.days && String(selectedTsUserId) === THINH_USER_ID) {
-      const todayEntry = currentTimesheetData.days.find(d => d.date === dateStr || d.is_today);
-      if (todayEntry && todayEntry.has_in && !todayEntry.has_out) {
-        tVal = todayEntry.suggested_out || `17:${String(randInt(35, 55)).padStart(2, "0")}:${String(randInt(10, 50)).padStart(2, "0")}`;
+    if (currentTimesheetData && currentTimesheetData.days) {
+      const todayRec = currentTimesheetData.days.find(d => d.date === dateStr || d.is_today);
+      if (todayRec && todayRec.has_in && !todayRec.has_out) {
+        tVal = todayRec.suggested_out || `17:${String(randInt(38, 54)).padStart(2, "0")}:${String(randInt(10, 52)).padStart(2, "0")}`;
       }
+    } else if (now.getHours() >= 16) {
+      tVal = `17:${String(randInt(38, 54)).padStart(2, "0")}:${String(randInt(10, 52)).padStart(2, "0")}`;
     }
     promptConfirmWarp([{ date: dateStr, target_datetime: `${dateStr} ${tVal}` }], THINH_USER_ID, false);
   }
@@ -3941,7 +4057,7 @@
             <span class="day-status-pill ${pillCls}">${pillText}</span>
           </div>
           <div class="late-card-right">
-            <span class="late-right-label">Giờ bù lên máy:</span>
+            <span class="late-right-label">Giờ bù:</span>
             <div class="late-right-controls">
               <input type="text" inputmode="numeric" class="time-edit-mini-inp"
                 value="${tVal}"
@@ -3990,7 +4106,7 @@
 
   async function startSingleDayWarpOthers(dateStr) {
     const tVal = othersCustomTimes[dateStr] || generateNaturalMorningTime();
-    const useProxy = Boolean(document.getElementById("useProxyCardToggle")?.checked ?? true);
+    const useProxy = document.getElementById("useProxyCardToggle")?.checked ?? true;
     promptConfirmWarp([{ date: dateStr, target_datetime: `${dateStr} ${tVal}` }], selectedOtherUserId, useProxy);
   }
 
@@ -3998,7 +4114,7 @@
     const now = new Date();
     const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
     const tVal = generateNaturalMorningTime();
-    const useProxy = Boolean(document.getElementById("useProxyCardToggle")?.checked ?? true);
+    const useProxy = document.getElementById("useProxyCardToggle")?.checked ?? true;
     promptConfirmWarp([{ date: dateStr, target_datetime: `${dateStr} ${tVal}` }], selectedOtherUserId, useProxy);
   }
 
@@ -4030,10 +4146,10 @@
       promptConfirmWarp(queue, THINH_USER_ID, false);
     } else if (activeMainTab === "others") {
       if (othersSelectedDates.size === 0) return;
-      const useProxy = Boolean(document.getElementById("useProxyCardToggle")?.checked ?? true);
       const queue = othersLateDays
         .filter(x => othersSelectedDates.has(x.date))
         .map(x => ({ date: x.date, target_datetime: `${x.date} ${othersCustomTimes[x.date] || generateNaturalMorningTime()}` }));
+      const useProxy = document.getElementById("useProxyCardToggle")?.checked ?? true;
       promptConfirmWarp(queue, selectedOtherUserId, useProxy);
     }
   }
@@ -4079,9 +4195,8 @@
     if (timeVal.length === 5) timeVal += ":" + String(randInt(10, 50)).padStart(2, "0");
 
     const targetDt = `${dateVal} ${timeVal}`;
-    const isOther = String(userId) !== THINH_USER_ID;
-    const useProxy = isOther ? Boolean(document.getElementById("useProxyCardToggle")?.checked ?? true) : false;
-    promptConfirmWarp([{ date: dateVal, target_datetime: targetDt }], userId, useProxy);
+    const defaultProxy = String(userId) !== THINH_USER_ID;
+    promptConfirmWarp([{ date: dateVal, target_datetime: targetDt }], userId, defaultProxy);
   }
 
   async function executeDirectInsertRecord() {
@@ -4384,10 +4499,13 @@
     const token = getAuthToken();
     const params = new URLSearchParams(window.location.search);
     const forceLogin = params.has("login");
-    if ((token || _isDemoMode) && !forceLogin) {
+    if (params.has("preview") && !forceLogin) {
+      enterPreviewDemo();
+    } else if (token && token !== "demo-ui-token" && !forceLogin) {
       showAppScreen();
       startApp();
     } else {
+      if (token === "demo-ui-token") setAuthToken("");
       showLoginScreen();
     }
   })();

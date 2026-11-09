@@ -1080,14 +1080,14 @@ tr.late-row .emp-avatar {
 
 @media (max-width: 767px) {
   .brand-title {
-    font-size: 17px;
-    flex-direction: column;
-    align-items: flex-start;
+    font-size: 16px;
+    flex-direction: row;
+    align-items: center;
     flex-wrap: wrap;
     gap: 6px;
   }
   .console-main {
-    padding: 14px;
+    padding: 12px;
   }
   .overview-strip {
     grid-template-columns: 1fr;
@@ -1100,12 +1100,29 @@ tr.late-row .emp-avatar {
   .action-cluster .btn {
     width: 100%;
   }
+  .stats-line {
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  .nav-item {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
   table:has(.empty-row) thead {
     display: none;
   }
 }
 
 @media (max-width: 639px) {
+  .conn-cluster {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .conn-cluster .btn-icon-only {
+    width: 100%;
+    grid-column: span 2;
+  }
   .filter-cluster,
   .action-cluster {
     width: 100%;
@@ -1116,17 +1133,14 @@ tr.late-row .emp-avatar {
   .conn-input,
   .field-control {
     width: 100%;
-    height: 44px;
-    font-size: 16px;
+    height: 42px;
+    font-size: 15px;
   }
   .btn,
   .nav-item,
   .action-btn,
   .ov-link-btn {
-    min-height: 44px;
-  }
-  .btn-icon-only {
-    width: 44px;
+    min-height: 42px;
   }
   .hide-mobile {
     display: none;
