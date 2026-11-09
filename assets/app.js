@@ -1,8 +1,22 @@
-const API_BASE = (window.location.port === "8099") ? "http://127.0.0.1:8098" : "";
+const API_BASE = (window.location.port === "8099")
+  ? `${window.location.protocol}//${window.location.hostname}:8098`
+  : "";
+const AUTH_TOKEN_KEY = "zk_stealth_auth_token";
 let currentRecords = [];
 let usersList = [];
 let latestState = {};
 let toastTimer = null;
+let _desktopDemoMode = new URLSearchParams(window.location.search).has("preview");
+
+function getDesktopAuthToken() {
+  const t = localStorage.getItem(AUTH_TOKEN_KEY) || "";
+  return (t === "demo-ui-token") ? "" : t;
+}
+
+function setDesktopAuthToken(token) {
+  if (token) localStorage.setItem(AUTH_TOKEN_KEY, token);
+  else localStorage.removeItem(AUTH_TOKEN_KEY);
+}
 
 const _desktopNativeFetch = window.fetch;
 const _desktopMockStore = {
@@ -47,88 +61,191 @@ function _desktopMockResponse(obj) {
   });
 }
 
-window.fetch = async function(url, options = {}) {
-  try {
-    return await _desktopNativeFetch(url, options);
-  } catch (err) {
-    const u = String(url);
-    if (u.includes("/api/attendance/patch")) {
-      const body = JSON.parse(options.body || "{}");
-      const rec = _desktopMockStore.records.find(r => r.index === Number(body.index));
-      if (rec) {
-        rec.datetime = body.datetime;
-        rec.date = body.datetime.slice(0, 10);
-        const timePart = body.datetime.slice(11, 19);
-        rec.is_late = rec.is_first && timePart > "08:30:00";
-        rec.status = Number(body.status);
-        rec.punch = Number(body.punch);
-        _desktopMockStore.state.pending_changes += 1;
-      }
-      return _desktopMockResponse({ ok: true });
-    }
-    if (u.includes("/api/attendance/insert")) {
-      const body = JSON.parse(options.body || "{}");
-      const usr = _desktopMockStore.users.find(x => x.user_id === body.user_id) || _desktopMockStore.users[1];
-      const nextIdx = _desktopMockStore.records.length ? Math.max(..._desktopMockStore.records.map(r => r.index)) + 1 : 14681;
-      const dateStr = body.datetime.slice(0, 10);
+function _handleDesktopMock(url, options = {}) {
+  const u = String(url);
+  if (u.includes("/api/attendance/patch")) {
+    const body = JSON.parse(options.body || "{}");
+    const rec = _desktopMockStore.records.find(r => r.index === Number(body.index));
+    if (rec) {
+      rec.datetime = body.datetime;
+      rec.date = body.datetime.slice(0, 10);
       const timePart = body.datetime.slice(11, 19);
-      _desktopMockStore.records.unshift({
-        index: nextIdx,
-        seq: _desktopMockStore.records.length + 1,
-        user_id: usr.user_id,
-        name: usr.name,
-        date: dateStr,
-        datetime: body.datetime,
-        timestamp: 846925000 + nextIdx,
-        status: Number(body.status || 4),
-        punch: Number(body.punch || 0),
-        is_first: true,
-        is_late: timePart > "08:30:00",
-        hex: "0c0037343431303833000000000000000000000000000000000004a4287b320000000000"
-      });
+      rec.is_late = rec.is_first && timePart > "08:30:00";
+      rec.status = Number(body.status);
+      rec.punch = Number(body.punch);
       _desktopMockStore.state.pending_changes += 1;
-      return _desktopMockResponse({ ok: true });
-    }
-    if (u.includes("/api/attendance")) {
-      const parsed = new URL(u, window.location.origin);
-      const dFilter = parsed.searchParams.get("date") || "";
-      const uFilter = parsed.searchParams.get("user") || "ALL";
-      const lFilter = parsed.searchParams.get("late") || "0";
-      let list = [..._desktopMockStore.records];
-      if (dFilter) list = list.filter(r => r.date === dFilter);
-      if (uFilter && uFilter !== "ALL") list = list.filter(r => r.user_id === uFilter);
-      if (lFilter === "1") list = list.filter(r => r.is_late);
-      return _desktopMockResponse({
-        ok: true,
-        records: list,
-        users: _desktopMockStore.users,
-        monotonic_ok: true,
-        file_size_bytes: 14681 * 40,
-        total_in_file: 14681,
-        state: _desktopMockStore.state
-      });
-    }
-    if (u.includes("/api/users/save")) {
-      const body = JSON.parse(options.body || "{}");
-      const existing = _desktopMockStore.users.find(x => Number(x.uid) === Number(body.uid));
-      if (existing) {
-        Object.assign(existing, body);
-      } else {
-        _desktopMockStore.users.push({ ...body, hex: "1a00004e6577205573657200000000000000000000000000" });
-      }
-      return _desktopMockResponse({ ok: true });
-    }
-    if (u.includes("/api/users")) {
-      return _desktopMockResponse({ ok: true, users: _desktopMockStore.users });
-    }
-    if (u.includes("/api/4370/pull")) {
-      return _desktopMockResponse({ ok: true, users_count: 220, records_count: 14681, bytes: 587240, elapsed_sec: 0.42 });
-    }
-    if (u.includes("/api/4370/push")) {
-      _desktopMockStore.state.pending_changes = 0;
-      return _desktopMockResponse({ ok: true, total_records: 14681, merged_new_swipes: 2, elapsed_sec: 0.68 });
     }
     return _desktopMockResponse({ ok: true });
+  }
+  if (u.includes("/api/attendance/insert")) {
+    const body = JSON.parse(options.body || "{}");
+    const usr = _desktopMockStore.users.find(x => x.user_id === body.user_id) || _desktopMockStore.users[1];
+    const nextIdx = _desktopMockStore.records.length ? Math.max(..._desktopMockStore.records.map(r => r.index)) + 1 : 14681;
+    const dateStr = body.datetime.slice(0, 10);
+    const timePart = body.datetime.slice(11, 19);
+    _desktopMockStore.records.unshift({
+      index: nextIdx,
+      seq: _desktopMockStore.records.length + 1,
+      user_id: usr.user_id,
+      name: usr.name,
+      date: dateStr,
+      datetime: body.datetime,
+      timestamp: 846925000 + nextIdx,
+      status: Number(body.status || 4),
+      punch: Number(body.punch || 0),
+      is_first: true,
+      is_late: timePart > "08:30:00",
+      hex: "0c0037343431303833000000000000000000000000000000000004a4287b320000000000"
+    });
+    _desktopMockStore.state.pending_changes += 1;
+    return _desktopMockResponse({ ok: true });
+  }
+  if (u.includes("/api/attendance")) {
+    const parsed = new URL(u, window.location.origin);
+    const dFilter = parsed.searchParams.get("date") || "";
+    const uFilter = parsed.searchParams.get("user") || "ALL";
+    const lFilter = parsed.searchParams.get("late") || "0";
+    let list = [..._desktopMockStore.records];
+    if (dFilter) list = list.filter(r => r.date === dFilter);
+    if (uFilter && uFilter !== "ALL") list = list.filter(r => r.user_id === uFilter);
+    if (lFilter === "1") list = list.filter(r => r.is_late);
+    return _desktopMockResponse({
+      ok: true,
+      records: list,
+      users: _desktopMockStore.users,
+      monotonic_ok: true,
+      file_size_bytes: 14681 * 40,
+      total_in_file: 14681,
+      state: _desktopMockStore.state
+    });
+  }
+  if (u.includes("/api/users/save")) {
+    const body = JSON.parse(options.body || "{}");
+    const existing = _desktopMockStore.users.find(x => Number(x.uid) === Number(body.uid));
+    if (existing) {
+      Object.assign(existing, body);
+    } else {
+      _desktopMockStore.users.push({ ...body, hex: "1a00004e6577205573657200000000000000000000000000" });
+    }
+    return _desktopMockResponse({ ok: true });
+  }
+  if (u.includes("/api/users")) {
+    return _desktopMockResponse({ ok: true, users: _desktopMockStore.users });
+  }
+  if (u.includes("/api/4370/pull")) {
+    return _desktopMockResponse({ ok: true, users_count: 220, records_count: 14681, bytes: 587240, elapsed_sec: 0.42 });
+  }
+  if (u.includes("/api/4370/push")) {
+    _desktopMockStore.state.pending_changes = 0;
+    return _desktopMockResponse({ ok: true, total_records: 14681, merged_new_swipes: 2, elapsed_sec: 0.68 });
+  }
+  return _desktopMockResponse({ ok: true });
+}
+
+function showDesktopLoginModal() {
+  let modal = document.getElementById("desktopAuthModal");
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "desktopAuthModal";
+    modal.className = "modal-backdrop";
+    modal.style.display = "flex";
+    modal.innerHTML = `
+      <div class="modal-card" style="max-width:400px;" onclick="event.stopPropagation()">
+        <div class="modal-head">
+          <h3>Đăng nhập ZK Enterprise Console</h3>
+        </div>
+        <form onsubmit="submitDesktopLogin(event)" class="modal-body" style="display:flex;flex-direction:column;gap:12px;">
+          <div id="desktopLoginErr" style="display:none;color:#dc2626;font-size:13px;font-weight:600;"></div>
+          <div>
+            <label class="field-label" for="dtLoginUser">Tài khoản quản trị</label>
+            <input id="dtLoginUser" type="text" class="form-control" value="admin" required />
+          </div>
+          <div>
+            <label class="field-label" for="dtLoginPass">Mật khẩu</label>
+            <input id="dtLoginPass" type="password" class="form-control" placeholder="Nhập mật khẩu..." required />
+          </div>
+          <div style="display:flex;gap:8px;margin-top:6px;">
+            <button type="button" class="btn" style="flex:1;" onclick="enableDesktopDemoMode()">Chế độ Demo UI</button>
+            <button type="submit" id="dtLoginBtn" class="btn btn-primary" style="flex:1.3;">Đăng nhập</button>
+          </div>
+        </form>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  } else {
+    modal.style.display = "flex";
+  }
+  setTimeout(() => document.getElementById("dtLoginPass")?.focus(), 60);
+}
+
+async function submitDesktopLogin(e) {
+  if (e) e.preventDefault();
+  const u = (document.getElementById("dtLoginUser")?.value || "admin").trim();
+  const p = document.getElementById("dtLoginPass")?.value || "";
+  const errEl = document.getElementById("desktopLoginErr");
+  const btn = document.getElementById("dtLoginBtn");
+  if (errEl) errEl.style.display = "none";
+  if (btn) { btn.disabled = true; btn.textContent = "Đang xác thực..."; }
+  try {
+    const res = await _desktopNativeFetch(`${API_BASE}/api/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: u, password: p })
+    });
+    const out = await res.json();
+    if (out.ok && out.token) {
+      _desktopDemoMode = false;
+      setDesktopAuthToken(out.token);
+      const modal = document.getElementById("desktopAuthModal");
+      if (modal) modal.style.display = "none";
+      showDesktopToast("Đăng nhập thành công!");
+      usersList = [];
+      await loadData();
+    } else {
+      if (errEl) {
+        errEl.textContent = out.error || "Sai tài khoản hoặc mật khẩu";
+        errEl.style.display = "block";
+      }
+    }
+  } catch (err) {
+    enableDesktopDemoMode();
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = "Đăng nhập"; }
+  }
+}
+
+function enableDesktopDemoMode() {
+  _desktopDemoMode = true;
+  const modal = document.getElementById("desktopAuthModal");
+  if (modal) modal.style.display = "none";
+  showDesktopToast("Đã chuyển sang Chế độ Demo UI (Dữ liệu mẫu)");
+  usersList = [];
+  loadData();
+}
+
+window.fetch = async function(url, options = {}) {
+  if (_desktopDemoMode) {
+    return _handleDesktopMock(url, options);
+  }
+  options = options || {};
+  options.headers = options.headers || {};
+  const token = getDesktopAuthToken();
+  if (token) {
+    if (options.headers instanceof Headers) {
+      options.headers.set("Authorization", `Bearer ${token}`);
+    } else {
+      options.headers["Authorization"] = `Bearer ${token}`;
+    }
+  }
+  try {
+    const res = await _desktopNativeFetch(url, options);
+    if (res.status === 401 && !String(url).includes("/api/auth/login")) {
+      setDesktopAuthToken("");
+      showDesktopLoginModal();
+    }
+    return res;
+  } catch (err) {
+    return _handleDesktopMock(url, options);
   }
 };
 
@@ -624,8 +741,23 @@ async function saveUser() {
   }
 }
 
-function downloadDat() {
-  window.location.href = `${API_BASE}/api/export/dat`;
+async function downloadDat() {
+  try {
+    const res = await fetch(`${API_BASE}/api/export/dat`);
+    if (!res.ok) {
+      alert('Không thể tải file ssrattlog.dat (Vui lòng đăng nhập trước).');
+      return;
+    }
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ssrattlog.dat';
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    alert('Lỗi khi tải ssrattlog.dat: ' + err.message);
+  }
 }
 
 function downloadCsv() {
@@ -658,7 +790,7 @@ window.addEventListener('DOMContentLoaded', () => {
   if (savedTheme === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
   }
-  document.getElementById('zkIp').value = localStorage.getItem('zk4370_ip') || '127.0.0.1';
+  document.getElementById('zkIp').value = localStorage.getItem('zk4370_ip') || '192.168.54.250';
   document.getElementById('zkPort').value = localStorage.getItem('zk4370_port') || '4370';
   document.getElementById('zkKey').value = localStorage.getItem('zk4370_key') || '0';
   loadData();
